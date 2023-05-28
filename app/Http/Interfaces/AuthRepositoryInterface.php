@@ -9,4 +9,8 @@ interface AuthRepositoryInterface
     public function verifyCode($request);
 
     public function changePassword($request);
+
+    public function changeUserPassword($request);
+
+
 }

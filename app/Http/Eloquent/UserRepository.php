@@ -23,6 +23,7 @@ use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
@@ -92,7 +93,7 @@ class UserRepository implements UserRepositoryInterface
         $i = 0;
         foreach ($explorecategories as $cat) {
             $expcats[$i]['id'] = $cat->id;
-            $expcats[$i]['name'] =  $cat == 'en' ? $cat->title_en : $cat->title_ar;
+            $expcats[$i]['name'] =  $lang == 'en' ? $cat->title_en : $cat->title_ar;
             $expcats[$i]['image'] = $cat->image;
             $i++;
         }
@@ -264,7 +265,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function CheckFavProduct($user_id, $product_id,$hall_id)
     {
-        $fav = Favourite::where('user_id',$user_id)->where('product_id',$product_id)
+        $fav = Wishlist::where('user_id',$user_id)->where('product_id',$product_id)
         ->orWhere('hall_id',$hall_id)->first();
         ;
         if ($fav) {
@@ -278,21 +279,30 @@ class UserRepository implements UserRepositoryInterface
         if ($fav == 'false') {
             return "false";
         }
-        Favourite::create(
+        if(isset($request->product_id)){
+        Wishlist::create(
             array(
                 'user_id' =>$request->user_id,
-                'product_id' => $request->product_id,
-                'hall_id'=> $request->hall_id
+                'product_id' =>$request->product_id
             )
         );
         return "true";
+        }else{
+            Wishlist::create(
+                array(
+                    'user_id' => $request->user_id,
+                    'hall_id' => $request->hall_id
+                )
+            );
+            return "true";
+        }
     }
 
 
     public function getFavoriteList($user_id, $lang)
     {
         $user = User::where('id',$user_id)->first();
-        $productsFav=Favourite::where('user_id',$user->id)
+        $productsFav=Wishlist::where('user_id',$user->id)
         ->whereNull('hall_id')->pluck('product_id');
         $latestProducts = Product::whereIn('id', $productsFav)->get();
         $allproducts = array();
@@ -308,7 +318,7 @@ class UserRepository implements UserRepositoryInterface
             $i++;
         }
 
-        $hallsFav=Favourite::where('user_id',$user->id)
+        $hallsFav= Wishlist::where('user_id',$user->id)
         ->whereNull('product_id')->pluck('hall_id');
         $halls=Hall::whereIn('id',$hallsFav)->get();
         $allhalls = array();
@@ -379,15 +389,113 @@ class UserRepository implements UserRepositoryInterface
         return ProductResource::collection($product);
     }
 
-    // public function getHall($lang, $hall_id)
-    // {
-    //     $hall = Hall::where('id', $hall_id)->get();
-    //     return HallDetailsResource::collection($hall);
-    // }
+    public function getHall($lang, $hall_id)
+    {
+        $hall = Hall::where('id', $hall_id)->get();
+        return HallDetailsResource::collection($hall);
+    }
 
     public function getPackage($lang, $package_id)
     {
         $package = Package::where('id', $package_id)->get();
         return PackageResource::collection($package);
+    }
+
+    public function search($request,$lang)
+    {
+        $getWeddingHalls = CategoryHall::where('category_id', 6)->pluck('hall_id');
+        $weddingsHalls = Hall::whereIn('id', $getWeddingHalls)
+            ->where('title_en', 'LIKE', '%' . $request->search. '%')
+            ->orWhere('title_ar',  'LIKE', '%' . $request->search. '%')
+            ->take(2)
+            ->latest()->get();
+        $allweddingshalls = array();
+        $i = 0;
+        foreach ($weddingsHalls as $whall) {
+            $allweddingshalls[$i]['id'] = $whall->id;
+            $allweddingshalls[$i]['name'] =  $lang == 'en' ? $whall->title_en : $whall->title_ar;
+            $allweddingshalls[$i]['image'] = $whall->primary_image_url;
+            $allweddingshalls[$i]['rate'] = $whall->rate;
+            $i++;
+        }
+
+        $getbirthdaysHalls = CategoryHall::where('category_id', 2)->pluck('hall_id');
+        $birthdaysHalls = Hall::whereIn('id', $getbirthdaysHalls)
+            ->where('title_en',  'LIKE', '%' . $request->search. '%')
+            ->orWhere('title_ar',  'LIKE', '%' . $request->search. '%')
+            ->take(2)
+            ->latest()->get();
+        $allbirthdayshalls = array();
+        $i = 0;
+        foreach ($birthdaysHalls as $bhall) {
+            $allbirthdayshalls[$i]['id'] = $bhall->id;
+            $allbirthdayshalls[$i]['name'] =  $lang == 'en' ? $bhall->title_en : $bhall->title_ar;
+            $allbirthdayshalls[$i]['image'] = $bhall->primary_image_url;
+            $allbirthdayshalls[$i]['rate'] = $bhall->rate;
+            $i++;
+        }
+
+        $latestProducts = Product::where('status', 1)->where('stock', '>', '0')
+            ->where('title_en',  'LIKE', '%' . $request->search. '%')
+            ->orWhere('title_ar',  'LIKE', '%' . $request->search. '%')
+            ->take(4)
+            ->latest()->get();
+        $allproducts = array();
+        $i = 0;
+        foreach ($latestProducts as $prod) {
+            $allproducts[$i]['id'] = $prod->id;
+            $allproducts[$i]['name'] =  $lang == 'en' ? $prod->title_en : $prod->title_ar;
+            $allproducts[$i]['desc'] =  $lang == 'en' ? $prod->description_en : $prod->description_ar;
+            $allproducts[$i]['image'] = $prod->primary_image_url;
+            $allproducts[$i]['real_price'] = $prod->real_price;
+            $allproducts[$i]['fake_price'] = $prod->fake_price;
+            $allproducts[$i]['percentage'] = number_format(($prod->real_price / $prod->fake_price) * 100);
+            $allproducts[$i]['category'] = $lang == 'en' ? $prod->category->title_en : $prod->category->title_ar;
+
+            $i++;
+        }
+
+
+        $getEngagementsHalls = CategoryHall::where('category_id', 3)->pluck('hall_id');
+        $engagementsHalls = Hall::whereIn('id', $getEngagementsHalls)
+            ->where('title_en',  'LIKE', '%' . $request->search. '%')
+            ->orWhere('title_ar',  'LIKE', '%' . $request->search. '%')
+            ->take(2)
+            ->latest()->get();
+        $allEngagementshalls = array();
+        $i = 0;
+        foreach ($engagementsHalls as $ehall) {
+            $allEngagementshalls[$i]['id'] = $ehall->id;
+            $allEngagementshalls[$i]['name'] =  $lang == 'en' ? $ehall->title_en : $ehall->title_ar;
+            $allEngagementshalls[$i]['image'] = $ehall->primary_image_url;
+            $allEngagementshalls[$i]['rate'] = $ehall->rate;
+            $i++;
+        }
+
+        $getconferencesHalls = CategoryHall::where('category_id', 4)->pluck('hall_id');
+        $conferencesHalls = Hall::whereIn('id', $getconferencesHalls)
+            ->where('title_en',  'LIKE', '%' . $request->search. '%')
+            ->orWhere('title_ar',  'LIKE', '%' . $request->search. '%')
+            ->take(2)
+            ->latest()->get();
+        $allconferenceshalls = array();
+        $i = 0;
+        foreach ($conferencesHalls as $chall) {
+            $allconferenceshalls[$i]['id'] = $chall->id;
+            $allconferenceshalls[$i]['name'] =  $lang == 'en' ? $chall->title_en : $chall->title_ar;
+            $allconferenceshalls[$i]['image'] = $chall->primary_image_url;
+            $allconferenceshalls[$i]['rate'] = $chall->rate;
+            $i++;
+        }
+
+        $data = [
+
+            'latest_wedings_halls' => $allweddingshalls,
+            'latest_birthdays_halls' => $allbirthdayshalls,
+            'latest_products' => $allproducts,
+            'latest_engagements_halls' => $allEngagementshalls,
+            'latest_conferences_halls' => $allconferenceshalls
+        ];
+        return $data;
     }
 }

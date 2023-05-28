@@ -24,7 +24,8 @@ class AuthRepository implements AuthRepositoryInterface
             $userToVerify->save();
             $this->verification_Ob->user_id = $userToVerify->id;
             $digits = 4;
-            $code = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+            //$code = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+            $code ="1234";
             $this->verification_Ob->code = $code;
             $this->verification_Ob->save();
             // $data = array('name' => $userToVerify->name, 'code' => $code);
@@ -69,5 +70,20 @@ class AuthRepository implements AuthRepositoryInterface
         $userToChangePassword->save();
         return $userToChangePassword;
     }
+
+    public function changeUserPassword($request)
+    {
+        $userToChangePassword = $this->user_Ob->where('email', $request->email)->first();
+        if (isset($request->password)) {
+            $check = Hash::check($request->password, $userToChangePassword->password);
+            if (!$check) {
+                return 'invalid_password';
+            }
+        }
+        $userToChangePassword->password = Hash::make($request->password);
+        $userToChangePassword->save();
+        return $userToChangePassword;
+    }
+
 
 }
