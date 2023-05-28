@@ -135,23 +135,23 @@ class AuthController extends Controller
             )
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(), 'data' => []],404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(), 'data' => []]);
         }
 
         $emialex = User::whereEmail($request->email)->get();
         $mobileex = User::wherePhone($request->phone)->get();
         if (isset($emialex) && count($emialex) > 0) {
-            return response()->json(res($lang, failed(), 'email_exist',[]), 404);
+            return response()->json(res($lang, failed(), 'email_exist',[]));
         }
         if (
             isset($mobileex) && count($mobileex) > 0
         ) {
-            return response()->json(res($lang, failed(),'phone_exist', []), 404);
+            return response()->json(res($lang, failed(),'phone_exist', []));
         }
         $dateOfBirth = $request->birth_date;
         $years = Carbon::parse($dateOfBirth)->age;
         if($years<17){
-            return response()->json(res($lang, failed(), 'years_small_than_17', []), 404);
+            return response()->json(res($lang, failed(), 'years_small_than_17', []));
         }
         $city=City::where('id',$request->city_id)->first();
         //$data = $request->all();
@@ -177,7 +177,7 @@ class AuthController extends Controller
         $data['country_id'] = $city->country->id;
         $user=User::create($data);
         $this->authObject->sendVerificationCode($request);
-        return response()->json(res($lang, success(), 'registered', ["code"=> "1234"]),200);
+        return response()->json(res($lang, success(), 'registered', []));
     }
 
     public function login(Request $request)
@@ -194,19 +194,17 @@ class AuthController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]]);
         }
-        $user = User::where('email',$request->email)->first();
+        $user = User::whereEmail($request->email)->first();
         if (!$user) {
-            return response()->json(res($lang, failed(), 'user_not_found',[]), 404);
+            return response()->json(res($lang, failed(), 'user_not_found',[]));
         }
-        $checked = Hash::check($request->password, $user->password);
-        if (!$checked) {
-            return response()->json(res($lang, failed(),'invalid_password', []), 404);
-        } else {
+        $check = Hash::check($request->password, $user->password);
+        if ($check) {
             if ($user->verified_status == 0) {
                 $this->authObject->sendVerificationCode($user);
-                return response()->json(res($lang, failed(), 'user_not_verified', []), 404);
+                return response()->json(res($lang, failed(),'user_not_verified', []));
             }
             if ($user->status == 1) {
                 $user->update(array('fcm-token' => $request->fcm_token));
@@ -215,10 +213,12 @@ class AuthController extends Controller
                     success(),
                     'logged_in',
                     new UserResource($user)
-                ), 200);
+                ));
             } else {
-                return response()->json(res($lang, failed(), 'user_not_activated', []), 404);
+                return response()->json(res($lang, failed(),'user_not_activated', []));
             }
+        } else {
+            return response()->json(res($lang, failed(),'invalid_password', []));
         }
     }
 
@@ -231,15 +231,15 @@ class AuthController extends Controller
             ['email' => 'required',]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]]);
         }
         $flag = $this->authObject->sendVerificationCode($request);
         if ($flag == 'code_sent') {
             $getcode = User::where('email', $request->email)->first();
             $code = Verification::where('user_id', $getcode->id)->first()->code;
-            return response(res($lang, success(), 'code_sent', []), 200);
+            return response(res($lang, success(), 'code_sent', []));
         } else {
-            return response(res($lang, failed(),'user_not_found', []), 404);
+            return response(res($lang, failed(),'user_not_found', []));
         }
     }
 
@@ -252,15 +252,15 @@ class AuthController extends Controller
             ['code' => 'required']
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]]);
         }
         $flag = $this->authObject->verifyCode($request);
         if (isset($flag->id)) {
-            return response(res($lang, success(), 'activated', []), 200);
+            return response(res($lang, success(), 'activated', []));
         } elseif ($flag == 'invalid_code') {
-            return response(res($lang, failed(),'invalid_code', []), 404);
+            return response(res($lang, failed(),'invalid_code', []));
         } elseif ($flag == 'user_already_verified') {
-            return response(res($lang, failed(),'user_already_verified', []), 404);
+            return response(res($lang, failed(),'user_already_verified', []));
         }
     }
 
@@ -268,29 +268,25 @@ class AuthController extends Controller
     {
         $lang = getLang();
         App::setLocale($lang);
-        $validator = Validator::make($request->all(), array(
-            'password' => 'required_with:password_confirmation|same:password_confirmation',
-            'password_confirmation' => 'required',
-            'email'
-        ));
+        $validator = Validator::make($request->all(), array('password' => 'required_with:password_confirmation|same:password_confirmation', 'password_confirmation' => 'required'));
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]]);
         }
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('id', $request->user()->id)->first();
         if (isset($user)) {
-            $request['email'] = $request->email;
-            $flag = $this->authObject->changeUserPassword($request);
+            $request['id'] = $user->id;
+            $flag = $this->authObject->changePassword($request);
             if (isset($flag->id)) {
-                return response(res($lang, success(), 'password_changed', new UserResource($flag)), 200);
+                return response(res($lang, success(), 'password_changed', new UserResource($flag)));
             } elseif ($flag == "invalid_password") {
                 return response(res(
                     $lang,
                     failed(),
                     'invalid_password',[]
-                ), 404);
+                ));
             }
         } else {
-            return response()->json(res($lang, failed(), 'user_not_found',[]), 404);
+            return response()->json(res($lang, failed(), 'user_not_found',[]));
         }
     }
 
@@ -304,11 +300,11 @@ class AuthController extends Controller
                 failed(),
                 'user_not_verified',
                 []
-            ), 404);
+            ));
         } else {
             $user->update(['fcm-token' => null]);
             $request->user()->currentAccessToken()->delete();
-            return response()->json(res($lang, success(),'logout', []), 200);
+            return response()->json(res($lang, success(),'logout', []));
         }
     }
 
@@ -317,9 +313,9 @@ class AuthController extends Controller
         $lang = getLang();
         $user = User::where('id', $request->user()->id)->first();
         if (!isset($user)) {
-            return response()->json(res($lang, failed(),'user_not_found', []), 404);
+            return response()->json(res($lang, failed(),'user_not_found', []));
         } else {
-            return response()->json(res($lang, success(), 'user_profile', new UserResource($user)), 200);
+            return response()->json(res($lang, success(), 'user_profile', new UserResource($user)));
         }
     }
 
@@ -333,9 +329,9 @@ class AuthController extends Controller
                 $data['password'] = Hash::make($request->password);
             }
             $user->update($data);
-            return response()->json(res($lang, success(), 'updated', new UserResource($user)), 200);
+            return response()->json(res($lang, success(), 'updated', new UserResource($user)));
         } else {
-            return response()->json(res($lang, failed(),'user_not_found', []), 404);
+            return response()->json(res($lang, failed(),'user_not_found', []));
         }
     }
 
@@ -351,13 +347,13 @@ class AuthController extends Controller
             )
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]]);
         }
         if (isset($user)) {
             $user->update(['lang' => $request->lang]);
-            return response()->json(res($lang, success(),'updated', []), 200);
+            return response()->json(res($lang, success(),'updated', []));
         } else {
-            return response()->json(res($lang, failed(),'user_not_found', []), 404);
+            return response()->json(res($lang, failed(),'user_not_found', []));
         }
     }
 
@@ -374,13 +370,13 @@ class AuthController extends Controller
                 )
             );
             if ($validator->fails()) {
-                return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+                return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]]);
             }
             $user->update(['fcm-token' => $request->fcm_token]);
 
-            return response()->json(res($lang, success(),'updated', []), 200);
+            return response()->json(res($lang, success(),'updated', []));
         } else {
-            return response()->json(res($lang, failed(),'user_not_found', []), 404);
+            return response()->json(res($lang, failed(),'user_not_found', []));
         }
     }
 
@@ -397,11 +393,11 @@ class AuthController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]]);
         }
         $user = User::where('id', $request->user()->id)->first();
         if ($user == 'false') {
-            return response()->json(res($lang, expired(),'user_not_found', []), 404);
+            return response()->json(res($lang, expired(),'user_not_found', []));
         }
         if (Hash::check($request->old_password, $user->password) && $request->password != null && ($request->password == $request->password_confirmation)) {
             $user->password = Hash::make($request->password);
@@ -411,12 +407,12 @@ class AuthController extends Controller
                     success(),
                     'password_changed',
                     []
-                ), 200);
+                ));
             } else {
-                return response(res($lang, failed(),'invalid_oldpassword', []), 404);
+                return response(res($lang, failed(),'invalid_oldpassword', []));
             }
         } else {
-            return response(res($lang, failed(),'invalid_oldpassword', []), 404);
+            return response(res($lang, failed(),'invalid_oldpassword', []));
         }
     }
 
@@ -432,13 +428,13 @@ class AuthController extends Controller
                 )
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(), 'data' => []], 404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(), 'data' => []]);
         }
         if (isset($user)) {
             $user->update(['status' => $request->status]);
-            return response()->json(res($lang, success(), 'updated', []), 200);
+            return response()->json(res($lang, success(), 'updated', []));
         } else {
-            return response()->json(res($lang, failed(), 'user_not_found', []), 404);
+            return response()->json(res($lang, failed(), 'user_not_found', []));
         }
     }
 }

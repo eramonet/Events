@@ -104,36 +104,13 @@
 
                     <div class="col-md-6">
                         <div class="form-group mb-4">
-                            <label for="country_id">country<span class="text-danger">*</span></label>
-                            <select required name="country_id" id="countrys"
-                                class="form-select @error('country_id') is-invalid @enderror">
-                                <option value="">select country</option>
-                                @foreach ($countrys as $country)
-                                    <option value="{{ $country->id }}" {{ old('country_id') }}>
-                                        {{ $country->title_en }}</option>
-                                @endforeach
-                                {{-- <option value="0" {{ old('status') =='0'?'selected':''}}>InActive</option> --}}
-                            </select>
-                        </div>
-
-
-                        @error('country_id')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
                             <label for="city">city <span class="text-danger">*</span></label>
                             <select required name="city_id" id="city"
                                 class="form-select @error('city_id') is-invalid @enderror">
                                 <option> select city</option>
-
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}">{{ $city->title_en }}</option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -160,6 +137,28 @@
 
 
                         @error('region_id')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="for_what">For What <span class="text-danger">*</span></label>
+                            <select required name="for_what" id="region"
+                                class="form-select @error('for_what') is-invalid @enderror">
+                                <option value="hall">Halls</option>
+                                <option value="product">Products</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+
+
+                        @error('for_what')
                             <div class="d-flex justify-content-center ">
 
                                 <div class="text-danger">
@@ -250,7 +249,32 @@
 
 
 
+        <div class="card mb-4">
+            <div class="card-header">
+                Icon
+            </div>
 
+            <div class="card-body">
+                {{-- icon --}}
+                <div class="form-group mb-4 d-flex justify-content-center">
+                    <input accept="image/*" type="file" name="icon" data-max-file-size="10M"
+                        class="dropify @error('icon') is-invalid @enderror" value="{{ old('icon') }}">
+                </div>
+
+
+                @error('primary_image')
+                    <div class="d-flex justify-content-center ">
+
+                        <div class="text-danger">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    </div>
+                @enderror
+
+                {{-- image --}}
+
+            </div>
+        </div>
 
 
 
@@ -409,58 +433,6 @@
             width: "100%"
         });
     </script>
-    <script>
-        $(document).on('change', '#countrys', function() {
-            $("#region").empty();
-
-            var location_id = document.querySelector("#countrys").value;
-
-            //alert(company_id);
-            if (location_id) {
-                $.ajax({
-                    type: "GET",
-                    // url:"{{ url('get-category-units/') }}/?category_id="+category_id,
-                    url: "/acp/cities/cityByCountryId/" + location_id,
-                    success: function(res) {
-
-
-                        if (res) {
-                            console.log(res);
-
-                            $("#city").empty();
-
-                            $("#city").append('<option value="">select city</option>');
-
-                            res.forEach(data => {
-                                $("#city").append('<option value="' + data.id + '" >' + data
-                                    .title_en + '</option>');
-                            });
-
-
-
-                        }
-                        if (res.length === 0) {
-                            $("#city").empty();
-                        }
-
-                    },
-                    error: function(res) {
-                        console.log(res);
-                    },
-                });
-            } else {
-                $("#city").empty();
-            }
-
-            var location_id = document.querySelector("#city").value;
-
-
-            //alert(company_id);
-
-
-
-        });
-    </script>
 
     <script>
         $(document).on('change', '#city', function() {
@@ -468,8 +440,6 @@
 
             var location_id = document.querySelector("#city").value;
 
-
-            //alert(company_id);
             if (location_id) {
                 $.ajax({
                     type: "GET",

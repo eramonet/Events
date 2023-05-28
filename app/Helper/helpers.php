@@ -34,7 +34,7 @@ function res($lang, $status, $key, $data = null)
     }
     return $response;
 }
-
+ 
 function getLang()
 {
     $lang = (Request()->hasHeader('lang')) ? Request()->header('lang') : 'en';

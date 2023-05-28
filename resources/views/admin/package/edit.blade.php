@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-Edit  Package
+Edit  Vendor
 @endsection
 @section('content')
 {{-- on top --}}
@@ -15,14 +15,14 @@ Edit  Package
                     </a>
                 </li>
                 <li class="breadcrumb-item ">
-                    <a href="{{ route('admin.packages.index') }}">Packages</a>
+                    <a href="{{ route('admin.vendors.index') }}">Vendors</a>
                 </li>
 
-                <li class="breadcrumb-item active" aria-current="page">Edit  Package</li>
+                <li class="breadcrumb-item active" aria-current="page">Edit  Vendor</li>
 
             </ol>
         </nav>
-        <h2 class="h4">Edit  Package</h2>
+        <h2 class="h4">Edit  Vendor</h2>
 
     </div>
 
@@ -36,7 +36,7 @@ Edit  Package
 {{-- on top --}}
 
 
-<form action="{{ route('admin.packages.update' , $package->id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.vendors.update' , $vendor->id) }}" method="POST" enctype="multipart/form-data">
 
 
     @csrf
@@ -60,7 +60,7 @@ Edit  Package
                 <div class="col-md-6">
                     <div class="form-group mb-4">
                         <label for="title_ar">Title In Arabic <span class="text-danger">*</span></label>
-                        <input dir="rtl" required type="text" name="title_ar" class="form-control @error('title_ar') is-invalid @enderror" value="{{ $package->title_ar  }}">
+                        <input dir="rtl" required type="text" name="title_ar" class="form-control @error('title_ar') is-invalid @enderror" value="{{ $vendor->title_ar  }}">
                     </div>
 
 
@@ -81,7 +81,7 @@ Edit  Package
                 <div class="col-md-6">
                     <div class="form-group mb-4">
                         <label for="title_en">Title In English <span class="text-danger">*</span></label>
-                        <input required type="text" name="title_en" class="form-control @error('title_en') is-invalid @enderror" value="{{  $package->title_en  }}">
+                        <input required type="text" name="title_en" class="form-control @error('title_en') is-invalid @enderror" value="{{  $vendor->title_en  }}">
                     </div>
 
 
@@ -102,7 +102,7 @@ Edit  Package
                 <div class="col-md-6">
                     <div class="form-group mb-4">
                         <label for="email">Email <span class="text-danger">*</span></label>
-                        <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ $package->email   }}">
+                        <input required type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ $vendor->email   }}">
                     </div>
 
 
@@ -123,7 +123,7 @@ Edit  Package
                 <div class="col-md-6">
                     <div class="form-group mb-4">
                         <label for="phone">Phone <span class="text-danger">*</span></label>
-                        <input required type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{   $package->phone   }}">
+                        <input required type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{   $vendor->phone   }}">
                     </div>
 
 
@@ -145,7 +145,7 @@ Edit  Package
                 <div class="col-md-6">
                     <div class="form-group mb-4">
                         <label for="commission">Commission % <span class="text-danger">*</span></label>
-                        <input required type="number" name="commission" class="form-control @error('commission') is-invalid @enderror" value="{{ $package->commission  }}">
+                        <input required type="number" name="commission" class="form-control @error('commission') is-invalid @enderror" value="{{ $vendor->commission  }}">
                     </div>
 
 
@@ -169,8 +169,8 @@ Edit  Package
                     <div class="form-group mb-4">
                         <label  for="status">Status <span class="text-danger">*</span></label>
                         <select  required name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="1" {{  $package->status  =='1'?'selected':''}}>Active</option>
-                            <option value="0" {{  $package->status  =='0'?'selected':''}}>InActive</option>
+                            <option value="1" {{  $vendor->status  =='1'?'selected':''}}>Active</option>
+                            <option value="0" {{  $vendor->status  =='0'?'selected':''}}>InActive</option>
                         </select>
                     </div>
 
@@ -198,7 +198,7 @@ Edit  Package
 
 
                     <div class="form-check form-switch mb-4">
-                        <input  {{  $package->can_add_products=='1'?'checked':'' }} value="1" class="form-check-input" type="checkbox" id="can_add_products" name="can_add_products">
+                        <input  {{  $vendor->can_add_products=='1'?'checked':'' }} value="1" class="form-check-input" type="checkbox" id="can_add_products" name="can_add_products">
                         <label class="form-check-label" for="can_add_products">Can Add Products</label>
                     </div>
 
@@ -215,7 +215,7 @@ Edit  Package
 
                 {{-- can_add_halls --}}
                     <div class="form-check form-switch mb-4">
-                        <input  {{ $package->can_add_halls =='1'?'checked':'' }} value="1" class="form-check-input" type="checkbox" id="can_add_halls" name="can_add_halls">
+                        <input  {{ $vendor->can_add_halls =='1'?'checked':'' }} value="1" class="form-check-input" type="checkbox" id="can_add_halls" name="can_add_halls">
                         <label class="form-check-label" for="can_add_halls">Can Add Halls</label>
                     </div>
 
@@ -271,7 +271,7 @@ Edit  Package
             <label for="summary_ar">  Summary In Arabic <span class="text-danger">*</span> </label>
 
 
-            <textarea editor  dir="rtl" name="summary_ar" id="summary_ar"   cols="30" rows="6" class="form-control @error('summary_ar') is-invalid @enderror">{!! $package->summary_ar !!}</textarea>
+            <textarea editor  dir="rtl" name="summary_ar" id="summary_ar"   cols="30" rows="6" class="form-control @error('summary_ar') is-invalid @enderror">{!! $vendor->summary_ar !!}</textarea>
         </div>
 
 
@@ -293,7 +293,7 @@ Edit  Package
     <div class="col-md-12">
         <div class="form-group mb-4">
             <label for="summary_en">  Summary In English <span class="text-danger">*</span> </label>
-            <textarea editor  name="summary_en" id="summary_en"   cols="30" rows="6" class="form-control @error('summary_en') is-invalid @enderror">{!! $package->summary_en !!}</textarea>
+            <textarea editor  name="summary_en" id="summary_en"   cols="30" rows="6" class="form-control @error('summary_en') is-invalid @enderror">{!! $vendor->summary_en !!}</textarea>
         </div>
 
 
@@ -351,7 +351,7 @@ Edit  Package
                         <label for="description_ar">  Meta Description  In Arabic </label>
 
 
-                        <textarea required dir="rtl" name="description_ar" id="description_ar"   cols="30" rows="3" class="form-control @error('description_ar') is-invalid @enderror">{{ $package->description_ar  }}</textarea>
+                        <textarea required dir="rtl" name="description_ar" id="description_ar"   cols="30" rows="3" class="form-control @error('description_ar') is-invalid @enderror">{{ $vendor->description_ar  }}</textarea>
                     </div>
 
 
@@ -375,7 +375,7 @@ Edit  Package
                         <label for="description_en">  Meta Description  In English </label>
 
 
-                        <textarea  name="description_en" id="description_en"   cols="30" rows="3" class="form-control @error('description_en') is-invalid @enderror">{{  $package->description_en}}</textarea>
+                        <textarea  name="description_en" id="description_en"   cols="30" rows="3" class="form-control @error('description_en') is-invalid @enderror">{{  $vendor->description_en}}</textarea>
                     </div>
 
 
@@ -402,7 +402,7 @@ Edit  Package
                         <label for="keywords_ar">  Meta Keywords In Arabic </label>
 
 
-                        <textarea  dir="rtl" name="keywords_ar" id="keywords_ar"   cols="30" rows="2" class="form-control @error('keywords_ar') is-invalid @enderror">{{ $package->keywords_ar }}</textarea>
+                        <textarea  dir="rtl" name="keywords_ar" id="keywords_ar"   cols="30" rows="2" class="form-control @error('keywords_ar') is-invalid @enderror">{{ $vendor->keywords_ar }}</textarea>
                     </div>
 
 
@@ -426,7 +426,7 @@ Edit  Package
                         <label for="keywords_en">  Meta Keywords In English </label>
 
 
-                        <textarea  name="keywords_en" id="keywords_en"   cols="30" rows="2" class="form-control @error('keywords_en') is-invalid @enderror">{{ $package->keywords_en  }}</textarea>
+                        <textarea  name="keywords_en" id="keywords_en"   cols="30" rows="2" class="form-control @error('keywords_en') is-invalid @enderror">{{ $vendor->keywords_en  }}</textarea>
                     </div>
 
 
@@ -489,7 +489,7 @@ Edit  Package
 
                      <span>Prefer 800*800 Pexel</span>
                     <div class="form-group mb-4 d-flex justify-content-center">
-                        <input data-default-file="{{ $package->image_url }}" accept="image/*" type="file" name="image"  data-max-file-size="10M" class="dropify @error('image') is-invalid @enderror" value="{{ old('image') }}">
+                        <input data-default-file="{{ $vendor->image_url }}" accept="image/*" type="file" name="image"  data-max-file-size="10M" class="dropify @error('image') is-invalid @enderror" value="{{ old('image') }}">
                     </div>
 
 

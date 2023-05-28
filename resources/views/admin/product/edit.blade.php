@@ -147,27 +147,6 @@
                     {{-- stock --}}
 
 
-                    {{-- purchase_price --}}
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="purchase_price">Purchase Price (AED) <span class="text-danger">*</span></label>
-                            <input minlength="0" min="1" required type="number" name="purchase_price"
-                                class="form-control @error('purchase_price') is-invalid @enderror"
-                                value="{{ $product->purchase_price }}">
-                        </div>
-
-
-                        @error('purchase_price')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- purchase_price --}}
 
                     {{-- real_price --}}
                     <div class="col-md-6">
@@ -282,32 +261,6 @@
                     </div>
 
                     {{-- category_id --}}
-
-                    {{-- category_id --}}
-
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="category_id">Sub Category <span class="text-danger">*</span></label>
-                            <select required name="category_id" id="subCategoriesSelect"
-                                class="form-select @error('category_id') is-invalid @enderror">
-                                
-                            </select>
-                        </div>
-
-
-                        @error('category_id')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- category_id --}}
-
-
                     {{-- taxes --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -315,11 +268,9 @@
                             <select multiple name="taxes[]" id="taxes"
                                 class="form-select @error('taxes') is-invalid @enderror">
 
-                                {{-- <option value="" {{ !old('taxes')  ?'selected':'' }}>No Taxes</option> --}}
-
                                 @foreach ($taxes as $tax)
                                     <option value="{{ $tax->id }}"
-                                        {{ collect($product->taxes->pluck('id'))->contains($tax->id) ? 'selected' : '' }}>
+                                        {{ collect($product->taxes->pluck('tax_id'))->contains($tax->id) ? 'selected' : '' }}>
                                         {{ $tax->title_en . ' - ' . $tax->title_ar }}</option>
                                 @endforeach
                             </select>
@@ -371,8 +322,6 @@
 
                     {{-- taxes --}}
 
-
-
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="taxes">Colors </label>
@@ -399,39 +348,6 @@
                             </div>
                         @enderror
                     </div>
-
-
-
-
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="taxes">Sizes </label>
-                            <select multiple name="size_id[]" id="size_id"
-                                class="form-select @error('size_id') is-invalid @enderror">
-
-                                {{-- <option value="" {{ !old('taxes')  ?'selected':'' }}>No Taxes</option> --}}
-
-                                @foreach ($sizes as $size)
-                                    <option value="{{ $size->id }}"
-                                        {{ collect($product->sizes->pluck('id'))->contains($size->id) ? 'selected' : '' }}>
-                                        {{ $size->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-
-                        @error('size_id')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-
-
 
                     {{-- taxes --}}
 

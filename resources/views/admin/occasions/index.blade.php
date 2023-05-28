@@ -20,7 +20,7 @@
                             </svg>
                         </a>
                     </li>
-                    
+
                 </ol>
             </nav>
             <h2 class="h4"> All Occasions</h2>
@@ -28,18 +28,17 @@
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
             {{-- @if (Auth::guard('admin')->user()->hasPermission('products-categories-create')) --}}
-                <a href="{{ route('admin.occasion.create') }}"
-                    class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Create New Occasions
-                </a>
+            <a href="{{ route('admin.occasion.create') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                    </path>
+                </svg>
+                Create New Occasions
+            </a>
             {{-- @endif --}}
 
-            
+
         </div>
     </div>
 
@@ -203,10 +202,9 @@
         <table class="table table-hover table-centered table-striped table-bordered text-center">
             <thead>
                 <tr>
-                  
+                    <th class="border-gray-200">Icon</th>
+                    <th class="border-gray-200">Image</th>
                     <th class="border-gray-200">Title</th>
-                    <th class="border-gray-200">Created At</th>
-                  
                     <th class="border-gray-200">Action</th>
                 </tr>
             </thead>
@@ -217,7 +215,19 @@
                     <tr>
 
 
-                        
+                        <td>
+
+                            <div class="m-auto" style="width:250px">
+                                <img src="{{ asset($occasion->icon) }}" width="50px">
+                            </div>
+                        </td>
+
+                        <td>
+
+                            <div class="m-auto" style="width:250px">
+                                <img src="{{ asset($occasion->primary_image) }}" width="50px">
+                            </div>
+                        </td>
 
 
 
@@ -229,32 +239,7 @@
                             </div>
                         </td>
 
-
-
                         <td>
-                            @if ($occasion->created_at)
-                                <span class="text-nowrap d-block h6"><i class="fas fa-calendar-week text-info"></i>
-                                    {{ \Carbon\Carbon::parse($occasion->created_at)->format('d/m/Y') }} </span>
-                                <span class="text-nowrap d-block h6"><i class="fas fa-clock text-success"></i>
-                                    {{ \Carbon\Carbon::parse($occasion->created_at)->format('h:i:s A') }} </span>
-                            @else
-                                ...
-                            @endif
-
-                        </td>
-
-
-
-
-                       
-
-
-
-
-                        <td>
-
-
-
 
                             {{-- actions --}}
 
@@ -273,30 +258,29 @@
 
                                 <div class="">
                                     {{-- @if (Auth::guard('admin')->user()->hasPermission('products-categories-update')) --}}
-                                        <a class="btn btn-info m-1" class="dropdown-item"
-                                            href="{{ route('admin.occasion.edit', $occasion->id) }}"
-                                            title="Edit" data-bs-toggle="tooltip" data-bs-placement="top"><span
-                                                class="fas fa-edit "></span>
-                                        </a>
+                                    <a class="btn btn-info m-1" class="dropdown-item"
+                                        href="{{ route('admin.occasion.edit', $occasion->id) }}" title="Edit"
+                                        data-bs-toggle="tooltip" data-bs-placement="top"><span
+                                            class="fas fa-edit "></span>
+                                    </a>
                                     {{-- @endif --}}
                                 </div>
 
 
                                 <div class="">
-                                   
-                                        {{-- @if (Auth::guard('admin')->user()->hasPermission('products-categories-delete')) --}}
-                                            <form class="delete-btn m-0 p-0 "
-                                                action="{{ route('admin.occasion.destroy', $occasion->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-danger m-1" type="submit" title="Delete"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top">
-                                                    <span class="fas fa-trash-alt "></span>
-                                                </button>
-                                            </form>
-                                        {{-- @endif --}}
-                                   
+
+                                    {{-- @if (Auth::guard('admin')->user()->hasPermission('products-categories-delete')) --}}
+                                    <form class="delete-btn m-0 p-0 "
+                                        action="{{ route('admin.occasion.destroy', $occasion->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger m-1" type="submit" title="Delete"
+                                            data-bs-toggle="tooltip" data-bs-placement="top">
+                                            <span class="fas fa-trash-alt "></span>
+                                        </button>
+                                    </form>
+                                    {{-- @endif --}}
+
 
                                 </div>
 
@@ -340,8 +324,13 @@
                                         <div class="wrapper m-auto">
 
                                             <div class="d-flex mb-2">
-                                                <img class="model-img" src="{{ $occasion->image_url }}"
-                                                    alt="{{ $occasion->title_en }} Image">
+                                                <label>Icon</label>
+                                                <img class="model-img" src="{{ $occasion->icon }}" width="100px">
+                                            </div>
+
+                                            <div class="d-flex mb-2">
+                                                <label>Image</label>
+                                                <img class="model-img" src="{{ $occasion->primary_image }}" width="100px">
                                             </div>
 
                                             <ul class="list-group list-group-flush">
@@ -349,38 +338,8 @@
                                                 </li>
                                                 <li class="list-group-item">Title In English : {{ $occasion->title_en }}
                                                 </li>
-
-
-
-
-                                                
-
-
-
-
-                                                
-
-
-
-
-
-                                               
-
-
-
-
-
-                                               
-
-
-
-
-
-
-
-
-
-                                              
+                                                <li class="list-group-item">Type : {{ $occasion->for_what }}
+                                                </li>
                                                 <li class="list-group-item">Added Date : <i
                                                         class="fas fa-calendar-week text-info"></i>
                                                     {{ \Carbon\Carbon::parse($occasion->created_at)->format('d/m/Y') }}
@@ -398,9 +357,9 @@
 
 
                                         {{-- @if (Auth::guard('admin')->user()->hasPermission('products-categories-update')) --}}
-                                            <a class="btn btn-primary"
-                                                href="{{ route('admin.products-categories.edit', $occasion->id) }}"><span
-                                                    class="fas fa-edit me-2"></span>Edit</a>
+                                        <a class="btn btn-primary"
+                                            href="{{ route('admin.products-categories.edit', $occasion->id) }}"><span
+                                                class="fas fa-edit me-2"></span>Edit</a>
                                         {{-- @endif --}}
 
                                         {{-- <button type="button" class="btn btn-secondary">Accept</button> --}}

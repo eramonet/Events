@@ -90,6 +90,12 @@ class AdvertisementController extends Controller
             return redirect()->back();
         }
 
+        if( $check->client_ads->count() > 0 ){
+            foreach( $check->client_ads as $ad ){
+                $ad->delete() ;
+            }
+        }
+
         $delete = OuterClients::find($id)->delete();
 
         if ($delete) {
@@ -105,6 +111,11 @@ class AdvertisementController extends Controller
     {
         $advertisements = Advertisement::latest()->get();
         return view('admin.advertisements.advertisements', compact('advertisements'));
+    }
+
+    public function add_advertisements_page()
+    {
+        return view('admin.advertisements.create_advertisments');
     }
 
     public function add_advertisements(Request $request)
@@ -135,7 +146,13 @@ class AdvertisementController extends Controller
             $request->session()->flash('failed', 'Something Wrong');
         }
 
-        return redirect()->back();
+        return redirect()->route('admin.advertisements.advertisements');
+    }
+
+    public function edit_advertisements_page( $id )
+    {
+        $advertisement = Advertisement::find($id) ;
+        return view('admin.advertisements.edit_advertisments' , compact('advertisement'));
     }
 
     public function edit_advertisements(Request $request, $id)
@@ -166,7 +183,7 @@ class AdvertisementController extends Controller
             $request->session()->flash('failed', 'Something Wrong');
         }
 
-        return redirect()->back();
+        return redirect()->route('admin.advertisements.advertisements');
     }
 
     public function delete_advertisements(Request $request, $id)
@@ -176,6 +193,13 @@ class AdvertisementController extends Controller
         if (!$check) {
             $request->session()->flash('failed', 'Advertisement Not Found');
             return redirect()->back();
+        }
+
+        // delete all childrens
+        if( $check->clients_ads->count() > 0 ){
+            foreach( $check->clients_ads as $client_ad ){
+                $client_ad->delete();
+            }
         }
 
         $delete = Advertisement::find($id)->delete();
@@ -193,6 +217,15 @@ class AdvertisementController extends Controller
     {
         $items = ClientsAd::latest()->get();
 
+        $today = Carbon::now();
+
+        // check activation by date
+        foreach( $items as $item){
+            if( $item->from > $today || $item->to < $today ){
+               $item->update([ "status" => "in_active" ]) ;
+            }
+        }
+
         // calc days for exp
         foreach ($items as $item) {
             $toDate = Carbon::parse($item->to);
@@ -202,6 +235,16 @@ class AdvertisementController extends Controller
         }
 
         return view('admin.advertisements.client_ads', compact('items'));
+    }
+
+    public function assign_outer_client_ad_page()
+    {
+        return view('admin.advertisements.assign_outer_client_ads');
+    }
+
+    public function assign_inner_client_ad_page()
+    {
+        return view('admin.advertisements.assign_inner_client_ads');
     }
 
     public function assign_client_ad(Request $request)

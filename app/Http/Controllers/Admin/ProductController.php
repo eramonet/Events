@@ -50,23 +50,18 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-
-
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
-            $products = $this->productService->getAll($request);
+
+            $products = Product::accept()->latest()->paginate(10);
+
             $type = $request->type && ($request->type == 'in-stock' || $request->type == 'out-of-stock') ? $request->type : 'all';
 
-            // return $products;
-
-            // return sprintf("%08d",'10000000009999999');
-            // return str_pad(3, 12, "0", STR_PAD_LEFT);
             return \view('admin.product.index', \compact('products', 'type'));
         } else {
-            $products = $this->productService->getAllAdmin($request, $useradmin);
-            $type = $request->type && ($request->type == 'in-stock' || $request->type == 'out-of-stock') ? $request->type : 'all';
 
-            // return $products;
+            $products = $this->productService->getAllAdmin($request, $useradmin->vendor);
+            $type = $request->type && ($request->type == 'in-stock' || $request->type == 'out-of-stock') ? $request->type : 'all';
 
             // return sprintf("%08d",'10000000009999999');
             // return str_pad(3, 12, "0", STR_PAD_LEFT);
@@ -90,7 +85,7 @@ class ProductController extends Controller
             $products = $this->productService->getActiveProducts();
             $sizes = Size::get();
             $cities = City::get();
-            $occasions = Occasion::get();
+            $occasions = Occasion::forProduct()->get();
             // return $products;
 
 
@@ -122,8 +117,6 @@ class ProductController extends Controller
         return Excel::download(new ProductExport($type), Carbon::now() . '-products.xlsx');
     }
 
-
-
     public function store(Request $request)
     {
 
@@ -150,11 +143,9 @@ class ProductController extends Controller
             'category_id' => ['required', 'exists:product_categories,id'],
             'taxes.*' => ['nullable', 'exists:taxes,id'],
             'color_id.*' => ['nullable', 'exists:colors,id'],
-            'size_id.*' => ['nullable', 'exists:sizes,id'],
             'stock' => ['required', 'integer'],
             'fake_price' => ['required', 'integer', 'min:1'],
             'real_price' => ['required', 'integer', 'min:1', 'lt:fake_price'],
-            'purchase_price' => ['required', 'integer', 'min:1'],
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['required', 'exists:occasions,id'],
@@ -166,7 +157,6 @@ class ProductController extends Controller
 
 
             if (Auth::guard('admin')->user()->vendor->products_count > Auth::guard('admin')->user()->vendor->products->count()) {
-
 
                 $created = $this->productService->store($request);
                 if ($created) {
@@ -210,8 +200,7 @@ class ProductController extends Controller
 
             $taxes = $this->texService->getActiveTaxes();
 
-            $firstMainCategorySubCategories = $this->productCategoryService->subCategoryByParentId($product->category_id);
-
+            $firstMainCategorySubCategories = $this->productCategoryService->getActiveMainCategories();
             // return $firstMainCategorySubCategories;
             $products = $this->productService->getActiveProducts();
 
@@ -269,7 +258,6 @@ class ProductController extends Controller
             'stock' => ['required', 'integer'],
             'fake_price' => ['required', 'integer', 'min:1'],
             'real_price' => ['required', 'integer', 'min:1', 'lte:fake_price'],
-            'purchase_price' => ['required', 'integer', 'min:1'],
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['nullable', 'exists:occasions,id'],
@@ -277,7 +265,7 @@ class ProductController extends Controller
         ]);
 
 
-        return $updated = $this->productService->update($request, $product);
+        $updated = $this->productService->update($request, $product);
 
         if ($updated) {
             $request->session()->flash('success', 'Product Updated SuccessFully');
@@ -308,6 +296,7 @@ class ProductController extends Controller
             $request->session()->flash('failed', 'Something Wrong');
             return redirect()->back();
         }
+
         $updated = $this->productService->updatePrice($request, $product);
 
         if ($updated) {
@@ -387,14 +376,12 @@ class ProductController extends Controller
             return redirect('acp/products');
         }
 
-        $product->status = '1';
+        $product->status = 1;
         $product->save();
         $request->session()->flash('success', 'Product  Status Changed To Active');
 
         return redirect('acp/products');
     }
-
-
 
     public function inactivation(Request $request, $id)
     {
@@ -405,6 +392,7 @@ class ProductController extends Controller
         }
 
         $product->status = '0';
+
         $product->save();
         $request->session()->flash('success', 'Product  Status Changed To InActive');
 
@@ -463,6 +451,8 @@ class ProductController extends Controller
             $request->session()->flash('failed', 'Product Not Found');
             return redirect()->back();
         }
+
+        // return $product->occasions ;
 
 
         return \view('admin.product.show', \compact('product'));

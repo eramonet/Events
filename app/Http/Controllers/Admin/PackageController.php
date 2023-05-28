@@ -81,6 +81,7 @@ class PackageController extends Controller
 
 
 
+
         // return $request->all();
 
         $request->validate([
@@ -113,6 +114,7 @@ class PackageController extends Controller
             'image'=>['required','image','max:10240'],
             'vendor_id'=>['required','exists:vendors,id'],
             'hall_id'=>['required','exists:halls,id'],
+            'category_id'=>['required','exists:hall_categories,id'],
             'taxes.*'=>['nullable','exists:taxes,id'],
             'options'=>['nullable','array'],
 
@@ -197,6 +199,7 @@ class PackageController extends Controller
             'image'=>['nullable','image','max:10240'],
             'vendor_id'=>['required','exists:vendors,id'],
             'hall_id'=>['required','exists:halls,id'],
+            'category_id'=>['required','exists:hall_categories,id'],
             'taxes.*'=>['nullable','exists:taxes,id'],
             'options'=>['nullable','array'],
 
@@ -253,15 +256,4 @@ class PackageController extends Controller
 
 
     }
-
-    public function show(Request $request, $id)
-    {
-        $package = $this->packageService->getById($id);
-        if (!$package) {
-            $request->session()->flash('failed', 'Package Not Found');
-            return redirect()->back();
-        }
-        return \view('admin.package.show', \compact('package'));
-    }
-
 }

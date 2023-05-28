@@ -115,7 +115,7 @@ class HallsCategoryController extends Controller
 
 
 
-        return \view('admin.hallCategory.edit' ,\compact( 'category'));
+        return \view('admin.hallCategory.edit' ,\compact( 'category',));
 
 
     }

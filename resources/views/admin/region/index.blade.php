@@ -201,6 +201,7 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+                    <th class="border-gray-200">Image</th>
                     <th class="border-gray-200">Title In Arabic</th>
                     <th class="border-gray-200">Title In English</th>
                     <th class="border-gray-200">Created At</th>
@@ -214,7 +215,9 @@
                 @foreach ($regions as $region)
                     <tr>
                         <td>{{ $region->id }}</td>
-
+                        <td>
+                            <img src="{{ $region->image }}" width="50px">
+                        </td>
                         <td>{{ $region->title_ar }}</td>
                         <td>{{ $region->title_en }}</td>
 
@@ -241,57 +244,36 @@
                         </td>
                         <td>
 
-                            <div class="btn-group">
-                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="icon icon-sm">
-                                        <span class="fas fa-ellipsis-h icon-dark"></span>
-                                    </span>
-                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu py-0">
-                                    <button data-bs-toggle="modal" data-bs-target="#modal-{{ $region->id }}"
-                                        class="dropdown-item rounded-top"><span class="fas fa-eye me-2"></span>View
-                                        Details</button>
+                            <a href="{{ route('admin.regions.show' , $region->id) }}" class="btn btn-primary"><span class="fas fa-eye"></span></a>
 
-                                    @if (Auth::guard('admin')->user()->hasPermission('regions-update'))
-                                        <a class="dropdown-item"
-                                            href="{{ route('admin.regions.edit', $region->id) }}"><span
-                                                class="fas fa-edit me-2"></span>Edit</a>
-                                    @endif
+                            @if (Auth::guard('admin')->user()->hasPermission('regions-update'))
+                                <a class="btn btn-info" href="{{ route('admin.regions.edit', $region->id) }}"><span
+                                        class="fas fa-edit"></span></a>
+                            @endif
 
 
-                                    @if ($region->deleted_at)
-                                        @if (Auth::guard('admin')->user()->hasPermission('regions-update'))
-                                            <form action="{{ route('admin.regions.restore', $region->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="dropdown-item text-success rounded-bottom">
-                                                    <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
-                                                </button>
-                                            </form>
-                                        @endif
-                                    @else
-                                        @if (Auth::guard('admin')->user()->hasPermission('regions-delete'))
-                                            <form class="delete-btn"
-                                                action="{{ route('admin.regions.destroy', $region->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger rounded-bottom">
-                                                    <span class="fas fa-trash-alt me-2"></span>Delete
-                                                </button>
-                                            </form>
-                                        @endif
-                                    @endif
-
-
-
-
-
-                                </div>
-                            </div>
+                            @if ($region->deleted_at)
+                                @if (Auth::guard('admin')->user()->hasPermission('regions-update'))
+                                    <form style="display: contents" action="{{ route('admin.regions.restore', $region->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn btn-success">
+                                            <span class="fa-solid fa-trash-can-arrow-up"></span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                @if (Auth::guard('admin')->user()->hasPermission('regions-delete'))
+                                    <form style="display: contents" class="delete-btn" action="{{ route('admin.regions.destroy', $region->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="fas fa-trash-alt"></span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
 
 
                         </td>

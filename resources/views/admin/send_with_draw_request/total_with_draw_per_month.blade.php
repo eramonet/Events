@@ -21,73 +21,13 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">Total With Draw Balance Per
-                        {{ date("F", mktime(0, 0, 0, Carbon\Carbon::now()->month, 1)) . " / " . Carbon\Carbon::now()->year  }}</li>
+                        {{ date('F', mktime(0, 0, 0, Carbon\Carbon::now()->month, 1)) . ' / ' . Carbon\Carbon::now()->year }}
+                    </li>
                 </ol>
             </nav>
 
         </div>
     </div>
-
-    {{-- <div class="card card-body border-0 shadow mb-2">
-
-        <div class="accordion ">
-
-
-
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Search Filters
-                    </button>
-                </h2>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionPricing">
-                    <div class="accordion-body card card-body ">
-
-
-                        <form action="{{ route('admin.with-draw-request.filter_total_withdraw') }}">
-
-                            <div class="row">
-
-                                <div class="col-lg-4">
-
-                                    <div class="form-group mb-3">
-                                        <label for="from">From</label>
-                                        <input type="date" id="from" value="{{ request()->from }}"
-                                            name="from" class="form-control search-docs" placeholder="From">
-
-                                    </div>
-                                </div>
-
-
-                                <div class="col-lg-4">
-
-                                    <div class="form-group mb-3">
-                                        <label for="to">To</label>
-
-                                        <input type="date" id="to"
-                                            value="{{ request()->to ? request()->to : date('Y-m-d', time()) }}"
-                                            name="to" class="form-control search-docs" placeholder="To">
-
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary ">Search</button>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div> --}}
 
 
 
@@ -98,61 +38,65 @@
                 <tr>
                     <th class="border-gray-200">Vendor Name </th>
                     <th class="border-gray-200">Vendor Phone </th>
-                    <th class="border-gray-200">Vendor Type </th>
-                    <th class="border-gray-200">Total Orders</th>
-                    <th class="border-gray-200">Vendor Balance</th>
+                    <th class="border-gray-200"> Hall Booking / Product Order </th>
+                    <th class="border-gray-200">Total Order Balance</th>
+                    <th class="border-gray-200">Total Vendor Balance</th>
+                    <th class="border-gray-200">Our Commission (%)</th>
+                    <th class="border-gray-200">Our Commission (AED)</th>
                     <th class="border-gray-200">Total Sent Balance</th>
-                    <th class="border-gray-200">Vendor Balance After Sent Money  </th>
-                    <th class="border-gray-200">Events Commission</th>
-                    <th class="border-gray-200">Events Balance</th>
+                    <th class="border-gray-200">Vendor Balance After Sent Money </th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Item -->
                 <?php
-                $total = 0 ;
-                $have = 0 ;
-                $commission = 0 ;
-                $total_sent_money = 0 ;
+                $total_order_balance = 0;
+                $vendor_balance = 0;
                 $our_commission = 0 ;
-                $vendor_have_after_sent_money = 0 ;?>
-                @foreach ($withdraw as $item)
-                    <tr>
-                        <td>
-                            <p class="text-nowrap">{{ $item->vendor ? $item->vendor->title_en : "----" }}</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ $item->vendor_phone }}</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ $item->vendor->type }}</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ number_format($item->total) }} AED</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ number_format($item->have) }} AED</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ number_format($item->sent_money) }} AED</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ number_format($item->have - $item->sent_money) }} AED</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap"> {{ $item->vendor ? $item->vendor->commission . "%" : "----" }} </p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ number_format($item->total * ($item->vendor->commission / 100)) }} AED</p>
-                        </td>
-                        <?php
-                        $total += $item->total ;
-                        $have += $item->have ;
-                        $commission += $item->vendor->commission ;
-                        $our_commission += $item->total * ($item->vendor->commission / 100) ;
-                        $total_sent_money += $item->sent_money ;
-                        $vendor_have_after_sent_money += ( $item->have - $item->sent_money ) ; ?>
-                    </tr>
+                $sent_money = 0 ;
+                $total_balance_after_sent = 0 ;?>
+                @foreach ($vendors as $vendor)
+                    @foreach ($vendor->with_draws as $with_draw)
+                        <tr>
+                            <td>
+                                <p class="text-nowrap">{{ $vendor->title_en }}</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ $vendor->phone }}</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ $with_draw->money_type }}</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ number_format($with_draw->total) }} AED</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ number_format($with_draw->have) }} AED</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ number_format($vendor->commission) . ' %' }}</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ number_format($with_draw->our_commission) . ' AED' }}</p>
+                            </td>
+                            <td>
+                                <?php $total_sent_money = 0; ?>
+                                @foreach ($with_draw->with_draw_requests as $request)
+                                    <?php $total_sent_money += $request->budget; $sent_money += $request->budget  ?>
+                                @endforeach
+                                <p class="text-nowrap">{{ number_format($total_sent_money) . ' AED' }}</p>
+                            </td>
+                            <td>
+                                <p class="text-nowrap">{{ number_format($with_draw->have - $total_sent_money) . ' AED' }}</p>
+                            </td>
+                            <?php
+                            $total_order_balance += $with_draw->total ;
+                            $vendor_balance += $with_draw->have ;
+                            $our_commission += $with_draw->our_commission ;
+                            $total_balance_after_sent += $with_draw->have - $total_sent_money ;
+                        ?>
+                        </tr>
+                    @endforeach
                 @endforeach
 
                 <!-- Item -->
@@ -169,26 +113,36 @@
                         <p class="text-nowrap"></p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($total) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
+                            {{ number_format($total_order_balance) }} AED
+                        </p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($have) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
+                            {{ number_format($vendor_balance) }} AED
+                        </p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($total_sent_money) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
+
+                        </p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($vendor_have_after_sent_money) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
+                            {{ number_format($our_commission) }} AED</p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold"></p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
+                            {{ number_format($sent_money) }} AED</p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($our_commission) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
+                            {{ number_format($total_balance_after_sent) }} AED</p>
                     </td>
                 </tr>
             </tbody>
         </table>
+    </div>
 
-        {{-- table --}}
-    @endsection
+    {{-- table --}}
+@endsection

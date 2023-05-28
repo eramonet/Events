@@ -36,6 +36,7 @@ class OccasionController extends Controller
     {
 
         $occasions =  Occasion::paginate(10);
+
         return \view('admin.occasions.index', [
             'occasions' => $occasions
         ]);
@@ -44,14 +45,10 @@ class OccasionController extends Controller
     public function create(Request $request)
     {
 
-        $countrys = Country::all();
-
         $cities = City::all();
         $regions = Region::all();
 
         return \view('admin.occasions.create', [
-
-            'countrys' => $countrys,
             'cities' => $cities,
             'regions' => $regions,
         ]);
@@ -65,24 +62,23 @@ class OccasionController extends Controller
         $request->validate([
 
             'primary_image' => ['required', 'image', 'max:10240'],
+            'icon' => ['required', 'image', 'max:10240'],
             'title_ar' => ['required', 'string', 'min:2', 'unique:occasions'],
             'title_en' => ['required', 'string', 'min:2', 'unique:occasions'],
-            'country_id' => ['required', 'exists:countries,id'],
             'city_id' => ['required', 'exists:cities,id'],
             'region_id' => ['required', 'exists:regions,id'],
             'description_ar' => ['required', 'string', 'min:2'],
             'description_en' => ['required', 'string', 'min:2'],
-
-
         ]);
 
-        //  return $request->file('primary_image') ;
-
         $imageName = UploadHelper::upload('occasions', $request->file('primary_image'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height'));
+
+        $iconName = UploadHelper::upload('occasions', $request->file('icon'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height'));
 
         $data = $request->all();
 
         $data['primary_image'] = $imageName;
+        $data['icon'] = $iconName;
         $created = Occasion::create($data);
 
         if ($created) {
@@ -91,7 +87,7 @@ class OccasionController extends Controller
             $request->session()->flash('failed', 'Something Wrong');
         }
 
-        return redirect('acp/occasion');
+        return redirect()->route('admin.occasion.index');
     }
 
 
@@ -103,12 +99,10 @@ class OccasionController extends Controller
             $request->session()->flash('failed', 'Occasion Not Found');
             return redirect()->back();
         }
-        $countrys = Country::all();
         $cities = City::all();
         $regions = Region::all();
 
         return \view('admin.occasions.edit', [
-            'countrys' => $countrys,
             'cities' => $cities,
             'regions' => $regions,
             'occasion' => $occasion,
@@ -122,15 +116,27 @@ class OccasionController extends Controller
 
 
         $request->validate([
-            'primary_image' => ['nullable', 'image', 'max:10240'],
+            'primary_image' => ['sometimes', 'image', 'max:10240'],
+            'icon' => ['sometimes', 'image', 'max:10240'],
             'title_ar' => ['required', 'string', 'min:2',  Rule::unique('occasions')->ignore($occasion)],
             'title_en' => ['required', 'string', 'min:2',  Rule::unique('occasions')->ignore($occasion)],
-            'country_id' => ['required', 'exists:countries,id'],
             'city_id' => ['required', 'exists:cities,id'],
             'region_id' => ['required', 'exists:regions,id'],
             'description_ar' => ['required', 'string', 'min:2'],
             'description_en' => ['required', 'string', 'min:2'],
         ]);
+        if ($request->hasFile('icon')) {
+
+
+            if (File::exists(public_path('uploads/occasions/' . $occasion->icon))) {
+
+                Storage::disk('public_uploads')->delete('occasions/' . $occasion->icon);
+            }
+
+            $iconName = UploadHelper::upload('occasions', $request->file('icon'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height'));
+
+            $occasion->icon = $iconName;
+        }
 
         if ($request->hasFile('primary_image')) {
 
@@ -144,9 +150,10 @@ class OccasionController extends Controller
 
             $occasion->primary_image = $imageName;
         }
-        
+
         $occasion->update([
             'primary_image' => $request->hasFile('primary_image') ? UploadHelper::upload('occasions', $request->file('primary_image'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')) : $occasion->primary_image ,
+            'icon' => $request->hasFile('icon') ? UploadHelper::upload('occasions', $request->file('icon'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')) : $occasion->icon ,
             'title_ar' => $request->title_ar,
             'title_en' => $request->title_en,
             'country_id' => $request->country_id,
@@ -161,7 +168,7 @@ class OccasionController extends Controller
 
 
 
-        return redirect()->back();
+        return redirect()->route('admin.occasion.index');
     }
 
     public function destroy(Request $request, $id)

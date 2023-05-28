@@ -15,4 +15,9 @@ class OuterClients extends Model
         "phone" ,
         "address"
     ] ;
+
+    public function client_ads()
+    {
+        return $this->hasMany(ClientsAd::class , "client_id");
+    }
 }

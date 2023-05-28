@@ -17,30 +17,33 @@ class RegionController extends Controller
     protected $cityService;
     protected $regionService;
 
-    public function __construct(CityService $cityService ,RegionService $regionService){
-          $this->cityService = $cityService;
-          $this->regionService = $regionService;
+    public function __construct(CityService $cityService, RegionService $regionService)
+    {
+        $this->cityService = $cityService;
+        $this->regionService = $regionService;
 
-          $this->middleware(['permission:regions-read'])->only(['index','export']);
-          $this->middleware(['permission:regions-create'])->only(['create', 'store']);
-          $this->middleware(['permission:regions-update'])->only(['update', 'edit']);
-          $this->middleware(['permission:regions-delete'])->only(['destroy']);
+        $this->middleware(['permission:regions-read'])->only(['index', 'export']);
+        $this->middleware(['permission:regions-create'])->only(['create', 'store']);
+        $this->middleware(['permission:regions-update'])->only(['update', 'edit']);
+        $this->middleware(['permission:regions-delete'])->only(['destroy']);
     }
 
 
 
-    public function index( Request $request){
+    public function index(Request $request)
+    {
 
 
-        $regions =$this->regionService->getAll($request);
+        $regions = $this->regionService->getAll($request);
 
 
 
         // return $regions;
-        return \view('admin.region.index' ,\compact('regions'));
+        return \view('admin.region.index', \compact('regions'));
     }
 
-    public function create( Request $request){
+    public function create(Request $request)
+    {
 
 
 
@@ -48,7 +51,7 @@ class RegionController extends Controller
 
 
 
-        return \view('admin.region.create' ,\compact('cities'));
+        return \view('admin.region.create', \compact('cities'));
     }
 
 
@@ -56,8 +59,7 @@ class RegionController extends Controller
     {
         ob_end_clean();
         ob_start();
-        return Excel::download(new RegionExport,  Carbon::now() .'-regions.xlsx');
-
+        return Excel::download(new RegionExport,  Carbon::now() . '-regions.xlsx');
     }
 
 
@@ -68,119 +70,107 @@ class RegionController extends Controller
 
 
         $request->validate([
-            'title_ar'=>['required','string','min:2' , 'unique:regions'],
-            'title_en'=>['required','string','min:2','unique:regions'],
-            'city_id'=>['required','exists:cities,id'],
-            'status'=>['required','string', Rule::in([1,0])],
-         ]);
+            'title_ar' => ['required', 'string', 'min:2', 'unique:regions'],
+            'title_en' => ['required', 'string', 'min:2', 'unique:regions'],
+            'city_id' => ['required', 'exists:cities,id'],
+            'status' => ['required', 'string', Rule::in([1, 0])],
+            'image' => ['nullable', 'image', 'max:10240'],
+        ]);
 
 
 
         $created = $this->regionService->store($request);
 
-        if($created){
+        if ($created) {
             $request->session()->flash('success', 'Region Added SuccessFully');
-
-        }else{
+        } else {
             $request->session()->flash('failed', 'Something Wrong');
-
         }
 
-        return redirect()->back();
-
+        return redirect()->route('admin.regions.index');
     }
 
 
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
 
-      $region = $this->regionService->getById($id);
-        if(!$region ){
+        $region = $this->regionService->getById($id);
+        if (!$region) {
             $request->session()->flash('failed', 'Region Not Found');
             return redirect()->back();
-
-
         }
         $cities = $this->cityService->getActiveCities();
 
 
-        return \view('admin.region.edit' ,\compact( 'region' ,'cities'));
-
-
+        return \view('admin.region.edit', \compact('region', 'cities'));
     }
 
 
     public function update(Request $request, $id)
     {
         $city = $this->regionService->getById($id);
-        if(!$city ){
+        if (!$city) {
             $request->session()->flash('failed', 'Region Not Found');
             return redirect()->back();
-
-
         }
+
         $request->validate([
-            'title_ar'=>['required','string','min:2' ,  Rule::unique('regions' ,'title_ar')->ignore($city->id)],
-            'title_en'=>['required','string','min:2', Rule::unique('regions' ,'title_en')->ignore($city->id)],
-            'city_id'=>['required','exists:cities,id'],
-            'status'=>['required','string', Rule::in([1,0])],
+            'title_ar' => ['required', 'string', 'min:2',  Rule::unique('regions', 'title_ar')->ignore($city->id)],
+            'title_en' => ['required', 'string', 'min:2', Rule::unique('regions', 'title_en')->ignore($city->id)],
+            'city_id' => ['required', 'exists:cities,id'],
+            'status' => ['required', 'string', Rule::in([1, 0])],
         ]);
 
-        $updated = $this->regionService->update($request , $city);
+        $updated = $this->regionService->update($request, $city);
 
-        if($updated){
+        if ($updated) {
             $request->session()->flash('success', 'Region Updated SuccessFully');
-
-        }else{
+        } else {
             $request->session()->flash('failed', 'Something Wrong');
         }
 
 
-         return redirect()->back();
-
-
+        return redirect()->route('admin.regions.index');
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         $city = $this->regionService->getById($id);
-        if(!$city ){
+        if (!$city) {
             $request->session()->flash('failed', 'Region Not Found');
             return redirect()->back();
-
-
         }
         $city->delete();
         $request->session()->flash('success', 'Region Deleted SuccessFully');
 
 
         return redirect()->back();
-
-
-
     }
 
 
-    public function restore(Request $request,$id)
+    public function restore(Request $request, $id)
     {
         $city = $this->regionService->getById($id);
-        if(!$city ){
+        if (!$city) {
             $request->session()->flash('failed', 'Region Not Found');
             return redirect()->back();
-
-
         }
         $city->restore();
         $request->session()->flash('success', 'Region Restored SuccessFully');
 
         return redirect()->back();
-
-
-
     }
 
-    public function getById($id){
-        $region= Region::where('id' , $id)->get();
+    public function getById($id)
+    {
+        $region = Region::where('city_id', $id)->get();
         return response()->json($region->toArray());
+    }
+
+    public function show($id)
+    {
+        $region = Region::find($id);
+
+        return view('admin.region.show' , compact('region'));
     }
 }

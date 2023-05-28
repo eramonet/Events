@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-Occasion
+    Occasion
 @endsection
 @section('content')
     {{-- on top --}}
@@ -41,7 +41,7 @@ Occasion
     {{-- on top --}}
 
 
-    <form action="{{ route('admin.occasion.update',$occasion->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.occasion.update', $occasion->id) }}" method="POST" enctype="multipart/form-data">
 
 
         @csrf
@@ -66,7 +66,8 @@ Occasion
                         <div class="form-group mb-4">
                             <label for="title_ar">Title In Arabic <span class="text-danger">*</span></label>
                             <input dir="rtl" required type="text" name="title_ar"
-                                class="form-control @error('title_ar') is-invalid @enderror" value="{{ $occasion->title_ar }}">
+                                class="form-control @error('title_ar') is-invalid @enderror"
+                                value="{{ $occasion->title_ar }}">
                         </div>
 
 
@@ -88,7 +89,8 @@ Occasion
                         <div class="form-group mb-4">
                             <label for="title_en">Title In English <span class="text-danger">*</span></label>
                             <input required type="text" name="title_en"
-                                class="form-control @error('title_en') is-invalid @enderror" value="{{ $occasion->title_en }}">
+                                class="form-control @error('title_en') is-invalid @enderror"
+                                value="{{ $occasion->title_en }}">
                         </div>
 
 
@@ -104,40 +106,14 @@ Occasion
 
                     <div class="col-md-6">
                         <div class="form-group mb-4">
-                            <label for="country_id">country<span class="text-danger">*</span></label>
-                            <select required name="country_id" id="countrys"
-                                class="form-select @error('country_id') is-invalid @enderror">
-                                <option value="">select country</option>
-                                @foreach ($countrys as $country)
-                                    <option value="{{ $country->id }}"  @if($country->id == $occasion->country_id) selected @endif {{ old('country_id') }}>
-                                        {{ $country->title_en }}</option>
-                                @endforeach
-
-                                {{-- <option value="0" {{ old('status') =='0'?'selected':''}}>InActive</option> --}}
-
-                            </select>
-                        </div>
-
-
-                        @error('country_id')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
                             <label for="city">city <span class="text-danger">*</span></label>
                             <select required name="city_id" id="city"
                                 class="form-select @error('city_id') is-invalid @enderror">
                                 <option> select city</option>
-                                @forEach($cities as $city)
-                                <option value="{{ $city->id }}"  @if($city->id == $occasion->city_id)selected @endif >  {{ $city->title_en }} </option>
-                                 @endforeach
+                                @foreach ($cities as $city)
+                                    <option value="{{ $city->id }}" @if ($city->id == $occasion->city_id) selected @endif>
+                                        {{ $city->title_en }} </option>
+                                @endforeach
                             </select>
                         </div>
 
@@ -157,9 +133,10 @@ Occasion
                             <label for="region_id">Region <span class="text-danger">*</span></label>
                             <select required name="region_id" id="region"
                                 class="form-select @error('region_id') is-invalid @enderror">
-                                @forEach($regions as $region)
-                                <option value="{{ $region->id }}"  @if($region->id == $occasion->region_id)selected @endif >  {{ $region->title_en }} </option>
-                                 @endforeach
+                                @foreach ($regions as $region)
+                                    <option value="{{ $region->id }}" @if ($region->id == $occasion->region_id) selected @endif>
+                                        {{ $region->title_en }} </option>
+                                @endforeach
 
                             </select>
                         </div>
@@ -205,7 +182,7 @@ Occasion
 
 
                             <textarea dir="rtl" name="description_ar" id="description_ar" cols="30" rows="3"
-                                class="form-control @error('description_ar') is-invalid @enderror">{{ $occasion->description_ar}}</textarea>
+                                class="form-control @error('description_ar') is-invalid @enderror">{{ $occasion->description_ar }}</textarea>
                         </div>
 
 
@@ -230,7 +207,7 @@ Occasion
 
 
                             <textarea name="description_en" id="description_en" cols="30" rows="3"
-                                class="form-control @error('description_en') is-invalid @enderror">{{$occasion->description_en }}</textarea>
+                                class="form-control @error('description_en') is-invalid @enderror">{{ $occasion->description_en }}</textarea>
                         </div>
 
 
@@ -256,6 +233,39 @@ Occasion
 
 
 
+        <div class="card mb-4">
+            <div class="card-header">
+                Icon
+            </div>
+
+
+            <div class="card-body">
+                {{-- icon --}}
+
+                <span class="text-danger">Prefer
+                    {{ config('imageDimensions.products.width') . '*' . config('imageDimensions.products.height') }}
+                    Pixels</span>
+
+                <div class="form-group mb-4 d-flex justify-content-center">
+                    <input data-default-file="{{ $occasion->icon }}"
+                        accept="image/*" type="file" name="icon" data-max-file-size="10M"
+                        class="dropify @error('icon') is-invalid @enderror" value="{{ old('icon') }}">
+                </div>
+
+
+                @error('icon')
+                    <div class="d-flex justify-content-center ">
+
+                        <div class="text-danger">
+                            <strong>{{ $message }}</strong>
+                        </div>
+                    </div>
+                @enderror
+
+                {{-- icon --}}
+
+            </div>
+        </div>
 
 
 
@@ -273,9 +283,10 @@ Occasion
                 <span class="text-danger">Prefer
                     {{ config('imageDimensions.products.width') . '*' . config('imageDimensions.products.height') }}
                     Pixels</span>
+
                 <div class="form-group mb-4 d-flex justify-content-center">
-                    <input data-default-file="{{asset('uploads/products_categories_images'.$occasion->primary_image)}}" accept="image/*" type="file"
-                        name="primary_image" data-max-file-size="10M"
+                    <input data-default-file="{{ $occasion->primary_image }}"
+                        accept="image/*" type="file" name="primary_image" data-max-file-size="10M"
                         class="dropify @error('primary_image') is-invalid @enderror" value="{{ old('primary_image') }}">
                 </div>
 
@@ -304,7 +315,7 @@ Occasion
 
 
         <button type="submit" class="btn btn-primary d-block m-auto">
-            Create
+            Save
             <i class="fas fa-plus icon icon-xs ms-2"></i>
         </button>
     </form>

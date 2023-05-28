@@ -27,7 +27,7 @@ class ProductCategoryService {
         $limit = isset($request->limit) && filter_var($request->limit, FILTER_VALIDATE_INT) ? $request->limit : 5;
         $order = isset($request->order) && $request->order == 'ASC' ? 'ASC' : 'DESC';
 
-        //$type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
+        $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
         $countries = $this->category::withCount(['sub_catagories', 'products', 'products_from_main'])->with(['admin', 'parent'])
         ->where(function ($query) use ($request) {
             return $query->when($request->search, function ($q) use ($request) {
@@ -36,12 +36,12 @@ class ProductCategoryService {
             });
         })
 
-            // ->when($type == 'sub', function ($q) {
-            //     return $q->sub();
-            // })
-            // ->when($type == 'main', function ($q) {
-            //     return $q->main();
-            // })
+            ->when($type == 'sub', function ($q) {
+                return $q->sub();
+            })
+            ->when($type == 'main', function ($q) {
+                return $q->main();
+            })
 
             ->when($deleted, function ($q) use ($deleted) {
                 return $q->onlyTrashed();
@@ -86,7 +86,7 @@ class ProductCategoryService {
         $limit = isset($request->limit) && filter_var($request->limit, FILTER_VALIDATE_INT) ? $request->limit : 5;
         $order = isset($request->order) && $request->order == 'ASC' ? 'ASC' : 'DESC';
 
-//$type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
+        $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
         $countries = $this->category::withCount(['sub_catagories', 'products', 'products_from_main'])->with(['admin', 'parent'])
         ->where('admin_id', $useradmin->id)
             ->where(function ($query) use ($request) {
@@ -96,12 +96,12 @@ class ProductCategoryService {
                 });
             })
 
-            // ->when($type == 'sub', function ($q) {
-            //     return $q->sub();
-            // })
-            // ->when($type == 'main', function ($q) {
-            //     return $q->main();
-            // })
+            ->when($type == 'sub', function ($q) {
+                return $q->sub();
+            })
+            ->when($type == 'main', function ($q) {
+                return $q->main();
+            })
 
             ->when($deleted, function ($q) use ($deleted) {
                 return $q->onlyTrashed();
@@ -152,7 +152,7 @@ class ProductCategoryService {
             'keywords_ar',
             'keywords_en',
             'status',
-            //'parent_id',
+            'parent_id',
             'features_ar',
             'features_en',
             'instructions_ar',
@@ -194,7 +194,7 @@ class ProductCategoryService {
             'keywords_ar',
             'keywords_en',
             'status',
-            //'parent_id',
+            'parent_id',
 
         ]);
 
@@ -236,13 +236,13 @@ class ProductCategoryService {
     }
 
 
-    // public function getActiveSubCategories()
-    // {
-    //     return  $this->category::whereStatus(1)->sub()->get();
-    // }
+    public function getActiveSubCategories()
+    {
+        return  $this->category::whereStatus(1)->sub()->get();
+    }
 
-    // public function subCategoryByParentId(int $id)
-    // {
-    //     return  $this->category::whereParentId($id)->get();
-    // }
+    public function subCategoryByParentId(int $id)
+    {
+        return  $this->category::whereParentId($id)->get();
+    }
 }

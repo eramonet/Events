@@ -286,76 +286,60 @@
                             <td>
                         @endif
 
-                          <td>
 
-                            {{-- actions --}}
-                            <div class="d-flex  align-items-center justify-content-center flex-md-nowrap">
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon icon-sm">
+                                        <span class="fas fa-ellipsis-h icon-dark"></span>
+                                    </span>
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu py-0">
+                                    <button data-bs-toggle="modal" data-bs-target="#modal-{{ $hall->id }}"
+                                        class="dropdown-item rounded-top"><span class="fas fa-eye me-2"></span>View
+                                        Details</button>
 
+                                    {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-update')) --}}
 
-                                <div class="">
-                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
-                                        <a href="{{ route('admin.halls.show' , $hall->id) }}" class="btn btn-primary  m-1"  class=""><span
-                                                class="fas fa-eye "></span>
-                                        </a>
-                                    </div>
-                                </div>
+                                    <a class="dropdown-item" href="{{ route('admin.halls.edit', $hall->id) }}"><span
+                                            class="fas fa-edit me-2"></span>Edit</a>
 
-
-                                <div class="">
-                                    @if (Auth::guard('admin')->user()->hasPermission('halls-update'))
-                                        <a class="btn btn-info m-1" class="dropdown-item"
-                                            href="{{ route('admin.halls.edit', $hall->id) }}" title="Edit"
-                                            data-bs-toggle="tooltip" data-bs-placement="top"><span
-                                                class="fas fa-edit "></span>
-                                        </a>
-                                    @endif
-                                </div>
+                                    {{-- @endif --}}
 
 
-                                <div class="">
                                     @if ($hall->deleted_at)
-                                        @if (Auth::guard('admin')->user()->hasPermission('halls-update'))
-                                            <form action="{{ route('admin.halls.restore', $hall->id) }}"
-                                                method="POST" class="action_btn"
-                                                data-message="Are You Sure You Want To Restore It ?">
+                                        {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-update')) --}}
+                                        <form action="{{ route('admin.halls.restore', $hall->id) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="dropdown-item text-success rounded-bottom">
+                                                <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
+                                            </button>
+                                        </form>
 
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="btn btn-success m-1" type="submit"
-                                                    title="Restore" data-bs-toggle="tooltip" data-bs-placement="top">
-                                                    <span class="fa-solid fa-trash-can-arrow-up text-white"></span>
-                                                </button>
-                                            </form>
-                                        @endif
+                                        {{-- @endif --}}
                                     @else
-                                        @if (Auth::guard('admin')->user()->hasPermission('halls-delete'))
-                                            <form class="delete-btn m-0 p-0 "
-                                                action="{{ route('admin.halls.destroy', $hall->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-danger m-1" type="submit" title="Delete"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top">
-                                                    <span class="fas fa-trash-alt "></span>
-                                                </button>
-                                            </form>
-                                        @endif
+                                        {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-delete')) --}}
+                                        <form class="delete-btn" action="{{ route('admin.halls.destroy', $hall->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="dropdown-item text-danger rounded-bottom">
+                                                <span class="fas fa-trash-alt me-2"></span>Delete
+                                            </button>
+                                        </form>
+
+                                        {{-- @endif --}}
                                     @endif
 
+
+
+
+
                                 </div>
-
-
-
-
-
-
                             </div>
-                            {{-- actions --}}
-
-
-
-
-
 
                         </td>
 

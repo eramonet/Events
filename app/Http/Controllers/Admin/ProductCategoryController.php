@@ -35,17 +35,17 @@ class ProductCategoryController extends Controller
         if ($useradmin->hasRole('super-admin')|| $useradmin->hasRole('admin') ) {
 
             $categories = $this->productCategoryService->getAll($request);
-            // $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
+            $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
             // return $categories;
-            return \view('admin.productCategory.index', \compact('categories'));
+            return \view('admin.productCategory.index', \compact('categories', 'type'));
 
         } else {
             $categories = $this->productCategoryService->getAllAdmin($request, $useradmin);
-           //$type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
+            $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
-
-            return \view('admin.productCategory.index', \compact('categories'));
+           
+            return \view('admin.productCategory.index', \compact('categories', 'type'));
         }
     }
 
@@ -88,7 +88,7 @@ class ProductCategoryController extends Controller
 
         $data=$request->all();
         $data['admin_id'] = Auth::id();
-
+       
         $request->validate([
 
             'title_ar' => ['required', 'string', 'min:2', 'unique:product_categories'],
@@ -96,20 +96,20 @@ class ProductCategoryController extends Controller
             'keywords_ar' => ['required', 'string', 'min:2'],
             'keywords_en' => ['required', 'string', 'min:2'],
             'status' => ['required', 'string', Rule::in([1, 0])],
-            //'parent_id' => ['nullable', 'exists:product_categories,id'],
+            'parent_id' => ['nullable', 'exists:product_categories,id'],
             'image' => ['nullable', 'image', 'max:10240'],
 
         ]);
 
 
-
-
-
+       
+              
+       
 
 
         $created = ProductCategory::create($data);
 
-
+        
 
         if ($created) {
             $request->session()->flash('success', 'Category Added SuccessFully');
@@ -171,7 +171,7 @@ class ProductCategoryController extends Controller
             'keywords_ar' => ['required', 'string', 'min:2'],
             'keywords_en' => ['required', 'string', 'min:2'],
             'status' => ['required', 'string', Rule::in([1, 0])],
-            //'parent_id' => ['nullable', 'exists:product_categories,id'],
+            'parent_id' => ['nullable', 'exists:product_categories,id'],
             'image' => ['nullable', 'image', 'max:10240'],
         ]);
 
@@ -217,18 +217,18 @@ class ProductCategoryController extends Controller
 
 
 
-    // public function subCategoryByParentId(Request $request)
-    // {
+    public function subCategoryByParentId(Request $request)
+    {
+        
+
+        if (!$request->input('id')) {
+            return response()->json(['id is required']);
+        }
+
+        $categories = $this->productCategoryService->subCategoryByParentId($request->id);
 
 
-    //     if (!$request->input('id')) {
-    //         return response()->json(['id is required']);
-    //     }
 
-    //     $categories = $this->productCategoryService->subCategoryByParentId($request->id);
-
-
-
-    //     return response()->json($categories->toArray());
-    // }
+        return response()->json($categories->toArray());
+    }
 }

@@ -67,10 +67,10 @@ class Package extends Model
         return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 
-    // public function hall()
-    // {
-    //     return $this->belongsTo(Hall::class, 'hall_id');
-    // }
+    public function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
+    }
 
     public function category()
     {
@@ -85,10 +85,6 @@ class Package extends Model
     public function taxes()
     {
         return $this->belongsToMany(Tax::class, 'package_tax', 'package_id', 'tax_id');
-    }
-    public function halls()
-    {
-        return $this->hasMany(Hall::class, 'hall_packages', 'package_id', 'hall_id');
     }
     public function bookings(){
         return $this->hasMany(Hall_booking::class);

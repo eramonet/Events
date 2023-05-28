@@ -34,8 +34,8 @@ class Product extends Model
     public function getProfitPercentAttribute()
     {
 
-        $profit = $this->real_price - $this->purchase_price;
-        $profit_percent = $profit * 100 / $this->purchase_price;
+        $profit = $this->real_price - 0;
+        $profit_percent = $profit * 100;
 
         return number_format($profit_percent, 2);
     }
@@ -73,7 +73,7 @@ class Product extends Model
 
     public function admin()
     {
-        return $this->belongsTo(Admin::class, 'admin_id')->with('roles');
+        return $this->belongsTo(Vendor::class , 'admin_id' , 'id');
     }
 
     public function orders(){
@@ -166,5 +166,26 @@ class Product extends Model
     public function vendors()
     {
         return $this->belongsToMany(Vendor::class, 'product_vendors', 'product_id', 'vendor_id');
+    }
+
+    public function owner()
+    {
+        return $this->belongsTo(Vendor::class , "admin_id");
+    }
+
+    ////      scope
+    public function scopeNew($query)
+    {
+        return $query->where("accept" , "new");
+    }
+
+    public function scopeAccept($query)
+    {
+        return $query->where("accept" , "accepted");
+    }
+
+    public function scopeReject($query)
+    {
+        return $query->where("accept" , "rejected");
     }
 }

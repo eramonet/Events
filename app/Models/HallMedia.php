@@ -11,7 +11,6 @@ class HallMedia extends Model
     protected $guarded = [];
 
 
-    protected $fillable = ['hall_id', 'image'];
 
     public function hall()
     {

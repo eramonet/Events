@@ -26,7 +26,7 @@
             <h2 class="h4">All Countries</h2>
 
         </div>
-        <div class="btn-toolbar mb-2 mb-md-0">
+        {{-- <div class="btn-toolbar mb-2 mb-md-0">
             @if (Auth::guard('admin')->user()->hasPermission('countries-create'))
                 <a href="{{ route('admin.countries.create') }}"
                     class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
@@ -42,8 +42,6 @@
             <div class="btn-group ms-2 ms-lg-3">
                 <a href="{{ route('admin.countries.export') }}"
                     class="btn btn-outline-success d-inline-flex align-items-center">
-                    {{-- <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> --}}
-
                     <svg class="icon icon-xs me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-file-earmark-break-fill" viewBox="0 0 16 16">
                         <path
@@ -52,7 +50,7 @@
                     <span> Export As Excel</span>
                 </a>
             </div>
-        </div>
+        </div> --}}
     </div>
 
 
@@ -156,8 +154,8 @@
 
                                     <div class="form-group mb-3">
                                         <label for="from">From</label>
-                                        <input type="date" id="from" value="{{ request()->from }}"
-                                            name="from" class="form-control search-docs" placeholder="From">
+                                        <input type="date" id="from" value="{{ request()->from }}" name="from"
+                                            class="form-control search-docs" placeholder="From">
 
                                     </div>
                                 </div>
@@ -241,65 +239,45 @@
                         </td>
                         <td>
 
-                            <div class="btn-group">
-                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="icon icon-sm">
-                                        <span class="fas fa-ellipsis-h icon-dark"></span>
-                                    </span>
-                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu py-0">
-                                    <button data-bs-toggle="modal" data-bs-target="#modal-{{ $country->id }}"
-                                        class="dropdown-item rounded-top"><span class="fas fa-eye me-2"></span>View
-                                        Details</button>
+                            <a href="{{ route('admin.countries.show' , $country->id ) }}" class="btn btn-primary"><span class="fas fa-eye"></span></a>
 
-                                    @if (Auth::guard('admin')->user()->hasPermission('countries-update'))
-                                        <a class="dropdown-item"
-                                            href="{{ route('admin.countries.edit', $country->id) }}"><span
-                                                class="fas fa-edit me-2"></span>Edit</a>
-                                    @endif
+                            {{-- @if (Auth::guard('admin')->user()->hasPermission('countries-update'))
+                                <a class="dropdown-item"
+                                    href="{{ route('admin.countries.edit', $country->id) }}"><span
+                                        class="fas fa-edit me-2"></span>Edit</a>
+                            @endif --}}
 
 
-                                    @if ($country->deleted_at)
-                                        @if (Auth::guard('admin')->user()->hasPermission('countries-update'))
-                                            <form action="{{ route('admin.countries.restore', $country->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="dropdown-item text-success rounded-bottom">
-                                                    <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
-                                                </button>
-                                            </form>
-                                        @endif
-                                    @else
-                                        @if (Auth::guard('admin')->user()->hasPermission('countries-delete'))
-                                            <form class="delete-btn"
-                                                action="{{ route('admin.countries.destroy', $country->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger rounded-bottom">
-                                                    <span class="fas fa-trash-alt me-2"></span>Delete
-                                                </button>
-                                            </form>
-                                        @endif
-                                    @endif
-
-
-
-
-
-                                </div>
-                            </div>
-
-
+                            {{-- @if ($country->deleted_at)
+                                @if (Auth::guard('admin')->user()->hasPermission('countries-update'))
+                                    <form action="{{ route('admin.countries.restore', $country->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="dropdown-item text-success rounded-bottom">
+                                            <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                @if (Auth::guard('admin')->user()->hasPermission('countries-delete'))
+                                    <form class="delete-btn"
+                                        action="{{ route('admin.countries.destroy', $country->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item text-danger rounded-bottom">
+                                            <span class="fas fa-trash-alt me-2"></span>Delete
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif --}}
                         </td>
 
 
 
 
-                        <div class="modal fade" id="modal-{{ $country->id }}" tabindex="-1" role="dialog"
+                        {{-- <div class="modal fade" id="modal-{{ $country->id }}" tabindex="-1" role="dialog"
                             aria-labelledby="modal-default" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
@@ -363,15 +341,12 @@
                                                     class="fas fa-edit me-2"></span>Edit</a>
                                         @endif
 
-                                        {{-- <button type="button" class="btn btn-secondary">Accept</button> --}}
-
-
                                         <button type="button" class="btn btn-link text-gray ms-auto"
                                             data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </tr>
                 @endforeach
                 <!-- Item -->

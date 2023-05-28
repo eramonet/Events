@@ -20,107 +20,124 @@
     <section id="showDetails" class="showDetails" style="background-color: #fff; padding: 0px; z-index: 100">
         <div class="container" style="">
             <div class="row">
-                <!-- <div class="col-lg-0.5 flower1">
-                                                                                                        <br /><br />
-                                                                                                        <img src="{{ asset('user_assets/images/flowers/left_slider.png') }}" style="width: 50px" />
-                                                                                                      </div> -->
+
                 <div class="col-lg-9 col-md-12 col-12">
                     <header style="border-radius: 10px">
                         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner" id="myCarousel" style="border-radius: 10px;">
                                 <?php $counter = 0; ?>
-
-                                @foreach ($home_page_ads as $home_slider)
-                                    @if ($counter == 0)
-                                        <div class="carousel-item header-carousel-item bg-cover active"
-                                            style="background-image: url({{ asset('user_assets/uploads/ads/' . $home_slider->ad->image . '') }})">
-                                        @else
-                                            <div class="carousel-item header-carousel-item bg-cover"
+                                @if (count($home_page_ads) > 0)
+                                    @foreach ($home_page_ads as $home_slider)
+                                        @if ($counter == 0)
+                                            <div class="carousel-item header-carousel-item bg-cover active"
                                                 style="background-image: url({{ asset('user_assets/uploads/ads/' . $home_slider->ad->image . '') }})">
-                                    @endif
-                                    <a href="{{ $home_slider->ad->link }}">
-                                        @if (!$home_slider->ad->title_en && !$home_slider->ad->description_en)
-                                            <div class="carousel-caption d-none d-md-block px-3"
-                                                style="text-align: left; height: 100%; bottom: 0px;">
                                             @else
-                                                <div class="carousel-caption d-none d-md-block px-3"
-                                                    style="text-align: left; height: 100%; background-color: #0000004d; bottom: 0px;">
+                                                <div class="carousel-item header-carousel-item bg-cover"
+                                                    style="background-image: url({{ asset('user_assets/uploads/ads/' . $home_slider->ad->image . '') }})">
                                         @endif
-                                        <div style=" width: 60%; padding: 20px; padding-top: 40%">
-                                            <h3>{{ $home_slider->ad->title_en ? $home_slider->ad->title_en : '' }}
-                                            </h3>
-                                            <p>{{ $home_slider->ad->description_en ? $home_slider->ad->description_en : '' }}
-                                            </p>
-                                        </div>
-                            </div>
-                        </div>
-                        </a>
-                        <?php $counter++; ?>
-                        @endforeach
+                                        <a href="{{ $home_slider->ad->link }}">
+                                            @if (!$home_slider->ad->title_en && !$home_slider->ad->description_en)
+                                                <div class="carousel-caption d-none d-md-block px-3"
+                                                    style="text-align: left; height: 100%; bottom: 0px;">
+                                                @else
+                                                    <div class="carousel-caption d-none d-md-block px-3"
+                                                        style="text-align: left; height: 100%; background-color: #0000004d; bottom: 0px;">
+                                            @endif
+                                            <div style=" width: 60%; padding: 20px; padding-top: 40%">
+                                                <h3>{{ $home_slider->ad->title_en ? $home_slider->ad->title_en : '' }}
+                                                </h3>
+                                                <p>{{ $home_slider->ad->description_en ? $home_slider->ad->description_en : '' }}
+                                                </p>
+                                            </div>
+                                        </a>
+                                        <?php $counter++; ?>
+                                    @endforeach
+                                @else
+                                    <div class="carousel-item header-carousel-item bg-cover active"
+                                        style="background-image: url({{ asset('user_assets/uploads/ads/default_ads.bmp') }})">
+                                    </div>
+                                @endif
 
+
+                            </div>
+
+
+                        </div>
+                    </header>
                 </div>
 
-
-            </div>
-            </header>
-        </div>
-
-        <script>
-            $(document).ready(function() {
-                $('#myCarousel').find('.item').first().addClass('active');
-            });
-        </script>
+                <script>
+                    $(document).ready(function() {
+                        $('#myCarousel').find('.item').first().addClass('active');
+                    });
+                </script>
 
 
-        <div class="col-lg-3 col-md-12 col-12">
-            <div class="images">
-                <ul class="d-flex d-md-block list-unstyled" style="">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-10 col-md-10 col-12">
-                                <li id="images_of_big_slider btn2" class="active" data-aos="zoom-in"
-                                    data-aos-duration="1500"
-                                    style="
+                <div class="col-lg-3 col-md-12 col-12">
+                    <div class="images">
+                        <ul class="d-flex d-md-block list-unstyled" style="">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-10 col-md-10 col-12">
+                                        <li id="images_of_big_slider btn2" class="active" data-aos="zoom-in"
+                                            data-aos-duration="1500"
+                                            style="
                                                 width: 100%;
                                                 height: 216px;
                                                 border-radius: 10px;
                                                 ">
-                                    <a href="{{ App\Models\ClientsAd::subHome1()->first()->ad->link }}">
-                                        <img src="{{ asset('user_assets/uploads/ads/' . App\Models\ClientsAd::subHome1()->first()->ad->image) }}"
-                                            style="height: 100%" />
-                                    </a>
-                                </li>
+                                            @if (App\Models\ClientsAd::subHome1()->first())
+                                                <a href="{{ App\Models\ClientsAd::subHome1()->first()->ad->link }}">
+                                                    <img src="{{ asset('user_assets/uploads/ads/' . App\Models\ClientsAd::subHome1()->first()->ad->image) }}"
+                                                        style="height: 100%" />
+                                                </a>
+                                            @else
+                                                <a>
+                                                    <img src="{{ asset('user_assets/uploads/ads/default_ads.bmp') }}"
+                                                        style="height: 100%" />
+                                                </a>
+                                            @endif
+
+                                        </li>
+                                    </div>
+                                    <div class="col-lg-2 below_small_image_sliders"></div>
+                                </div>
                             </div>
-                            <div class="col-lg-2 below_small_image_sliders"></div>
-                        </div>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-10 col-md-10 col-12">
-                                <li id="images_of_big_slider btn1" class="active" data-aos="zoom-in"
-                                    data-aos-duration="1500"
-                                    style="
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-10 col-md-10 col-12">
+                                        <li id="images_of_big_slider btn1" class="active" data-aos="zoom-in"
+                                            data-aos-duration="1500"
+                                            style="
                                 width: 100%;
                                 height: 216px;
                                 border-radius: 10px;
                                 ">
-                                    <a href="{{ App\Models\ClientsAd::subHome1()->first()->ad->link }}">
-                                        <img src="{{ asset('user_assets/uploads/ads/' . App\Models\ClientsAd::subHome2()->first()->ad->image) }}"
-                                            style="height: 100%" />
-                                    </a>
-                                </li>
+                                            @if (App\Models\ClientsAd::subHome1()->first())
+                                                <a href="{{ App\Models\ClientsAd::subHome1()->first()->ad->link }}">
+                                                    <img src="{{ asset('user_assets/uploads/ads/' . App\Models\ClientsAd::subHome2()->first()->ad->image) }}"
+                                                        style="height: 100%" />
+                                                </a>
+                                            @else
+                                                <a>
+                                                    <img src="{{ asset('user_assets/uploads/ads/default_ads.bmp') }}"
+                                                        style="height: 100%" />
+                                                </a>
+                                            @endif
+
+                                        </li>
+                                    </div>
+                                    <div class="col-lg-2 below_small_image_sliders">
+                                        <br />
+                                        <img src="{{ asset('user_assets/images/flowers/right_small_image_slider.png') }}"
+                                            style="width: 100px" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-lg-2 below_small_image_sliders">
-                                <br />
-                                <img src="{{ asset('user_assets/images/flowers/right_small_image_slider.png') }}"
-                                    style="width: 100px" />
-                            </div>
-                        </div>
+                        </ul>
                     </div>
-                </ul>
+                </div>
             </div>
-        </div>
-        </div>
         </div>
         <br />
         <div class="container slider_doted_next_prev" style="text-align: center; padding: 30px; width: 100%; margin: auto">
@@ -319,7 +336,7 @@
                         @foreach ($main_categories as $main_category)
                             @if ($main_category->products->count() > 0)
                                 <li class="filte my_foused_class1" data-filter=".item_filter{{ $main_category->id }}">
-                                    {{ $lang == "en" ? $main_category->title_en : $main_category->title_ar }}
+                                    {{ $lang == 'en' ? $main_category->title_en : $main_category->title_ar }}
                                 </li>
                             @endif
                         @endforeach
@@ -338,7 +355,10 @@
                                     <div class="row">
                                         @foreach ($main_categories as $main_category)
                                             @foreach ($main_category->products as $product)
-                                                <div class="col-lg-4 col-md-12 col-sm-12 mix item_filter{{ $product->main_category->id }}" onmouseenter="show_options('{{ $product->id }}')" onmouseleave="hide_options('{{ $product->id }}')" id="ContainerCart">
+                                                <div class="col-lg-4 col-md-12 col-sm-12 mix item_filter{{ $product->main_category->id }}"
+                                                    onmouseenter="show_options('{{ $product->id }}')"
+                                                    onmouseleave="hide_options('{{ $product->id }}')"
+                                                    id="ContainerCart">
                                                     <div class="product" id="products_latest_products1"
                                                         style="border: 1px solid #000;border-radius: 0px;height: 425px;">
                                                         <div class="image">
@@ -362,7 +382,8 @@
                                                                         New
                                                                     </li>
                                                                 </div>
-                                                                <div class="my_div_hovered" id="my_div_hovered{{ $product->id }}"
+                                                                <div class="my_div_hovered"
+                                                                    id="my_div_hovered{{ $product->id }}"
                                                                     style="
                                                                         width: 100%;
                                                                         float: right;
@@ -382,7 +403,8 @@
                                                                                 "
                                                                             class="fa fa-eye"></i>
                                                                         <br />
-                                                                        <i onclick="add_to_cart({{ $product->id }} , 1)" style="
+                                                                        <i onclick="add_to_cart({{ $product->id }} , 1)"
+                                                                            style="
                                                                         border: 2px solid #f3a095;
                                                                         padding: 15px;
                                                                         border-left: 0;
@@ -399,12 +421,19 @@
                                                                 <div class="container">
                                                                     <div class="row">
                                                                         <div class="col-10">
-                                                                            <a href="" style="text-decoration: none"><h4 style="color: #000; font-weight: bold">{{ $lang == "en" ? substr($product->title_en, 0,  15) : substr($product->title_ar, 0,  15) }} ....</h4></a>
-                                                                            <p style="color: #aaa; font-weight: bold">{{ substr( $product->main_category->title_ar , 0,  100) }}</p>
+                                                                            <a href=""
+                                                                                style="text-decoration: none">
+                                                                                <h4 style="color: #000; font-weight: bold">
+                                                                                    {{ $lang == 'en' ? substr($product->title_en, 0, 15) : substr($product->title_ar, 0, 15) }}
+                                                                                    ....</h4>
+                                                                            </a>
+                                                                            <p style="color: #aaa; font-weight: bold">
+                                                                                {{ substr($product->main_category->title_ar, 0, 100) }}
+                                                                            </p>
                                                                         </div>
-                                                                        <div class="col-2"
-                                                                            style="text-align: right">
-                                                                            <span><i class="far fa-heart favorit" style="font-size: 20px"
+                                                                        <div class="col-2" style="text-align: right">
+                                                                            <span><i class="far fa-heart favorit"
+                                                                                    style="font-size: 20px"
                                                                                     id="fav_icon3"></i></span>
                                                                         </div>
                                                                     </div>
@@ -419,7 +448,8 @@
                                                                                     color: #000;
                                                                                     font-weight: bold;
                                                                                     font-size: 18px;
-                                                                                    ">{{ $product->real_price }} AED</span>
+                                                                                    ">{{ $product->real_price }}
+                                                                                    AED</span>
                                                                                 <span
                                                                                     style="
                                                                                         color: #888888;
@@ -1755,8 +1785,7 @@
     <!-- ------------------ start Shop By Brands ---------------------------- -->
     <section class="WeddingsHalls latestEngagments">
         <div class="container">
-            <div class="head text-center sec-title" data-aos="fade-right" data-aos-offset="0"
-                data-aos-duration="2500">
+            <div class="head text-center sec-title" data-aos="fade-right" data-aos-offset="0" data-aos-duration="2500">
                 <a href="brandsCollaboration.html" target="_blank">
                     <h2>Shop By BRANDS</h2>
                 </a>
@@ -1884,15 +1913,13 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                aria-label="Close"></button>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
     </div>
     <!-- ------------------ start Latest Engagments halls ---------------------------- -->
     <section class="WeddingsHalls LatestBirthdayHalls" style="width: 80%; margin: auto">
         <div class="container">
-            <div class="head text-center sec2-title" data-aos="fade-left" data-aos-offset="0"
-                data-aos-duration="2500">
+            <div class="head text-center sec2-title" data-aos="fade-left" data-aos-offset="0" data-aos-duration="2500">
                 <span>{{ App\Models\LatestEngagmentsHall::first()->small_text_en }}</span>
                 <h2>LATEST ENGAGMENTS HALLS</h2>
                 <p>

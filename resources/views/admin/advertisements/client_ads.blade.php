@@ -33,8 +33,8 @@
             </div>
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <a href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-client-center"
-                style="height: 40px; margin-right: 10px" data-bs-toggle="modal" data-bs-target="#modal-add-outer">
+            <a href="{{ route('admin.advertisements.assign_outer_client_ad_page') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-client-center"
+                style="height: 40px; margin-right: 10px">
                 <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
@@ -42,8 +42,7 @@
                 </svg>
                 Assign To Outer Client
             </a>
-            <a href="#" class="btn btn-sm btn-gray-800 d-inline-flex align-client-center" style="height: 40px;"
-                data-bs-toggle="modal" data-bs-target="#modal-add-inner">
+            <a href="{{ route('admin.advertisements.assign_inner_client_ad_page') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-client-center" style="height: 40px;">
                 <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
@@ -152,23 +151,18 @@
 
                                 <div class="">
                                     <div data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">
-                                        <a href="{{ route('admin.advertisements.delete_client_ad', $items->id) }}"
-                                            class="btn btn-danger  m-1"><span class="fas fa-trash "></span>
-                                        </a>
+                                        <form class="delete-btn m-0 p-0 "
+                                                action="{{ route('admin.advertisements.delete_client_ad', $items->id) }}"
+                                                method="GET">
+                                                @csrf
+                                                <button class="btn btn-danger m-1" type="submit" title="Delete"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top">
+                                                    <span class="fas fa-trash-alt "></span>
+                                                </button>
+                                            </form>
                                     </div>
                                 </div>
-
-
-
-
-
                             </div>
-
-
-
-
-
-
                         </td>
 
 
@@ -297,178 +291,8 @@
                         </div>
                     </tr>
                 @endforeach
-
-                <div class="modal fade" id="modal-add-outer" tabindex="-1" role="dialog"
-                    aria-labelledby="modal-default" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="h6 modal-title">Create New Advertisement</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <form action="{{ route('admin.advertisements.assign_client_ad') }}" method="POST"
-                                enctype="multipart/form-data">
-                                <div class="modal-body">
-
-                                    <div class="wrapper m-auto">
-                                        <ul class="list-group list-group-flush">
-                                            <label> Client</label>
-                                            <select name="client_id" class="form-control">
-                                                @foreach (App\Models\OuterClients::get() as $outer_client)
-                                                    <option value="{{ $outer_client->id }}"> {{ $outer_client->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select><br>
-
-                                            <label> Advertisement </label>
-                                            <select name="ad_id" id="slick" class="form-control">
-                                                @foreach (App\Models\Advertisement::get() as $ad)
-                                                    <option value="{{ $ad->id }}">
-                                                        {{ $ad->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select><br>
-
-                                            <label> From </label>
-                                            <input name="from" type="date" class="form-control" /><br>
-
-                                            <input name="client_type" value="outer" hidden />
-
-                                            <label> To </label>
-                                            <input name="to" type="date" class="form-control" /><br>
-
-                                            <label>Ads nns</label>
-                                            <select name="location" class="form-control">
-                                                <option value="In Brand Page">In Brand Page</option>
-                                                <option value="Main Home">Main Home</option>
-                                                <option value="Sub Home 1">Sub Home 1</option>
-                                                <option value="Sub Home 2">Sub Home 2</option>
-                                                <option value="In Category Menu">In Category Menu</option>
-                                                <option value="In Brand Menu">In Brand Menu</option>
-                                                <option value="In Mobile App Home">In Mobile App Home</option>
-                                            </select><br>
-
-                                            <label>Activation</label>
-                                            <select name="activation" class="form-control">
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                            </select><br>
-                                        </ul>
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-
-
-                                    <button type="submit" class="btn btn-primary">
-                                        Add
-                                    </button>
-
-
-                                    <button type="button" class="btn btn-link text-gray ms-auto"
-                                        data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal fade" id="modal-add-inner" tabindex="-1" role="dialog"
-                    aria-labelledby="modal-default" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h2 class="h6 modal-title">Create New Advertisement</h2>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <form action="{{ route('admin.advertisements.assign_client_ad') }}" method="POST"
-                                enctype="multipart/form-data">
-                                <div class="modal-body">
-
-                                    <div class="wrapper m-auto">
-                                        <ul class="list-group list-group-flush">
-                                            <label> Client</label>
-                                            <select name="client_id" class="form-control">
-
-                                                @foreach (App\Models\Vendor::get() as $vendor)
-                                                    <option value="{{ $vendor->id }}"> {{ $vendor->title_en }}
-                                                    </option>
-                                                @endforeach
-                                            </select><br>
-
-                                            <label> Advertisement </label>
-                                            <select name="ad_id" id="slick" class="form-control">
-                                                @foreach (App\Models\Advertisement::get() as $ad)
-                                                    <option value="{{ $ad->id }}">
-                                                        {{ $ad->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select><br>
-
-                                            <label> From </label>
-                                            <input name="from" type="date" class="form-control" /><br>
-
-                                            <input name="client_type" value="inner" hidden />
-
-                                            <label> To </label>
-                                            <input name="to" type="date" class="form-control" /><br>
-
-                                            <label>Ads Locations</label>
-                                            <select name="location" class="form-control">
-                                                <option value="In Brand Page">In Brand Page</option>
-                                                <option value="Main Home">Main Home</option>
-                                                <option value="Sub Home 1">Sub Home 1</option>
-                                                <option value="Sub Home 2">Sub Home 2</option>
-                                                <option value="In Category Menu">In Category Menu</option>
-                                                <option value="In Brand Menu">In Brand Menu</option>
-                                                <option value="In Mobile App Home">In Mobile App Home</option>
-                                            </select><br>
-
-                                            <label>Activation</label>
-                                            <select name="activation" class="form-control">
-                                                <option value="yes">Yes</option>
-                                                <option value="no">No</option>
-                                            </select><br>
-                                        </ul>
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-
-
-                                    <button type="submit" class="btn btn-primary">
-                                        Add
-                                    </button>
-
-
-                                    <button type="button" class="btn btn-link text-gray ms-auto"
-                                        data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-
-
-
-
-
             </tbody>
         </table>
-        <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-client-center justify-content-between">
-            {{-- {!! $items->appends(request()->query())->links('pagination::bootstrap-5') !!} --}}
-
-
-        </div>
-
-        {{-- @if ($taxes->count() < 1)
-        <div class="d-flex justify-content-center" style="min-height: 300px">
-            Empty
-        </div>
-    @endif --}}
     </div>
 
     {{-- table --}}

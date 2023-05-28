@@ -17,7 +17,7 @@ class PackageResource extends JsonResource
         $lang = getLang();
         return [
             'id'=>$this->id,
-            'photographer'=>$this->photographer == '1' ? true : false,
+            'photographer'=>$this->photographer,
             'number_of_guests'=>$this->number_of_guests,
             'number_of_tables'=>$this->number_of_tables,
             'meal_description'=> $lang == 'en' ? $this->description_en : $this->description_ar,

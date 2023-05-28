@@ -46,7 +46,24 @@
                 <div class="card card-body px-1 py-3 mx-4 p bg-primary   rounded my-3 order-statistics  position-relative">
                     <h1 style="color: #fff; font-size: 30px;"><span id="balance_price">0</span> AED</h1>
                     <input type="text" id="inp_balance" hidden>
-                    <a><span class="d-block " style=" font-size:35px ; color:#fff">Balance</span></a>
+                    <a><span class="d-block " style=" font-size:35px ; color:#fff">Total Balance</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card my-4">
+
+        <div class="card-header">
+            Selected Order Balance
+        </div>
+        <div class=" card-body ">
+
+            <div class="d-flex justify-content-center align-items-center flex-wrap">
+                <div class="card card-body px-1 py-3 mx-4 p bg-primary   rounded my-3 order-statistics  position-relative">
+                    <h1 style="color: #fff; font-size: 30px;"><span id="selected_order_balance">0</span> AED</h1>
+                    <input type="text" id="inp_balance" hidden>
+                    <a><span class="d-block " style=" font-size:35px ; color:#fff">Selected Order Balance</span></a>
                 </div>
             </div>
         </div>
@@ -72,7 +89,9 @@
 
             <div class="card-body">
 
-
+                <input type="text" id="client_email_inpt" name="client_email_inpt" hidden>
+                <input type="text" id="client_order_balance_inpt" name="client_order_balance_inpt" hidden>
+                <input type="text" id="key_for_filter" name="key_for_filter" hidden>
 
                 <div class="row">
 
@@ -90,6 +109,26 @@
 
                     <div class="col-md-4">
                         <div class="form-group mb-4">
+                            <label for="title_ar">Select Balance Type <span class="text-danger">*</span></label>
+                            <select name="hall_order" class="form-control" id="select_filter_key">
+                                <option value="">Select Balance Type</option>
+                                <option value="hall">Hall</option>
+                                <option value="order">Order</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group mb-4">
+                            <label for="title_ar">Select Client Orders <span class="text-danger">*</span></label>
+                            <select name="client_order" class="form-control" id="choose_client_orders">
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group mb-4">
                             <label for="title_en">Value <span class="text-danger">*</span></label>
                             <input required type="number" step="0.01" name="value"
                                 class="form-control @error('value') is-invalid @enderror" value="{{ old('value') }}">
@@ -99,9 +138,8 @@
                     <div class="col-md-4">
                         <div class="form-group mb-4">
                             <label for="purchase_price">Notes</label>
-                            <input value="{{ old('notes') }}" type="text"
-                                name="notes" class="form-control @error('notes') is-invalid @enderror"
-                                value="{{ old('notes') }}">
+                            <input value="{{ old('notes') }}" type="text" name="notes"
+                                class="form-control @error('notes') is-invalid @enderror" value="{{ old('notes') }}">
                             <input type="text" id="client_id" name="vendor_id" hidden>
                         </div>
                     </div>
@@ -141,25 +179,102 @@
                 client_id = "empty";
             }
 
-            complete_url = "/acp/admin/get-vendor-balance/" + client_id;
+            complete_url = "/acp/admin/get-vendor-balance/" + client_id + "/" + "hello";
 
             $.ajax({
                 type: "GET",
                 url: complete_url,
                 success: function(data) {
 
-                    console.log(data)
                     if (data == "empty") {
                         $("#balance_price").text(0);
                         $("#inp_balance").val(0);
                         $("#client_id").val("");
                     } else {
+                        $("#client_email_inpt").val(data[1].email);
 
-                        $("#balance_price").text( addCommas(data[0].toFixed(2)).split('.')[1] == 00 ? addCommas(data[0]) : addCommas(data[0].toFixed(2)) );
-                        $("#inp_balance").val(data[1].have);
-                        $("#client_id").val(data[1].admin.id);
+                        $("#balance_price").text(addCommas(data[0].toFixed(2)).split('.')[1] == 00 ?
+                            addCommas(data[0]) : addCommas(data[0].toFixed(2)));
                     }
+                },
+                error: function(data) {
+                    console.log("error");
+                },
+            });
 
+        });
+
+        $("#select_filter_key").change(function() {
+            key = $(this).children("option:selected").val();
+
+            client_id = $("#client_email_inpt").val();
+
+            if (key == "") {
+                key = "empty";
+            }
+
+            $("#key_for_filter").val(key)
+
+            complete_url = "/acp/admin/get-vendor-balance/" + client_id + "/" + key;
+
+            $.ajax({
+                type: "GET",
+                url: complete_url,
+                success: function(data) {
+
+                    if (data == "empty") {
+                        $("#balance_price").text(0);
+                        $("#inp_balance").val(0);
+                        $("#client_id").val("");
+                    } else {
+                        $("#balance_price").text(addCommas(data[0].toFixed(2)).split('.')[1] == 00 ?
+                            addCommas(data[0]) : addCommas(data[0].toFixed(2)));
+                        // $("#inp_balance").val(data[1].have);
+
+                        $("#client_id").val(data[1].id);
+
+                        $('#choose_client_orders').empty();
+                        if (data[1].my_orders.length > 0) {
+                            $('#choose_client_orders').append(`
+                                        <option value="empty"> Please Select Client Order--------- </option>
+                            `);
+                            for (x = 0; x < data[1].my_orders.length; x++) {
+                                $('#choose_client_orders').append(`
+                                        <option value="0000${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+                                `);
+                            }
+                        }
+                    }
+                },
+                error: function(data) {
+                    console.log("error");
+                },
+            });
+        });
+
+        $("#choose_client_orders").change(function() {
+            client_email = $("#client_email_inpt").val();
+            order_number = $(this).children("option:selected").val();
+
+            if (order_number == "") {
+                order_number = "empty";
+            }
+
+            key = $("#key_for_filter").val();
+
+            complete_url = "/acp/admin/get-vendor-order-balance/" + client_email + "/" + key + "/" + order_number;
+
+            $.ajax({
+                type: "GET",
+                url: complete_url,
+                success: function(data) {
+                    if (data == "empty") {
+                        $("#client_order_balance_inpt").val(0);
+                        $("#selected_order_balance").text(0)
+                    } else {
+                        $("#client_order_balance_inpt").val(data[0]);
+                        $("#selected_order_balance").text(data[0])
+                    }
                 },
                 error: function(data) {
                     console.log("error");

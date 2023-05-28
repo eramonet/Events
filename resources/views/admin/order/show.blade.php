@@ -645,10 +645,6 @@
                                 </th>
 
                                 <th class=" rounded-end">
-                                    <p class="h6 text-bold">Role</p>
-                                </th>
-
-                                <th class=" rounded-end">
                                     <p class="h6 text-bold">Product Title</p>
                                 </th>
                                 <th class="">
@@ -698,12 +694,7 @@
                                 <tr>
 
                                     <td class="">
-                                        <p class="h5 text-nowrap"> {{ $product->product->admin->email }}</p>
-                                    </td>
-
-                                    <td class="">
-                                        <p class="h5 text-nowrap"> {{ $product->product->admin->roles[0]->display_name }}
-                                        </p>
+                                        <p class="h5 text-nowrap"> {{ $product->product->admin->title_en }}</p>
                                     </td>
 
                                     <td class="">

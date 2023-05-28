@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    Edit Available Date
+    Edit Unvalabel Date
 @endsection
 @section('content')
     {{-- on top --}}
@@ -20,14 +20,14 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item ">
-                        <a href="{{ route('admin.availabel_date.index') }}">Edit Available Date</a>
+                        <a href="{{ route('admin.availabel_date.index') }}">Edit Unvalabel Date</a>
                     </li>
 
-                    <li class="breadcrumb-item active" aria-current="page">Edit Available Date</li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Create New Unvalabel Date</li>
 
                 </ol>
             </nav>
-            <h2 class="h4">Edit Available Date</h2>
+            <h2 class="h4">Edit Create New Unvalabel Date</h2>
 
         </div>
 
@@ -184,7 +184,7 @@
 
             </div>
         </div>
-
+        
 
 
 

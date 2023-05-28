@@ -509,7 +509,8 @@
                                         @if (Auth::guard('admin')->user()->hasPermission('products-update'))
                                             <a class="btn btn-success m-1" class="dropdown-item"
                                                 href="{{ route('admin.product_request.product_request_accept', $product->id) }}" title="Accept"
-                                                data-bs-toggle="tooltip" data-bs-placement="top">
+                                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                                style="color: #fff">
                                                 Accept
                                             </a>
                                         @endif

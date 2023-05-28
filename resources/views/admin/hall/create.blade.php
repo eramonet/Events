@@ -351,7 +351,7 @@
 
 
                     {{-- country_id --}}
-                    {{-- <div class="col-md-6">
+                    <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="country_id">Country <span class="text-danger">*</span></label>
                             <select required name="country_id" id="country_id"
@@ -373,7 +373,7 @@
                                 </div>
                             </div>
                         @enderror
-                    </div> --}}
+                    </div>
 
                     {{-- country_id --}}
 
@@ -887,10 +887,10 @@
         });
 
 
-        // $('#country_id').select2({
-        //     width: "100%",
-        // });
-        // let countrySelect = document.getElementById('country_id');
+        $('#country_id').select2({
+            width: "100%",
+        });
+        let countrySelect = document.getElementById('country_id');
         let citySelect = document.getElementById('city_id');
 
 

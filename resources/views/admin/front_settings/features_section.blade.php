@@ -93,7 +93,7 @@
 
 
                                 <div class="">
-                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
+                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
                                         <button class="btn btn-primary  m-1" data-bs-toggle="modal"
                                             data-bs-target="#modal-{{ $items->id }}" class=""><span
                                                 class="fas fa-edit "></span>

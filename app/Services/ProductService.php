@@ -7,6 +7,7 @@ use App\Helper\UploadHelper;
 use App\Models\Admin;
 use App\Models\ProductColor;
 use App\Models\ProductSize;
+use App\Models\ProductTax;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -166,8 +167,6 @@ class ProductService
     }
     public function store(Request $request)
     {
-
-
         $data = $request->only([
             'title_ar',
             'title_en',
@@ -180,13 +179,10 @@ class ProductService
             'details_en',
             'fake_price',
             'real_price',
-            'purchase_price',
             'stock',
             'status',
             'in_stock',
             'category_id',
-
-
             'features_ar',
             'features_en',
             'instructions_ar',
@@ -198,34 +194,38 @@ class ProductService
 
         ]);
 
+        $request->all() ;
+
         $data['admin_id'] = Auth::guard('admin')->id();
         if( Auth::guard('admin')->user()->vendor){
-            $data['vendor_id'] = Auth::guard('admin')->user()->vendor->id;
+            $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
         }
+
+        $data["accept"] = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
+        $data["status"] = Auth::guard('admin')->user()->vendor ? 0 : 1 ;
 
 
         $product = $this->product::create($data);
 
         if ($request->input('taxes')) {
-            $product->taxes()->attach($request->taxes);
+            foreach( $request->input('taxes') as $tax ){
+                ProductTax::create([
+                    "tax_id" => $tax ,
+                    "product_id" => $product->id
+                ]);
+            }
         }
 
         if ($request->input('occasion_id')) {
             $product->occasions()->attach($request->occasion_id);
         }
 
-
         if ($request->input('products_with')) {
             $product->products_with()->attach($request->products_with);
         }
 
-
         if ($request->input('color_id')) {
             $product->colors()->attach($request->color_id);
-        }
-
-        if ($request->input('size_id')) {
-            $product->sizes()->attach($request->size_id);
         }
 
         if ($request->hasFile('primary_image')) {
@@ -253,9 +253,6 @@ class ProductService
 
     public function update(Request $request, Product $product)
     {
-
-
-
         $data = $request->only([
             'title_ar',
             'title_en',
@@ -268,12 +265,10 @@ class ProductService
             'details_en',
             'fake_price',
             'real_price',
-            'purchase_price',
             'stock',
             'status',
             'in_stock',
             'category_id',
-
             'features_ar',
             'features_en',
             'instructions_ar',
@@ -283,10 +278,26 @@ class ProductService
             'extras_ar',
             'extras_en'
         ]);
-        return $product->taxes() ;
+
+        $data["accept"] = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
+
+
         $product->update($data);
         // $product->taxes()->sync($request->taxes);
-        $product->taxes()->sync($request->occasion_id);
+
+        if(  $request->taxes && count( $request->taxes ) > 0 ){
+            foreach( $product->taxes as $taxe ){
+                $taxe->delete() ;
+            }
+
+            foreach( $request->taxes as $tax ){
+                ProductTax::create([
+                    "tax_id" => $tax ,
+                    "product_id" => $product->id
+                ]);
+            }
+
+        }
         $product->products_with()->sync($request->products_with);
         $product->sizes()->sync($request->size_id);
 
@@ -348,6 +359,8 @@ class ProductService
 
     public function updatePrice(Request $request, Product $product)
     {
+        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
+
         $product->real_price = $request->real_price;
         $product->fake_price = $request->fake_price;
         $product->save();
@@ -356,6 +369,7 @@ class ProductService
 
     public function updateStock(Request $request, Product $product)
     {
+        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
         $product->stock = $request->stock;
         $product->save();
         return $product ? true : false;

@@ -32,7 +32,4 @@ interface UserRepositoryInterface
 
     public function getPackage($lang, $package_id);
 
-    public function getHall($lang, $hall_id);
-
-    public function search($request,$lang);
 }

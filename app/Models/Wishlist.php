@@ -9,16 +9,11 @@ class Wishlist extends Model
 {
     use HasFactory;
 
-    public $fillable = ["product_id" ,"hall_id" ,"user_id"] ;
+    public $fillable = ["product_id" , "user_id"] ;
 
     /////////////////////////////////////////// Relationships /////////////////////////////
     public function product()
     {
         return $this->hasOne(Product::class , "id" , "product_id");
-    }
-
-    public function hall()
-    {
-        return $this->hasOne(Hall::class, "id", "hall_id");
     }
 }

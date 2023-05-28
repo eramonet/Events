@@ -10,6 +10,7 @@ use App\Exports\CountryExport;
 use Illuminate\Validation\Rule;
 use App\Services\CountryService;
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -18,30 +19,33 @@ class CityController extends Controller
     protected $cityService;
     protected $countryService;
 
-    public function __construct(CityService $cityService ,CountryService $countryService){
-          $this->cityService = $cityService;
-          $this->countryService = $countryService;
+    public function __construct(CityService $cityService, CountryService $countryService)
+    {
+        $this->cityService = $cityService;
+        $this->countryService = $countryService;
 
-          $this->middleware(['permission:cities-read'])->only(['index','export']);
-          $this->middleware(['permission:cities-create'])->only(['create', 'store']);
-          $this->middleware(['permission:cities-update'])->only(['update', 'edit']);
-          $this->middleware(['permission:cities-delete'])->only(['destroy']);
+        $this->middleware(['permission:cities-read'])->only(['index', 'export']);
+        $this->middleware(['permission:cities-create'])->only(['create', 'store']);
+        $this->middleware(['permission:cities-update'])->only(['update', 'edit']);
+        $this->middleware(['permission:cities-delete'])->only(['destroy']);
     }
 
 
 
-    public function index( Request $request){
+    public function index(Request $request)
+    {
 
 
-        $cities =$this->cityService->getAll($request);
+        $cities = $this->cityService->getAll($request);
 
 
 
         // return $cities;
-        return \view('admin.city.index' ,\compact('cities'));
+        return \view('admin.city.index', \compact('cities'));
     }
 
-    public function create( Request $request){
+    public function create(Request $request)
+    {
 
 
 
@@ -49,7 +53,7 @@ class CityController extends Controller
 
 
 
-        return \view('admin.city.create' ,\compact('countries'));
+        return \view('admin.city.create', \compact('countries'));
     }
 
 
@@ -57,136 +61,112 @@ class CityController extends Controller
     {
         ob_end_clean();
         ob_start();
-        return Excel::download(new CityExport,  Carbon::now() .'-cities.xlsx');
-
+        return Excel::download(new CityExport,  Carbon::now() . '-cities.xlsx');
     }
 
-
-
     public function store(Request $request)
-
     {
-
-
         $request->validate([
-            'title_ar'=>['required','string','min:2' , 'unique:cities'],
-            'title_en'=>['required','string','min:2','unique:cities'],
-            'country_id'=>['required','exists:countries,id'],
-            'status'=>['required','string', Rule::in([1,0])],
-         ]);
+            'title_ar' => ['required', 'string', 'min:2', 'unique:cities'],
+            'title_en' => ['required', 'string', 'min:2', 'unique:cities'],
+            'status' => ['required', 'string', Rule::in([1, 0])],
+            'image' => ['nullable', 'image', 'max:10240'],
+        ]);
 
 
 
         $created = $this->cityService->store($request);
 
-        if($created){
+        if ($created) {
             $request->session()->flash('success', 'City Added SuccessFully');
-
-        }else{
+        } else {
             $request->session()->flash('failed', 'Something Wrong');
-
         }
 
-        return redirect()->back();
-
+        return redirect()->route('admin.cities.index');
     }
 
 
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
 
-      $city = $this->cityService->getById($id);
-        if(!$city ){
+        $city = $this->cityService->getById($id);
+        if (!$city) {
             $request->session()->flash('failed', 'City Not Found');
             return redirect()->back();
-
-
         }
         $countries = $this->countryService->getActiveCountries();
 
 
-        return \view('admin.city.edit' ,\compact( 'city' ,'countries'));
-
-
+        return \view('admin.city.edit', \compact('city', 'countries'));
     }
 
 
     public function update(Request $request, $id)
     {
         $city = $this->cityService->getById($id);
-        if(!$city ){
+        if (!$city) {
             $request->session()->flash('failed', 'City Not Found');
             return redirect()->back();
-
-
         }
         $request->validate([
-            'title_ar'=>['required','string','min:2' ,  Rule::unique('cities' ,'title_ar')->ignore($city->id)],
-            'title_en'=>['required','string','min:2', Rule::unique('cities' ,'title_en')->ignore($city->id)],
-            'country_id'=>['required','exists:countries,id'],
-            'status'=>['required','string', Rule::in([1,0])],
+            'title_ar' => ['required', 'string', 'min:2',  Rule::unique('cities', 'title_ar')->ignore($city->id)],
+            'title_en' => ['required', 'string', 'min:2', Rule::unique('cities', 'title_en')->ignore($city->id)],
+            'status' => ['required', 'string', Rule::in([1, 0])],
         ]);
 
-        $updated = $this->cityService->update($request , $city);
+        $updated = $this->cityService->update($request, $city);
 
-        if($updated){
+        if ($updated) {
             $request->session()->flash('success', 'City Updated SuccessFully');
-
-        }else{
+        } else {
             $request->session()->flash('failed', 'Something Wrong');
         }
 
 
-         return redirect()->back();
-
-
+        return redirect()->route('admin.cities.index');
     }
 
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         $city = $this->cityService->getById($id);
-        if(!$city ){
+        if (!$city) {
             $request->session()->flash('failed', 'City Not Found');
             return redirect()->back();
-
-
         }
         $city->delete();
         $request->session()->flash('success', 'City Deleted SuccessFully');
 
 
         return redirect()->back();
-
-
-
     }
 
 
-    public function restore(Request $request,$id)
+    public function restore(Request $request, $id)
     {
         $city = $this->cityService->getById($id);
-        if(!$city ){
+        if (!$city) {
             $request->session()->flash('failed', 'City Not Found');
             return redirect()->back();
-
-
         }
         $city->restore();
         $request->session()->flash('success', 'City Restored SuccessFully');
 
         return redirect()->back();
-
-
-
     }
 
 
- public function cityByCountryId($id)
-{
+    public function cityByCountryId($id)
+    {
 
-    $cities = $this->cityService->cityByCountryId($id);
-    return response()->json($cities->toArray());
+        $cities = $this->cityService->cityByCountryId($id);
+        return response()->json($cities->toArray());
+    }
 
-}
+    public function show($id)
+    {
+        $city = City::find($id) ;
 
+        return view('admin.city.show' , compact('city'));
+    }
 }

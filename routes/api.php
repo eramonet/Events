@@ -31,8 +31,7 @@ Route::controller(SettingsController::class)->group(function () {
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('contactus', 'insertContactForm');
             Route::get('notifications', 'getNotifications');
-            Route::post('send-query', 'send_query');
-            Route::get('my-queries', 'myQueries');
+
         });
     } else {
         Route::post('contactus', 'insertContactForm');
@@ -44,13 +43,13 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
     Route::post('sendverifycode', 'sendVerificationCode');
     Route::post('verifycode', 'verifyCode');
-    Route::post('changepassword', 'changePassword');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::post('logout', 'logout');
         Route::get('getprofile', 'userProfile');
         Route::post('updateprofile', 'updateUserProfile');
         Route::post('updatefirebase', 'updateUserFirebase');
         Route::post('updatelang', 'updateLang');
+        Route::post('changepassword', 'changePassword');
         Route::post('updatepasswordprofile', 'updatePasswordProfile');
         Route::post('suspend', 'suspend');
     });
@@ -73,7 +72,6 @@ Route::controller(UserController::class)->group(function () {
         });
     }else{
         Route::get('home', 'home');
-        Route::post('search', 'search');
         Route::get('events-categories', 'eventsCategories');
         Route::get('event-halls/{category_id}', 'eventHalls');
         Route::get('latest-wedings-halls', 'latestWedingsHalls');

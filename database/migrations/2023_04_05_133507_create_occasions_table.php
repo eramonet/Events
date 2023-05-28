@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('occasions', function (Blueprint $table) {
             $table->id();
             $table->string('primary_image')->nullable();
+            $table->string('icon')->nullable();
             $table->string('title_ar')->unique();
             $table->string('title_en')->unique();
             $table->unsignedBigInteger('country_id')->nullable();
@@ -27,6 +28,7 @@ return new class extends Migration
             // $table->string('rate')->default(0);
             $table->text('description_ar')->nullable();
             $table->text('description_en')->nullable();
+            $table->enum("for_what" , ["product" , "hall" , "both"]);
             $table->timestamps();
         });
     }

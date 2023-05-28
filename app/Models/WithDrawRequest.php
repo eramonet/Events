@@ -11,6 +11,8 @@ class WithDrawRequest extends Model
 
     public $fillable = [
         "vendor_id",
+        "with_draw_id" ,
+        "budget_before" ,
         "budget",
         "type",
         "status",
@@ -48,5 +50,10 @@ class WithDrawRequest extends Model
     public function vendor()
     {
         return $this->belongsTo(Vendor::class , "vendor_id" , "id" ) ;
+    }
+
+    public function with_draw()
+    {
+        return $this->belongsTo(WithDraw::class) ;
     }
 }

@@ -100,7 +100,7 @@ Edit Products Category
 
 
                 {{-- parent_id --}}
-                {{-- <div class="col-md-6">
+                <div class="col-md-6">
                 <div class="form-group mb-4">
                     <label  for="parent_id">Parent Category <span class="text-danger">*</span></label>
                     <select   name="parent_id" id="parent_id" class="form-select @error('parent_id') is-invalid @enderror">
@@ -123,7 +123,7 @@ Edit Products Category
                     </div>
                 </div>
                 @enderror
-            </div> --}}
+            </div>
 
             {{-- parent_id --}}
 

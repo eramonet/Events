@@ -22983,7 +22983,7 @@ textarea.form-control-lg {
 
 .sidebar-inner {
     position: relative;
-    /* overflow-y: hidden; */
+    overflow-y: hidden;
 }
 
 .sidebar-heading {
