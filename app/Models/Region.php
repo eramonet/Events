@@ -19,26 +19,6 @@ class Region extends Model
         return  $this->$title;
 
     }
-    
-    protected function getImageAttribute($value)
-    {
-        if($value){
-            return asset('uploads/products_categories_images' . '/' . $value);
-            }
-            else{
-            return asset('uploads/products_categories_images/default.png');
-            }
-    }
-
-    public function setImageAttribute($value)
-    {
-        if ($value) {
-            $imageName = time() . '.' . $value->getClientOriginalExtension();
-            $value->move(public_path('uploads/products_categories_images/'), $imageName);
-            $this->attributes['image'] = $imageName;
-        }
-    }
-
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_id');
@@ -53,11 +33,6 @@ class Region extends Model
     public function admin()
     {
         return $this->belongsTo(Admin::class, 'admin_id');
-    }
-
-    public function users()
-    {
-        return $this->hasMany(User::class , "region_id");
     }
 
 }

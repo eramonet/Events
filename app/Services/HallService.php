@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Hall;
 use App\Helper\UploadHelper;
 use App\Models\CategoryHall;
+use App\Models\HallMedia;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -148,6 +149,7 @@ class HallService
     {
 
 
+
         $data = $request->only([
             'email',
             'phone',
@@ -171,11 +173,12 @@ class HallService
         ]);
         $data['admin_id'] = Auth::guard('admin')->id();
         $data['vendor_id'] = Auth::guard('admin')->user()->vendor ? Auth::guard('admin')->user()->vendor->id : null;
-
+        $data['country_id'] = 3;
+        $data['accept']= 'accepted';
         $hall = $this->hall::create($data);
 
         if ($request->input('categories')) {
-            return $request->input('categories') ;
+            // return $request->input('categories') ;
             foreach( $request->input('categories') as $category_occasion ){
                 CategoryHall::create([
                     "category_id" => $category_occasion ,
@@ -193,6 +196,7 @@ class HallService
 
             $hall->primary_image = $imageName;
         }
+
 
         if ($request->hasFile('images')) {
 
@@ -286,7 +290,7 @@ class HallService
 
     public function getById(int $id)
     {
-        return  $this->hall::withTrashed()->find($id);
+        return $this->hall::withTrashed()->find($id);
     }
 
 

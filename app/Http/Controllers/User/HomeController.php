@@ -15,8 +15,6 @@ class HomeController extends Controller
 {
     public function home_page()
     {
-
-        // return redirect()->route('admin.dashboard');
         $home_page_ads = ClientsAd::active()->mainHome()->get();
 
         // Events Category Section

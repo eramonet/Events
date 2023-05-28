@@ -30,7 +30,7 @@
             @if (Auth::guard('admin')->user()->hasPermission('shippings-create'))
                 <a href="{{ route('admin.shippings.create') }}"
                     class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                    <svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -42,9 +42,9 @@
             <div class="btn-group ms-2 ms-lg-3">
                 <a href="{{ route('admin.shippings.export') }}"
                     class="btn btn-outline-success d-inline-flex align-items-center">
-                    {{-- <svg class="icon icon-xs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> --}}
+                    {{-- <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> --}}
 
-                    <svg class="icon icon-xs" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                    <svg class="icon icon-xs me-2" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         fill="currentColor" class="bi bi-file-earmark-break-fill" viewBox="0 0 16 16">
                         <path
                             d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V9H2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM2 12h12v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2zM.5 10a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H.5z" />
@@ -216,7 +216,7 @@
                         <td>{{ $shipping->id }}</td>
 
                         <td>{{ $shipping->city ? $shipping->city->title_en : '--' }}</td>
-                        <td>{{ number_format($shipping->cost) . " AED"}}</td>
+                        <td>{{ $shipping->cost }}</td>
 
 
                         <td>
@@ -242,36 +242,59 @@
                         </td>
                         <td>
 
-                            <a href="{{ route('admin.shippings.show' , $shipping->id) }}" class="btn btn-primary"><span class="fas fa-eye"></span></a>
+                            <div class="btn-group">
+                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="icon icon-sm">
+                                        <span class="fas fa-ellipsis-h icon-dark"></span>
+                                    </span>
+                                    <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <div class="dropdown-menu py-0">
+                                    <button data-bs-toggle="modal" data-bs-target="#modal-{{ $shipping->id }}"
+                                        class="dropdown-item rounded-top"><span class="fas fa-eye me-2"></span>View
+                                        Details</button>
 
-                            @if (Auth::guard('admin')->user()->hasPermission('shippings-update'))
-                                <a class="btn btn-info" href="{{ route('admin.shippings.edit', $shipping->id) }}"><span
-                                        class="fas fa-edit"></span></a>
-                            @endif
+                                    @if (Auth::guard('admin')->user()->hasPermission('shippings-update'))
+                                        <a class="dropdown-item"
+                                            href="{{ route('admin.shippings.edit', $shipping->id) }}"><span
+                                                class="fas fa-edit me-2"></span>Edit</a>
+                                    @endif
 
 
-                            @if ($shipping->deleted_at)
-                                @if (Auth::guard('admin')->user()->hasPermission('shippings-update'))
-                                    <form style="display: contents" action="{{ route('admin.shippings.restore', $shipping->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn btn-success">
-                                            <span class="fa-solid fa-trash-can-arrow-up"></span>
-                                        </button>
-                                    </form>
-                                @endif
-                            @else
-                                @if (Auth::guard('admin')->user()->hasPermission('shippings-delete'))
-                                    <form style="display: contents" class="delete-btn"
-                                        action="{{ route('admin.shippings.destroy', $shipping->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">
-                                            <span class="fas fa-trash-alt"></span>
-                                        </button>
-                                    </form>
-                                @endif
-                            @endif
+                                    @if ($shipping->deleted_at)
+                                        @if (Auth::guard('admin')->user()->hasPermission('shippings-update'))
+                                            <form action="{{ route('admin.shippings.restore', $shipping->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="dropdown-item text-success rounded-bottom">
+                                                    <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @else
+                                        @if (Auth::guard('admin')->user()->hasPermission('shippings-delete'))
+                                            <form class="delete-btn"
+                                                action="{{ route('admin.shippings.destroy', $shipping->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger rounded-bottom">
+                                                    <span class="fas fa-trash-alt me-2"></span>Delete
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endif
+
+
+
+
+
+                                </div>
+                            </div>
+
+
                         </td>
 
 
@@ -349,7 +372,7 @@
                                         @if (Auth::guard('admin')->user()->hasPermission('shippings-update'))
                                             <a class="btn btn-primary"
                                                 href="{{ route('admin.shippings.edit', $shipping->id) }}"><span
-                                                    class="fas fa-edit"></span>Edit</a>
+                                                    class="fas fa-edit me-2"></span>Edit</a>
                                         @endif
 
                                         {{-- <button type="button" class="btn btn-secondary">Accept</button> --}}

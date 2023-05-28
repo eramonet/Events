@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-Create New Unvalabel Date
+Create New Available Date
 @endsection
 @section('content')
 {{-- on top --}}
@@ -15,14 +15,14 @@ Create New Unvalabel Date
                     </a>
                 </li>
                 <li class="breadcrumb-item ">
-                    <a href="{{ route('admin.availabel_date.index') }}">Unvalabel Date</a>
+                    <a href="{{ route('admin.availabel_date.index') }}">Available Date</a>
                 </li>
 
-                <li class="breadcrumb-item active" aria-current="page">Create New Unvalabel Date</li>
+                <li class="breadcrumb-item active" aria-current="page">Create New Available Date</li>
 
             </ol>
         </nav>
-        <h2 class="h4">Create New Unvalabel Date</h2>
+        <h2 class="h4">Create New Available Date</h2>
 
     </div>
 
@@ -192,7 +192,7 @@ Create New Unvalabel Date
 
 
 
-    
+
 
 
 
@@ -214,7 +214,7 @@ Create New Unvalabel Date
 
 
 
-    
+
 
 
 

@@ -11,7 +11,6 @@ use App\Services\OrderService;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\OrderProduct;
-use App\Models\Vendor;
 use App\Models\WithDraw;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
@@ -240,6 +239,8 @@ class OrderController extends Controller
             $order = Order::latest()->with(["order_products" => function ($order_products) {
                 $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
             }])->where("order_number", $id)->first();
+
+
         } else {
             $order = Order::latest()->with("order_products")->where("order_number", $id)->first();
         }
@@ -258,8 +259,6 @@ class OrderController extends Controller
             'delivered_admin',
             'cancelled_admin'
         ]);
-
-        // return $order->order_products[0]->product->admin ;
 
         // return auth()->guard('admin')->user()->getRoles() ;
 
@@ -321,30 +320,55 @@ class OrderController extends Controller
 
         foreach ($order->order_products as $order_product) {
 
-            // not exist
-            $total_taxes = 0 ;
-            if( $order_product->product->taxes->count() > 0 ){
-                foreach( $order_product->product->taxes as $taxe ){
-                    $total_taxes += $order->product_total_price * ( $taxe->percentage / 100 ) ;
+            // check if this vendor exist or not
+            $check_vendor_exist = WithDraw::where([
+                ["vendor_name", $order_product->product->admin->vendor ? $order_product->product->admin->vendor->email : $order_product->product->admin->email],
+                ["vendor_phone", $order_product->product->admin->phone],
+            ])->first();
+
+            if ($check_vendor_exist) {
+                // exist
+                $total_taxes = 0 ;
+                if( $order_product->product->taxes->count() > 0 ){
+                    foreach( $order_product->product->taxes as $taxe ){
+                        $total_taxes += $order->product_total_price * ( $taxe->percentage / 100 ) ;
+                    }
                 }
+
+                $our_commission = 0 ;
+
+                if( $order_product->product->admin->vendor ){
+                    $our_commission = $order->product_total_price * ( $order_product->product->admin->vendor->commission / 100 ) ;
+                }
+
+                $check_vendor_exist->update([
+                    "total" => $check_vendor_exist->total + ( ( $order_product->price + $total_taxes ) * $order_product->product_quantity ) ,
+                    "have" => $check_vendor_exist->have + ( ( ( $order_product->price + $total_taxes ) * $order_product->product_quantity ) - $our_commission ),
+                    "our_commission" => $check_vendor_exist->our_commission + $our_commission
+                ]);
+            } else {
+                // not exist
+                $total_taxes = 0 ;
+                if( $order_product->product->taxes->count() > 0 ){
+                    foreach( $order_product->product->taxes as $taxe ){
+                        $total_taxes += $order->product_total_price * ( $taxe->percentage / 100 ) ;
+                    }
+                }
+
+                $our_commission = 0 ;
+
+                if( $order_product->product->admin->vendor ){
+                    $our_commission = $order->product_total_price * ( $order_product->product->admin->vendor->commission / 100 ) ;
+                }
+
+                WithDraw::create([
+                    "vendor_name" => $order_product->product->admin->vendor ? $order_product->product->admin->vendor->email : $order_product->product->admin->email,
+                    "vendor_phone" => $order_product->product->admin->phone,
+                    "total" => ( $order_product->price + $total_taxes ) * $order_product->product_quantity ,
+                    "have" => ( ( $order_product->price + $total_taxes ) * $order_product->product_quantity ) - $our_commission,
+                    "our_commission" => $our_commission
+                ]);
             }
-
-            $our_commission = 0 ;
-
-            if( $order_product->product->admin ){
-                $our_commission = $order->product_total_price * ( $order_product->product->admin->commission / 100 ) ;
-            }
-
-            WithDraw::create([
-                "vendor_name" => $order_product->product->admin->email,
-                "vendor_phone" => $order_product->product->admin->phone,
-                "money_type" => "Product Order",
-                "order_number" => $order->order_number ,
-                "action_id" => $order->id ,
-                "total" => ( $order_product->price + $total_taxes ) * $order_product->product_quantity ,
-                "have" => ( ( $order_product->price + $total_taxes ) * $order_product->product_quantity ) - $our_commission,
-                "our_commission" => $our_commission
-            ]);
 
             $total_taxes = 0 ;
         }

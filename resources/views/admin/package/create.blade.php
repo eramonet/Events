@@ -205,7 +205,7 @@ Create New Package
 
 
              {{-- category_id --}}
-             <div class="col-md-6">
+             {{-- <div class="col-md-6">
                 <div class="form-group mb-4">
                     <label  for="category_id">Category <span class="text-danger">*</span></label>
                     <select required name="category_id" id="category_id" class="form-select @error('category_id') is-invalid @enderror">
@@ -225,7 +225,7 @@ Create New Package
                     </div>
                 </div>
                 @enderror
-            </div>
+            </div> --}}
 
             {{-- category_id --}}
 
@@ -260,7 +260,7 @@ Create New Package
              <div class="col-md-6">
                 <div class="form-group mb-4">
                     <label  for="hall_id">Hall <span class="text-danger">*</span></label>
-                    <select required name="hall_id" id="hall_id" class="form-select @error('hall_id') is-invalid @enderror">
+                    <select required name="hall_id[]" multiple id="hall_id" class="form-select @error('hall_id') is-invalid @enderror">
 
                         @foreach ($firstVendorHalls as $hall)
                         <option value="{{ $hall->id }}" >{{  $hall->title_en  .' - ' .$hall->title_ar}} </option>
@@ -1036,11 +1036,11 @@ $(document).ready(function() {
 
 
 
-    $('#category_id').select2(
-        {
-            width: "100%"
-        }
-    );
+    // $('#category_id').select2(
+    //     {
+    //         width: "100%"
+    //     }
+    // );
 
 
     $('#vendor_id').select2(

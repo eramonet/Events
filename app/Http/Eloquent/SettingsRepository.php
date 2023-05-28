@@ -113,10 +113,7 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function getNotifications($user)
     {
-        $notifications= Notification::where('user_id', $user->id)->latest()->paginate(10);
-        // return NotificationResource::collection($notifications);
-        // $data=(NotificationResource::collection($notifications);
-        // return $data;
+        $notifications= Notification::where('user_id', $user->id)->latest()->get();
         return NotificationResource::collection($notifications);
 
     }

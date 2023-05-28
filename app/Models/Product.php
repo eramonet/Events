@@ -73,7 +73,7 @@ class Product extends Model
 
     public function admin()
     {
-        return $this->belongsTo(Vendor::class , 'admin_id' , 'id');
+        return $this->belongsTo(Admin::class, 'admin_id')->with('roles');
     }
 
     public function orders(){
@@ -166,10 +166,5 @@ class Product extends Model
     public function vendors()
     {
         return $this->belongsToMany(Vendor::class, 'product_vendors', 'product_id', 'vendor_id');
-    }
-
-    public function owner()
-    {
-        return $this->belongsTo(Vendor::class , "admin_id");
     }
 }

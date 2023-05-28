@@ -110,8 +110,8 @@
                 <th class="border-gray-200">Request Date </th>
                 <th class="border-gray-200">Vendor Name </th>
                 <th class="border-gray-200">Vendor Balance  </th>
+
                 <th class="border-gray-200">Value</th>
-                <th class="border-gray-200">Current Vendor Balance  </th>
                 <th class="border-gray-200">Notes</th>
                 <th class="border-gray-200">Status</th>
                 <th class="border-gray-200">Action</th>
@@ -129,14 +129,12 @@
                         <p class="text-nowrap">{{ $item->vendor->title_en }}</p>
                     </td>
                     <td>
-                        <p class="text-nowrap">{{ number_format($item->budget_before) . " AED" }}</p>
+
+                        <p class="text-nowrap">{{ number_format($item->have - $item->sent_money) . " AED" }}</p>
                     </td>
                     <td>
                         <?php $total_sent_money += $item->budget ?>
                         <p class="text-nowrap">{{ number_format($item->budget) }} AED</p>
-                    </td>
-                    <td>
-                        <p class="text-nowrap">{{ number_format($item->budget_before - $item->sent_money) . " AED" }}</p>
                     </td>
                     <td>
                         <p class="text-nowrap">{{ $item->notes ? $item->notes : '-----' }}</p>

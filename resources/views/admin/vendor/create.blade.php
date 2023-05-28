@@ -275,15 +275,41 @@
                         @enderror
                     </div>
 
+
+
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="country_id">country<span class="text-danger">*</span></label>
+                            <select required name="country_id" id="countrys"
+                                class="form-select @error('country_id') is-invalid @enderror">
+                                <option value="" >select country</option>
+                                @foreach ($countrys as $country)
+                                    <option value="{{ $country->id }}" {{ old('country_id') }}>
+                                        {{ $country->title_en }}</option>
+                                @endforeach
+                                {{-- <option value="0" {{ old('status') =='0'?'selected':''}}>InActive</option> --}}
+                            </select>
+                        </div>
+
+
+                        @error('country_id')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="city">city <span class="text-danger">*</span></label>
                             <select required name="city_id" id="city"
                                 class="form-select @error('city_id') is-invalid @enderror">
-                                <option > select city ---- </option>
-                                @foreach ($cities as $cities)
-                                    <option value="{{ $cities->id }}"> {{ $cities->title_en }} </option>
-                                @endforeach
+                                <option > select city</option>
+
                             </select>
                         </div>
 
@@ -404,6 +430,56 @@
                     </div>
 
 
+
+
+
+
+
+                    <div class="col-md-6 mt-4">
+
+
+                        {{-- can_add_products --}}
+
+
+                        <div class="form-check form-switch mb-4">
+                            <input {{ old('can_add_products') == '1' ? 'checked' : '' }} value="1"
+                                class="form-check-input" type="checkbox" id="can_add_products" name="can_add_products">
+                            <label class="form-check-label" for="can_add_products">Can Add Products</label>
+                        </div>
+
+                        @error('can_add_products')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                        {{-- can_add_products --}}
+
+
+                        {{-- can_add_halls --}}
+                        <div class="form-check form-switch mb-4">
+                            <input {{ old('can_add_halls') == '1' ? 'checked' : '' }} value="1" class="form-check-input"
+                                type="checkbox" id="can_add_halls" name="can_add_halls">
+                            <label class="form-check-label" for="can_add_halls">Can Add Halls</label>
+                        </div>
+
+
+                        @error('can_add_halls')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+
+
+                        {{-- can_add_halls --}}
+                    </div>
+
+                    {{-- can_add_products --}}
 
 
 
@@ -845,21 +921,78 @@
     </script>
 
 
+
+
+    <script>
+        $(document).on('change', '#countrys', function() {
+            $("#region").empty();
+
+            var location_id = document.querySelector("#countrys").value;
+            
+            //alert(company_id);
+            if (location_id) {
+                $.ajax({
+                    type: "GET",
+                    // url:"{{ url('get-category-units/') }}/?category_id="+category_id,
+                    url: "/acp/cities/cityByCountryId/" + location_id,
+                    success: function(res) {
+
+
+                        if (res) {
+                            console.log(res);
+
+                            $("#city").empty();
+
+                            $("#city").append('<option value="">select city</option>');
+
+                            res.forEach(data => {
+                                $("#city").append('<option value="' + data.id + '" >' + data
+                                    .title_en + '</option>');
+                            });
+
+
+
+                        }
+                        if (res.length === 0) {
+                            $("#city").empty();
+                        }
+
+                    },error: function (res) {
+                        console.log(res);
+                    },
+                });
+            } else {
+                $("#city").empty();
+            }
+
+            var location_id = document.querySelector("#city").value;
+
+
+            //alert(company_id);
+
+
+
+        });
+    </script>
+
     <script>
         $(document).on('change', '#city', function() {
 
 
             var location_id = document.querySelector("#city").value;
 
+
+            //alert(company_id);
             if (location_id) {
                 $.ajax({
                     type: "GET",
                     // url:"{{ url('get-category-units/') }}/?category_id="+category_id,
                     url: "/acp/regions/getById/" + location_id,
                     success: function(res) {
-                        console.log(res) ;
+
 
                         if (res) {
+                            console.log(res);
                             $("#region").empty();
                             res.forEach(data => {
                                 $("#region").append('<option value="' + data.id + '" >' + data

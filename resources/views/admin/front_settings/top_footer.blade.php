@@ -94,7 +94,7 @@
 
 
                                 <div class="">
-                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">
+                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
                                         <button class="btn btn-success  m-1" data-bs-toggle="modal"
                                             data-bs-target="#modal-show-{{ $items->id }}" class=""><span
                                                 class="fas fa-eye "></span>

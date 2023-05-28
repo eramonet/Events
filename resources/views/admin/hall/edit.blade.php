@@ -205,6 +205,37 @@
                     {{-- status --}}
 
 
+
+
+                    {{-- status --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="accept">Accepted <span class="text-danger">*</span></label>
+                            <select required name="accept" id="accept"
+                                class="form-select @error('accept') is-invalid @enderror">
+                                <option value="new" {{ $hall->accept == 'new' ? 'selected' : '' }}>New
+                                </option>
+                                <option value="accepted" {{ $hall->accept == 'accepted' ? 'selected' : '' }}>Accepted
+                                </option>
+                                <option value="rejected" {{ $hall->accept == 'rejected' ? 'selected' : '' }}>Rejected
+                                </option>
+                            </select>
+                        </div>
+
+
+                        @error('accept')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- status --}}
+
+
                     {{-- vendor_id --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -232,7 +263,7 @@
                     </div>
 
                     {{-- vendor_id --}}
-                    {{ $hall->categories->pluck('id') }}
+                    {{-- {{ $hall->categories->pluck('id') }} --}}
                     {{-- categories --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -241,10 +272,8 @@
                                 class="form-select @error('categories') is-invalid @enderror">
 
                                 @foreach ($hallCategories as $hallCategory)
-
                                     <option value="{{ $hallCategory->id }}"
-                                        {{ collect($hall->categories->pluck('category_id'))->contains($hallCategory->id) ? 'selected' : '' }}
-                                        >
+                                        {{ collect($hall->categories->pluck('category_id'))->contains($hallCategory->id) ? 'selected' : '' }}>
                                         {{ $hallCategory->title_en . ' - ' . $hallCategory->title_ar }}</option>
                                 @endforeach
                             </select>
@@ -378,7 +407,7 @@
 
 
                     {{-- country_id --}}
-                    <div class="col-md-6">
+                    {{-- <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="country_id">Country <span class="text-danger">*</span></label>
                             <select required name="country_id" id="country_id"
@@ -401,7 +430,7 @@
                                 </div>
                             </div>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     {{-- country_id --}}
 
@@ -415,7 +444,8 @@
 
 
                                 @foreach ($firstCountryCities as $city)
-                                    <option value="{{ $city->id }}" {{ $hall->city_id == $city->id ? 'selected' : '' }}>
+                                    <option value="{{ $city->id }}"
+                                        {{ $hall->city_id == $city->id ? 'selected' : '' }}>
                                         {{ $city->title_en }}</option>
                                 @endforeach
                             </select>
@@ -922,10 +952,10 @@
         });
 
 
-        $('#country_id').select2({
-            width: "100%",
-        });
-        let countrySelect = document.getElementById('country_id');
+        // $('#country_id').select2({
+        //     width: "100%",
+        // });
+        // let countrySelect = document.getElementById('country_id');
         let citySelect = document.getElementById('city_id');
     </script>
 @endsection

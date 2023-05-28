@@ -253,7 +253,7 @@
         <table class="table table-hover table-centered table-striped table-bordered text-center">
             <thead>
                 <tr>
-                    <th class="border-gray-200">Added By</th>
+                    <th class="border-gray-200">ID</th>
                     <th class="border-gray-200">Title </th>
                     <th class="border-gray-200">Price</th>
                     <th class="border-gray-200">Stock</th>
@@ -445,10 +445,24 @@
 
                     {{-- models --}}
 
+
+
+
+
+
+
+
+
+
+
+
+
                     <tr>
 
+
+
                         <td>
-                            <p class="text-nowrap">{{ $product->owner ? $product->owner->title_en : "Events" }}</p>
+                            <p class="text-nowrap">{{ $product->id }}.</p>
                         </td>
 
 
@@ -582,6 +596,21 @@
                                 @endif
                             </td>
                         @endif
+
+
+
+                        {{--
+                        <td>
+                            @if ($product->created_at)
+                                <span class="text-nowrap d-block h6"><i class="fas fa-calendar-week text-info"></i>
+                                    {{ \Carbon\Carbon::parse($product->created_at)->format('d/m/Y') }} </span>
+                                <span class="text-nowrap d-block h6"><i class="fas fa-clock text-success"></i>
+                                    {{ \Carbon\Carbon::parse($product->created_at)->format('h:i:s A') }} </span>
+                            @else
+                                ...
+                            @endif
+
+                        </td> --}}
 
 
 

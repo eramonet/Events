@@ -18,24 +18,6 @@ class City extends Model
         return  $this->$title;
 
     }
-    protected function getImageAttribute($value)
-    {
-        if($value){
-            return asset('uploads/products_categories_images' . '/' . $value);
-            }
-            else{
-            return asset('uploads/products_categories_images/default.png');
-            }
-    }
-
-    public function setImageAttribute($value)
-    {
-        if ($value) {
-            $imageName = time() . '.' . $value->getClientOriginalExtension();
-            $value->move(public_path('uploads/products_categories_images/'), $imageName);
-            $this->attributes['image'] = $imageName;
-        }
-    }
 
     public function country()
     {

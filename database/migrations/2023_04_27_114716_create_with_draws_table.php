@@ -17,9 +17,6 @@ return new class extends Migration
             $table->id();
             $table->text("vendor_name");
             $table->text("vendor_phone")->nullable();
-            $table->text("money_type") ;
-            $table->text("order_number")->nullable() ;
-            $table->integer("action_id") ;
             $table->double("total");
             $table->double("have");
             $table->double("our_commission");

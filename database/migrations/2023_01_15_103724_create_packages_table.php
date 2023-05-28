@@ -41,6 +41,7 @@ return new class extends Migration
             $table->text('flowers_description_en')->nullable();
             $table->text('decoration_description_ar')->nullable();
             $table->text('decoration_description_en')->nullable();
+            $table->tinyInteger('photographer');
 
             $table->text('description_ar')->nullable();
             $table->text('description_en')->nullable();

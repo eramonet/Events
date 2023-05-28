@@ -69,17 +69,7 @@ class Vendor extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'admin_id');
-    }
-
-    public function orders_products()
-    {
-        return $this->hasMany(OrderProduct::class , "vendor_id" , "id");
-    }
-
-    public function with_draws()
-    {
-        return $this->hasMany(WithDraw::class , "vendor_name" , "email") ;
+        return $this->hasMany(Product::class, 'vendor_id');
     }
 
 }

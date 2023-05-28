@@ -16,9 +16,7 @@ return new class extends Migration
         Schema::create('with_draw_requests', function (Blueprint $table) {
             $table->id();
             $table->integer("vendor_id");
-            $table->integer("with_draw_id");
-            $table->double("budget_before");
-            $table->double("budget");
+            $table->integer("budget");
             $table->enum("type" , ["from_admin" , "from_vendor"])->default("from_admin");
             $table->enum("status" , ["accepted" , "rejected" , "pending"])->default("pending");
             $table->text("notes");

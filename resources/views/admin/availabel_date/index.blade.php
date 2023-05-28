@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-Unavailable DATES 
+Available Dates
 @endsection
 
 @section('content')
@@ -16,17 +16,17 @@ Unavailable DATES
                         <svg class="icon icon-xxs" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     </a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Unavailable DATES </li>
+                <li class="breadcrumb-item active" aria-current="page">Available Dates </li>
             </ol>
         </nav>
-        <h2 class="h4">Unavailable DATES </h2>
+        <h2 class="h4">Available Dates </h2>
 
     </div>
     <div class="btn-toolbar mb-2 mb-md-0">
         @if (Auth::guard('admin')->user()->hasPermission('packages-available-dates-and-times-create'))
         <a href="{{ route('admin.availabel_date.create') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
             <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-            Create New Unavailable Dates 
+            Create New Available Dates
         </a>
         @endif
 
@@ -286,7 +286,7 @@ Unavailable DATES
 
                                 <div class="wrapper m-auto">
 
-                                    
+
 
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">Title In Arabic : {{ $date->hall->title_ar }} </li>

@@ -1,3 +1,6 @@
+@php
+    $type='main';
+@endphp
 @extends('layouts.admin.master')
 @section('title')
     All Product Categories
@@ -20,10 +23,10 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Products {{ ucwords($type) }} Categories</li>
+                    <li class="breadcrumb-item active" aria-current="page">Products Categories</li>
                 </ol>
             </nav>
-            <h2 class="h4">All Products {{ ucwords($type) }} Categories</h2>
+            <h2 class="h4">Categories</h2>
 
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
@@ -117,7 +120,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4">
+                                {{-- <div class="col-lg-4">
                                     <div class="form-group mb-3">
                                         <label for="status"> Main Or Sub Category</label>
 
@@ -128,7 +131,7 @@
                                                 Category</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-lg-4">
                                     <div class="form-group mb-3">

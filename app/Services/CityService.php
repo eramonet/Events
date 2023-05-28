@@ -2,7 +2,6 @@
 
 namespace App\Services;
 use App\Models\City;
-use App\Models\Country;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -70,10 +69,9 @@ public function store(Request $request  ){
             'title_ar',
             'title_en',
             'status',
-            'image',
+            'country_id',
         ]);
         $data['admin_id'] = Auth::guard('admin')->id();
-        $data['country_id'] = Country::first()->id ;
         $this->city::create($data);
 
     return true;
@@ -84,16 +82,17 @@ public function store(Request $request  ){
 
 public function update(Request $request ,City $city){
 
+
     $data = $request->only([
         'title_ar',
         'title_en',
         'status',
-        'image',
+        'country_id',
     ]);
 
-    $data['country_id'] = Country::first()->id ;
-
     $city->update($data);
+
+
 
     return $city ? true :false;
 

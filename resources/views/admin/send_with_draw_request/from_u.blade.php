@@ -93,18 +93,14 @@
                 <tr>
                     <th class="border-gray-200">Request Date </th>
                     <th class="border-gray-200">Vendor Name </th>
-                    <th class="border-gray-200">HALL BOOKING / PRODUCT ORDER </th>
-                    <th class="border-gray-200"> Transaction Source </th>
-                    <th class="border-gray-200"> Before Sent Money </th>
-                    <th class="border-gray-200">Sent Value</th>
-                    <th class="border-gray-200"> After Sent Money </th>
+                    <th class="border-gray-200">Value</th>
                     <th class="border-gray-200">Notes</th>
                     <th class="border-gray-200">Status</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Item -->
-                @foreach ($withdraws as $item)
+                @foreach ($withdraw as $item)
                     <tr>
                         <td>
                             <p class="text-nowrap">{{ $item->created_at }}</p>
@@ -113,23 +109,7 @@
                             <p class="text-nowrap">{{ $item->vendor->title_ar }}</p>
                         </td>
                         <td>
-                            <p class="text-nowrap">{{ $item->with_draw->money_type }}</p>
-                        </td>
-                        <td>
-                            @if ( $item->with_draw->money_type == "Hall Booking" )
-                                <a target="_blank" class="btn btn-info" href="{{ url('/acp/bookings/show/' . $item->with_draw->action_id) }}"> Go </a>
-                            @elseif( $item->with_draw->money_type == "Product Order" )
-                                <a target="_blank" class="btn btn-info" href="{{ url('acp/orders/' . $item->with_draw->order_number . '/show') }}"> Go </a>
-                            @endif
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ $item->budget_before }}</p>
-                        </td>
-                        <td>
                             <p class="text-nowrap">{{ number_format($item->budget) }} AED</p>
-                        </td>
-                        <td>
-                            <p class="text-nowrap">{{ ($item->budget_before - $item->budget) }}</p>
                         </td>
                         <td>
                             <p class="text-nowrap">{{ $item->notes ? $item->notes : "-----" }}</p>

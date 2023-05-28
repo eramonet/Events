@@ -144,7 +144,7 @@ class OccasionController extends Controller
 
             $occasion->primary_image = $imageName;
         }
-
+        
         $occasion->update([
             'primary_image' => $request->hasFile('primary_image') ? UploadHelper::upload('occasions', $request->file('primary_image'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')) : $occasion->primary_image ,
             'title_ar' => $request->title_ar,

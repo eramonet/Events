@@ -3,7 +3,6 @@
 namespace App\Services;
 use App\Helper\UploadHelper;
 use App\Models\Admin;
-use App\Models\Country;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -86,9 +85,12 @@ public function store(Request $request  ){
         'status'=>$request->status,
         'password'=>Hash::make($request->password),
         'gender'=>$request->gender,
-        'country_id'=> Country::first()->id,
+        'country_id'=>$request->country_id,
         'city_id'=>$request->city_id,
         'sign_from'=>'web',
+
+
+
     ];
 
     $user = $this->user::create($data);
@@ -117,7 +119,7 @@ public function update(Request $request ,User $user){
         'email'=>$request->email,
         'status'=>$request->status,
         'gender'=>$request->gender,
-        'country_id'=>Country::first()->id,
+        'country_id'=>$request->country_id,
         'city_id'=>$request->city_id,
 
     ];
@@ -127,7 +129,6 @@ public function update(Request $request ,User $user){
     if($request->input('password')){
         $data['password']= Hash::make($request->password);
     }
-
     $user->update($data);
     if($request->hasFile('image')){
 

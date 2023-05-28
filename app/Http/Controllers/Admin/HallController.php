@@ -13,6 +13,8 @@ use App\Services\CountryService;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\CategoryHall;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Hall;
 use App\Models\Occasion;
 use Maatwebsite\Excel\Facades\Excel;
@@ -67,7 +69,7 @@ class HallController extends Controller
 
         $countries = $this->countryService->getActiveCountries();
         $cities = $this->cityService->getActiveCities();
-        $firstCountryCities = $countries->count() > 0 ? $countries->first()->cities : $countries;
+        $firstCountryCities = $this->cityService->getActiveCities()->where('country_id',3);
         $vendors = $this->vendorService->getActiveVendors();
         $hallCategories = Occasion::latest()->get();
 
@@ -104,7 +106,7 @@ class HallController extends Controller
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:10240'],
             'guests_capacity' => ['required', 'integer'],
-            'country_id' => ['required', 'exists:countries,id'],
+            //'country_id' => ['required', 'exists:countries,id'],
             'city_id' => ['required', 'exists:cities,id'],
             'latitude' => ['nullable', 'string', 'min:2'],
             'longitude' => ['nullable', 'string', 'min:2'],
@@ -156,9 +158,9 @@ class HallController extends Controller
             return redirect()->back();
         }
 
-        $countries = $this->countryService->getActiveCountries();
+       //$countries = $this->countryService->getActiveCountries();
         $cities = $this->cityService->getActiveCities();
-        $firstCountryCities = $this->cityService->cityByCountryId($hall->country_id);
+        $firstCountryCities = $this->cityService->cityByCountryId(3);
         $vendors = $this->vendorService->getActiveVendors();
         $hallCategories = Occasion::latest()->get();
 
@@ -166,14 +168,16 @@ class HallController extends Controller
         $hall["categories"] = CategoryHall::where("hall_id" , $hall->id)->latest()->get();
 
 
-        return \view('admin.hall.edit', \compact('hall', 'countries', 'cities', 'firstCountryCities', 'vendors', 'hallCategories'));
+        return \view('admin.hall.edit', \compact('hall',
+        //'countries',
+        'cities', 'firstCountryCities', 'vendors', 'hallCategories'));
     }
 
     public function show(Request $request, $id)
     {
 
         $hall = $this->hallService->getById($id);
-        
+
         if (!$hall) {
             $request->session()->flash('failed', 'Hall Not Found');
             return redirect()->back();
@@ -208,7 +212,7 @@ class HallController extends Controller
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:10240'],
             'guests_capacity' => ['required', 'integer'],
-            'country_id' => ['required', 'exists:countries,id'],
+            //'country_id' => ['required', 'exists:countries,id'],
             'city_id' => ['required', 'exists:cities,id'],
             'vendor_id' => ['required', 'exists:vendors,id'],
             'latitude' => ['nullable', 'string', 'min:2'],

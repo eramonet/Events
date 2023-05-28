@@ -141,6 +141,30 @@
 
                     {{-- stock --}}
 
+
+                    {{-- purchase_price --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="purchase_price">Purchase Price (AED) <span class="text-danger">*</span></label>
+                            <input minlength="0" min="1" value="{{ old('purchase_price') }}" required
+                                type="number" name="purchase_price"
+                                class="form-control @error('purchase_price') is-invalid @enderror"
+                                value="{{ old('purchase_price') }}">
+                        </div>
+
+
+                        @error('purchase_price')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- purchase_price --}}
+
                     {{-- real_price --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -185,27 +209,6 @@
                     </div>
 
                     {{-- fake_price --}}
-
-                    {{-- Offer ending --}}
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="to">Offet Ending At <span class="text-danger">*</span></label>
-                            <input value="{{ old('to') }}" required type="date"
-                                name="to" class="form-control @error('to') is-invalid @enderror"
-                                value="{{ old('to') }}">
-                        </div>
-
-
-                        @error('to')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-                    {{-- Offer ending --}}
 
 
 
@@ -387,6 +390,33 @@
 
 
                         @error('color_id')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="size_id">Sizes </label>
+                            <select multiple name="size_id[]" id="size_id"
+                                class="form-select @error('size_id') is-invalid @enderror">
+
+                                {{-- <option value="" {{ !old('taxes')  ?'selected':'' }}>No Taxes</option> --}}
+
+                                @foreach ($sizes as $size)
+                                    <option value="{{ $size->id }}"
+                                        {{ collect(old('size_id'))->contains($size->id) ? 'selected' : '' }}>
+                                        {{ $size->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        @error('size_id')
                             <div class="d-flex justify-content-center ">
 
                                 <div class="text-danger">

@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
             $table->string('title_ar')->unique();
             $table->string('title_en')->unique();
             $table->enum('status',[1,0])->default(1)->nullable();

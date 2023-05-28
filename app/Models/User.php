@@ -28,6 +28,12 @@ class User extends Authenticatable
         return  is_null($this->image) ? $path . '/default.png' : $path . '/' . $this->image;
     }
 
+
+
+
+
+
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -48,18 +54,15 @@ class User extends Authenticatable
         return $this->belongsTo(Country::class, 'country_id');
     }
 
+
     public function city()
     {
         return $this->belongsTo(City::class, 'city_id');
     }
     public function booking()
     {
-        return $this->hasMany(Hall_booking::class);
-    }
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class , "customer_email" , "email" );
+        return $this->hasMany(Hall_booking::class);
     }
 
     public function cart()

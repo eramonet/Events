@@ -63,17 +63,18 @@ public function getAll(Request $request){
 
 public function store(Request $request  ){
 
+
         $data = $request->only([
             'title_ar',
             'title_en',
             'status',
             'city_id',
-            'image',
         ]);
         $data['admin_id'] = Auth::guard('admin')->id();
         $this->region::create($data);
 
     return true;
+
 
 }
 
@@ -86,7 +87,6 @@ public function update(Request $request ,Region $region){
         'title_en',
         'status',
         'city_id',
-        'image',
     ]);
 
     $region->update($data);

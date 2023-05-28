@@ -53,8 +53,8 @@
 
                                     <div class="form-group mb-3">
                                         <label for="from">From</label>
-                                        <input type="date" id="from" value="{{ request()->from }}" name="from"
-                                            class="form-control search-docs" placeholder="From">
+                                        <input type="date" id="from" value="{{ request()->from }}"
+                                            name="from" class="form-control search-docs" placeholder="From">
 
                                     </div>
                                 </div>
@@ -97,65 +97,63 @@
                 <tr>
                     <th class="border-gray-200">Vendor Name </th>
                     <th class="border-gray-200">Vendor Phone </th>
-                    <th class="border-gray-200"> Hall Booking / Product Order </th>
-                    <th class="border-gray-200">Total Order Balance</th>
-                    <th class="border-gray-200">Total Vendor Balance</th>
-                    <th class="border-gray-200">Our Commission (%)</th>
-                    <th class="border-gray-200">Our Commission (AED)</th>
+                    <th class="border-gray-200">Vendor Type </th>
+                    <th class="border-gray-200">Total Orders</th>
+                    <th class="border-gray-200">Vendor Balance</th>
                     <th class="border-gray-200">Total Sent Balance</th>
-                    <th class="border-gray-200">Vendor Balance After Sent Money </th>
+                    <th class="border-gray-200">Vendor Balance After Sent Money  </th>
+                    <th class="border-gray-200">Events Commission</th>
+                    <th class="border-gray-200">Events Balance</th>
                 </tr>
             </thead>
             <tbody>
                 <!-- Item -->
                 <?php
-                $total_order_balance = 0;
-                $vendor_balance = 0;
+                $total = 0 ;
+                $have = 0 ;
+                $commission = 0 ;
+                $total_sent_money = 0 ;
                 $our_commission = 0 ;
-                $sent_money = 0 ;
-                $total_balance_after_sent = 0 ;?>
-                @foreach ($vendors as $vendor)
-                    @foreach ($vendor->with_draws as $with_draw)
-                        <tr>
-                            <td>
-                                <p class="text-nowrap">{{ $vendor->title_en }}</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ $vendor->phone }}</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ $with_draw->money_type }}</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ number_format($with_draw->total) }} AED</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ number_format($with_draw->have) }} AED</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ number_format($vendor->commission) . ' %' }}</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ number_format($with_draw->our_commission) . ' AED' }}</p>
-                            </td>
-                            <td>
-                                <?php $total_sent_money = 0; ?>
-                                @foreach ($with_draw->with_draw_requests as $request)
-                                    <?php $total_sent_money += $request->budget; $sent_money += $request->budget  ?>
-                                @endforeach
-                                <p class="text-nowrap">{{ number_format($total_sent_money) . ' AED' }}</p>
-                            </td>
-                            <td>
-                                <p class="text-nowrap">{{ number_format($with_draw->have - $total_sent_money) . ' AED' }}</p>
-                            </td>
-                            <?php
-                            $total_order_balance += $with_draw->total ;
-                            $vendor_balance += $with_draw->have ;
-                            $our_commission += $with_draw->our_commission ;
-                            $total_balance_after_sent += $with_draw->have - $total_sent_money ;
-                        ?>
-                        </tr>
-                    @endforeach
+                $vendor_have_after_sent_money = 0 ;?>
+                @foreach ($withdraw as $item)
+                @if( ! $item->sent_money == 0 )
+                <tr>
+                    <td>
+                        <p class="text-nowrap">{{ $item->vendor ? $item->vendor->title_en : "----" }}</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ $item->vendor_phone }}</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ $item->vendor->type }}</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ number_format($item->total) }} AED</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ number_format($item->have) }} AED</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ number_format($item->sent_money) }} AED</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ number_format($item->have - $item->sent_money) }} AED</p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap"> {{ $item->vendor ? $item->vendor->commission . "%" : "----" }} </p>
+                    </td>
+                    <td>
+                        <p class="text-nowrap">{{ number_format($item->total * ($item->vendor->commission / 100)) }} AED</p>
+                    </td>
+                    <?php
+                    $total += $item->total ;
+                    $have += $item->have ;
+                    $commission += $item->vendor->commission ;
+                    $our_commission += $item->total * ($item->vendor->commission / 100) ;
+                    $total_sent_money += $item->sent_money ;
+                    $vendor_have_after_sent_money += ( $item->have - $item->sent_money ) ; ?>
+                </tr>
+                @endif
                 @endforeach
 
                 <!-- Item -->
@@ -172,36 +170,26 @@
                         <p class="text-nowrap"></p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
-                            {{ number_format($total_order_balance) }} AED
-                        </p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($total) }} AED</p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
-                            {{ number_format($vendor_balance) }} AED
-                        </p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($have) }} AED</p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
-
-                        </p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($total_sent_money) }} AED</p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
-                            {{ number_format($our_commission) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($vendor_have_after_sent_money) }} AED</p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
-                            {{ number_format($sent_money) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold"></p>
                     </td>
                     <td>
-                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">
-                            {{ number_format($total_balance_after_sent) }} AED</p>
+                        <p class="text-nowrap" style="font-size: 17px; font-weight: bold">{{ number_format($our_commission) }} AED</p>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>
 
-    {{-- table --}}
+        {{-- table --}}
     @endsection

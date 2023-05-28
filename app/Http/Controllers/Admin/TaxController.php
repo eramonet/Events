@@ -16,9 +16,8 @@ use Maatwebsite\Excel\Facades\Excel;
 class TaxController extends Controller
 {
     protected $texService;
-    public function __construct(TaxService $texService)
-    {
-        $this->texService = $texService;
+    public function __construct(TaxService $texService){
+          $this->texService = $texService;
         //   $this->middleware(['permission:taxes-read'])->only(['index','export']);
         //   $this->middleware(['permission:taxes-create'])->only(['create', 'store']);
         //   $this->middleware(['permission:taxes-update'])->only(['update', 'edit']);
@@ -27,25 +26,23 @@ class TaxController extends Controller
 
 
 
-    public function index(Request $request)
-    {
+    public function index( Request $request){
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
-            $taxes = $this->texService->getAll($request);
-            // return $taxes;
-            return \view('admin.tax.index', \compact('taxes'));
-        } else {
+        $taxes =$this->texService->getAll($request);
+        // return $taxes;
+        return \view('admin.tax.index' ,\compact('taxes'));
+        }else{
             $taxes = $this->texService->getAllAdmin($request, $useradmin);
             // return $taxes;
             return \view('admin.tax.index', \compact('taxes'));
         }
     }
 
-    public function create(Request $request)
-    {
+    public function create( Request $request){
 
 
-        return \view('admin.tax.create');
+        return \view('admin.tax.create' );
     }
 
 
@@ -53,7 +50,8 @@ class TaxController extends Controller
     {
         ob_end_clean();
         ob_start();
-        return Excel::download(new TaxExport,  Carbon::now() . '-taxes.xlsx');
+        return Excel::download(new TaxExport,  Carbon::now() .'-taxes.xlsx');
+
     }
 
 
@@ -61,86 +59,103 @@ class TaxController extends Controller
     public function store(Request $request)
 
     {
+
+
         $request->validate([
-            'title_ar' => ['required', 'string', 'min:2', 'unique:taxes'],
-            'title_en' => ['required', 'string', 'min:2', 'unique:taxes'],
-            'percentage' => ['required', 'numeric', 'min:1'],
-            'status' => ['required', 'string', Rule::in([1, 0])],
-        ]);
+            'title_ar'=>['required','string','min:2' , 'unique:taxes'],
+            'title_en'=>['required','string','min:2','unique:taxes'],
+            'percentage'=>['required','numeric', ],
+            'status'=>['required','string', Rule::in([1,0])],
+         ]);
 
 
 
         $created = $this->texService->store($request);
 
-        if ($created) {
+        if($created){
             $request->session()->flash('success', 'Tax Added SuccessFully');
-        } else {
+
+        }else{
             $request->session()->flash('failed', 'Something Wrong');
+
         }
 
-        return redirect()->route('admin.taxes.index');
+        return redirect()->back();
+
     }
 
 
-    public function edit(Request $request, $id)
+    public function edit(Request $request,$id)
     {
 
-        $tax = $this->texService->getById($id);
-        if (!$tax) {
+      $tax = $this->texService->getById($id);
+        if(!$tax ){
             $request->session()->flash('failed', 'Tax Not Found');
             return redirect()->back();
+
+
         }
 
 
-        return \view('admin.tax.edit', \compact('tax'));
+        return \view('admin.tax.edit' ,\compact( 'tax'));
+
+
     }
 
 
     public function update(Request $request, $id)
     {
         $tax = $this->texService->getById($id);
-        if (!$tax) {
+        if(!$tax ){
             $request->session()->flash('failed', 'Tax Not Found');
             return redirect()->back();
         }
         $request->validate([
-            'title_ar' => ['required', 'string', 'min:2',  Rule::unique('taxes', 'title_ar')->ignore($tax->id)],
-            'title_en' => ['required', 'string', 'min:2', Rule::unique('taxes', 'title_en')->ignore($tax->id)],
-            'percentage' => ['required', 'numeric', 'min:1'],
-            'status' => ['required', 'string', Rule::in([1, 0])],
+            'title_ar'=>['required','string','min:2' ,  Rule::unique('taxes' ,'title_ar')->ignore($tax->id)],
+            'title_en'=>['required','string','min:2', Rule::unique('taxes' ,'title_en')->ignore($tax->id)],
+            'percentage'=>['required','numeric', ],
+            'status'=>['required','string', Rule::in([1,0])],
         ]);
 
-        $updated = $this->texService->update($request, $tax);
+        $updated = $this->texService->update($request , $tax);
 
-        if ($updated) {
+        if($updated){
             $request->session()->flash('success', 'Tax Updated SuccessFully');
-        } else {
+
+        }else{
             $request->session()->flash('failed', 'Something Wrong');
         }
 
 
-        return redirect()->route('admin.taxes.index');
+         return redirect()->back();
+
+
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request,$id)
     {
         $tax = $this->texService->getById($id);
-        if (!$tax) {
+        if(!$tax ){
             $request->session()->flash('failed', 'Tax Not Found');
             return redirect()->back();
+
+
         }
         $tax->delete();
         $request->session()->flash('success', 'Tax Deleted SuccessFully');
 
 
         return redirect()->back();
+
+
+
     }
 
 
-    public function restore(Request $request, $id)
+    public function restore(Request $request,$id)
     {
         $tax = $this->texService->getById($id);
-        if (!$tax) {
+        if(!$tax ){
             $request->session()->flash('failed', 'Tax Not Found');
             return redirect()->back();
         }
@@ -148,5 +163,8 @@ class TaxController extends Controller
         $request->session()->flash('success', 'Tax Restored SuccessFully');
 
         return redirect()->back();
+
+
+
     }
 }

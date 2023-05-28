@@ -54,16 +54,19 @@ class ProductController extends Controller
 
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
-
             $products = $this->productService->getAll($request);
-
             $type = $request->type && ($request->type == 'in-stock' || $request->type == 'out-of-stock') ? $request->type : 'all';
 
+            // return $products;
+
+            // return sprintf("%08d",'10000000009999999');
+            // return str_pad(3, 12, "0", STR_PAD_LEFT);
             return \view('admin.product.index', \compact('products', 'type'));
         } else {
-
-            $products = $this->productService->getAllAdmin($request, $useradmin->vendor);
+            $products = $this->productService->getAllAdmin($request, $useradmin);
             $type = $request->type && ($request->type == 'in-stock' || $request->type == 'out-of-stock') ? $request->type : 'all';
+
+            // return $products;
 
             // return sprintf("%08d",'10000000009999999');
             // return str_pad(3, 12, "0", STR_PAD_LEFT);
@@ -460,8 +463,6 @@ class ProductController extends Controller
             $request->session()->flash('failed', 'Product Not Found');
             return redirect()->back();
         }
-
-        // return $product->taxes ;
 
 
         return \view('admin.product.show', \compact('product'));

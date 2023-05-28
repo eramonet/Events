@@ -44,28 +44,9 @@
 
             <div class="d-flex justify-content-center align-items-center flex-wrap">
                 <div class="card card-body px-1 py-3 mx-4 p bg-primary   rounded my-3 order-statistics  position-relative">
-                    <h1 style="color: #fff; font-size: 30px;"><span
-                            id="balance_price">{{ number_format($our_balance) }}</span> AED</h1>
+                    <h1 style="color: #fff; font-size: 30px;"><span id="balance_price">{{ number_format($our_balance) }}</span> AED</h1>
                     <input type="text" id="inp_balance" hidden>
-                    <a><span class="d-block " style=" font-size:35px ; color:#fff">My Total Balance</span></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card my-4">
-
-        <div class="card-header">
-            Selected Order Balance
-        </div>
-        <div class=" card-body ">
-
-            <div class="d-flex justify-content-center align-items-center flex-wrap">
-                <div class="card card-body px-1 py-3 mx-4 p bg-primary   rounded my-3 order-statistics  position-relative">
-                    <h1 style="color: #fff; font-size: 30px;"><span
-                            id="order_balance">0</span> AED</h1>
-                    <input type="text" id="inp_balance" hidden>
-                    <a><span class="d-block " style=" font-size:35px ; color:#fff">Selected Order Balance</span></a>
+                    <a><span class="d-block " style=" font-size:35px ; color:#fff">Balance</span></a>
                 </div>
             </div>
         </div>
@@ -91,31 +72,9 @@
 
             <div class="card-body">
 
-                <input type="text" id="selected_key" name="selected_key" hidden>
-                <input type="text" id="selected_order" name="selected_order" hidden>
-                <input type="text" id="order_price" name="order_price" hidden>
+
 
                 <div class="row">
-
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="title_en">Select Money Type <span class="text-danger">*</span></label>
-                            <select name="key" class="form-control" id="select_key">
-                                <option value="empty">Select Money Type -------</option>
-                                <option value="order">Orders</option>
-                                <option value="hall">Halls</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="title_en">Select Order <span class="text-danger">*</span></label>
-                            <select name="key" class="form-control" id="my_orders">
-
-                            </select>
-                        </div>
-                    </div>
 
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -128,8 +87,9 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="purchase_price">Notes</label>
-                            <input value="{{ old('notes') }}" type="text" name="notes"
-                                class="form-control @error('notes') is-invalid @enderror" value="{{ old('notes') }}">
+                            <input value="{{ old('notes') }}" type="text"
+                                name="notes" class="form-control @error('notes') is-invalid @enderror"
+                                value="{{ old('notes') }}">
                             <input type="text" id="client_id" name="vendor_id" hidden>
                         </div>
                     </div>
@@ -144,83 +104,6 @@
             <i class="fas fa-plus icon icon-xs ms-2"></i>
         </button>
     </form>
-
-
-    <script>
-        $("#select_key").change(function() {
-
-            select_key = $(this).children("option:selected").val();
-
-            if (select_key == "") {
-                select_key = "empty";
-            }
-
-            complete_url = "/acp/admin/get-orders-based-on-key/" + select_key;
-
-            $.ajax({
-                type: "GET",
-                url: complete_url,
-                success: function(data) {
-                    console.log(data.my_orders)
-
-                    $("#selected_key").val(select_key)
-
-                    $("#my_orders").empty();
-
-                    if (data.my_orders.length > 0) {
-                        $("#my_orders").append(`
-                                <option value="empty">Select Order -------</option>
-                            `);
-                        for (x = 0; x < data.my_orders.length; x++) {
-                            $("#my_orders").append(`
-                                <option value="${data.my_orders[x].id}">0000${data.my_orders[x].id}</option>
-                            `);
-                        }
-                    }
-                },
-                error: function(data) {
-                    console.log("error");
-                },
-            });
-        });
-
-        $("#my_orders").change(function() {
-
-            my_orders = $(this).children("option:selected").val();
-
-            key = $("#selected_key").val();
-
-            if (my_orders == "") {
-                my_orders = "empty";
-            }
-
-            complete_url = "/acp/admin/get-order-price/" + key + "/" + my_orders;
-
-            $.ajax({
-                type: "GET",
-                url: complete_url,
-                success: function(data) {
-
-                    console.log(data)
-
-                    $("#selected_order").val(my_orders)
-
-                    if (data == "empty") {
-                        $("#order_price").val(0);
-                        $("#order_balance").text(0)
-                    } else {
-                        $("#order_price").val(data[0]);
-                        $("#order_balance").text(data[0])
-                    }
-
-
-                },
-                error: function(data) {
-                    console.log("error");
-                },
-            });
-        });
-    </script>
 
 
 

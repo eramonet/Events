@@ -80,9 +80,23 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
+            // system-admins
+
+            // system-admins
+
+            Route::controller(HallsCategoryController::class)->prefix('halls-categories.')->name('halls-categories.')->group(function () {
+
+
+                Route::get('', 'index')->name('index');
+                Route::get('/export', 'export')->name('export');
+                Route::get('/create', 'create')->name('create');
+                Route::post('/store', 'store')->name('store');
+                Route::get('/{id}/edit', 'edit')->name('edit');
+                Route::put('/{id}/update', 'update')->name('update');
+                Route::put('/{id}/restore', 'restore')->name('restore');
+                Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            });
         // system-admins
-
-
 
 
         // vendor-admins
@@ -118,7 +132,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
 
             Route::get('company', 'company')->name('company');
             Route::get('individual', 'individual')->name('individual');
-            Route::get('/{id}/show', 'show')->name('show');
         });
         // vendors
 
@@ -157,7 +170,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            Route::get('/{id}/show', 'show')->name('show');
         });
         // user
 
@@ -168,14 +180,13 @@ Route::prefix('acp')->name('admin.')->group(function () {
 
 
             Route::get('', 'index')->name('index');
-            Route::get('/{id}/show', 'show')->name('show');
             Route::get('/export', 'export')->name('export');
-            // Route::get('/create', 'create')->name('create');
-            // Route::post('/store', 'store')->name('store');
-            // Route::get('/{id}/edit', 'edit')->name('edit');
-            // Route::put('/{id}/update', 'update')->name('update');
-            // Route::put('/{id}/restore', 'restore')->name('restore');
-            // Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/store', 'store')->name('store');
+            Route::get('/{id}/edit', 'edit')->name('edit');
+            Route::put('/{id}/update', 'update')->name('update');
+            Route::put('/{id}/restore', 'restore')->name('restore');
+            Route::delete('/{id}/destroy', 'destroy')->name('destroy');
         });
         // counties
 
@@ -200,8 +211,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-
-            Route::get('/{id}/show', 'show')->name('show');
         });
         // cities
 
@@ -264,7 +273,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            Route::get('/{id}/show', 'show')->name('show');
         });
         // regions
 
@@ -341,6 +349,8 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+                Route::get('/{id}/show', 'show')->name('show');
+
         });
         // packages
 
@@ -395,7 +405,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            Route::get('/{id}/show', 'show')->name('show');
         });
         //promo-codes
 
@@ -626,7 +635,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
-            Route::get('/{id}/show', 'show')->name('show');
         }
     );
 
@@ -659,8 +667,7 @@ Route::prefix('acp')->name('admin.')->group(function () {
         Route::get('filter-to-you' , 'filter_to_you')->name('filter_to_you');
         Route::post('accept-money/{request_id}' , 'accept_money')->name('accept_money') ;
         Route::post('reject-money/{request_id}' , 'reject_money')->name('reject_money') ;
-        Route::get('get-vendor-order-balance/{vendor_email}/{key}/{order_number}' , 'get_vendor_order_balance')->name('get_vendor_order_balance');
-        Route::get('get-vendor-balance/{vendor_email}/{key}' , 'get_vendor_balance')->name('get_vendor_balance');
+        Route::get('get-vendor-balance/{vendor_email}' , 'get_vendor_balance')->name('get_vendor_balance');
         Route::get('total-withdraw' , 'total_withdraw')->name('total_withdraw');
         Route::get('filter-total-withdraw' , 'filter_total_withdraw')->name('filter_total_withdraw');
         Route::get('total-withdraw-per-month' , 'total_withdraw_per_month')->name('total_withdraw_per_month');
@@ -671,8 +678,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
         Route::get('withdraw-requests/{status}' , 'withdraw_requests')->name('withdraw_requests');
         Route::get('resend-money-requests/{request_id}' , 'resend_money_requests')->name('resend_money_requests');
         Route::get('filter-sent-request' , 'filter_sent_request')->name('filter_sent_request') ;
-        Route::get('get-orders-based-on-key/{key}' , 'get_orders_based_on_key')->name('get_orders_based_on_key');
-        Route::get('get-order-price/{key}/{order}' , 'get_order_price')->name('get_order_price');
     });
 
     Route::controller(HallBookingController::class)->prefix('admin')->name('hall-booking.')->group(function () {
@@ -707,9 +712,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
         // explore category
         Route::get('explore-category', 'explore_category')->name('explore_category');
         Route::post('edit-explore_category/{id}', 'edit_explore_category')->name('edit_explore_category');
-
-        // assign explore category
-        Route::get('explore-category', 'explore_category')->name('explore_category');
 
         // best sellers
         Route::get('best-sellers', 'best_sellers')->name('best_sellers');
@@ -772,22 +774,20 @@ Route::prefix('acp')->name('admin.')->group(function () {
         Route::post('edit-contact-us-footer/{id}', 'edit_contact_us_footer')->name('edit_contact_us_footer');
     });
 
+    //
     Route::controller(AdvertisementController::class)->prefix('advertisements')->name('advertisements.')->group(function () {
+
         Route::get('outer-clients' , "outer_clients")->name("outer_clients");
         Route::post('add-outer-clients' , "add_outer_clients")->name("add_outer_clients");
         Route::post('edit-outer-clients/{id}' , "edit_outer_clients")->name("edit_outer_clients");
         Route::get('delete-outer-clients/{id}' , "delete_outer_clients")->name("delete_outer_clients");
 
         Route::get('advertisements' , "advertisements")->name("advertisements");
-        Route::get('add-advertisements-page' , "add_advertisements_page")->name("add_advertisements_page");
         Route::post('add-advertisements' , "add_advertisements")->name("add_advertisements");
-        Route::get('edit-advertisements-page/{id}' , "edit_advertisements_page")->name("edit_advertisements_page");
         Route::post('edit-advertisements/{id}' , "edit_advertisements")->name("edit_advertisements");
         Route::get('delete-advertisements/{id}' , "delete_advertisements")->name("delete_advertisements");
 
         Route::get('clients-ads' , "clients_ads")->name("clients_ads");
-        Route::get('assign-outer-client-ad-page' , "assign_outer_client_ad_page")->name("assign_outer_client_ad_page");
-        Route::get('assign-inner-client-ad-page' , "assign_inner_client_ad_page")->name("assign_inner_client_ad_page");
         Route::post('assign-client-ad' , "assign_client_ad")->name("assign_client_ad");
         Route::post('edit-client-ad/{id}' , "edit_client_ad")->name("edit_client_ad");
         Route::get('delete-client-ad/{id}' , "delete_client_ad")->name("delete_client_ad");

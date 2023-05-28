@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('primary_image')->nullable();
             $table->text('details_ar')->nullable();
             $table->text('details_en')->nullable();
-
+            
             $table->text('features_ar')->nullable();
             $table->text('features_en')->nullable();
             $table->text('instructions_ar')->nullable();
@@ -38,6 +38,7 @@ return new class extends Migration
 
             $table->double('fake_price', 8, 2)->nullable();
             $table->double('real_price', 8, 2)->nullable();
+            $table->double('purchase_price', 8, 2)->nullable();
             $table->bigInteger('stock')->nullable();
             $table->enum('status',[1,0])->default(1)->nullable();
             $table->enum('accept',['accepted','rejected','new'])->default('new');

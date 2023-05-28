@@ -1,3 +1,11 @@
+@php
+    $getPackages = App\Models\HallPackage::where('hall_id', $hall->id)->pluck('package_id');
+    $packages = App\Models\Package::whereIn('id', $getPackages)->get();
+    $getcats = App\Models\CategoryHall::where('hall_id', $hall->id)->pluck('category_id');
+    $cats = App\Models\PackageOption::whereIn('category_id', $getcats)->pluck('category_id');
+    $options = App\Models\PackageOptionCategory::whereIn('id', $cats)->get();
+
+@endphp
 @extends('layouts.admin.master')
 @section('title')
     Show Hall
@@ -23,809 +31,174 @@
                         <a href="{{ route('admin.halls.index') }}">Halls</a>
                     </li>
 
-                    <li class="breadcrumb-item active" aria-current="page">Show Hall</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $hall->title_en }} Details</li>
 
                 </ol>
             </nav>
-            <h2 class="h4">Show Hall</h2>
+            <h2 class="h4">{{ $hall->title_en }} Details</h2>
 
         </div>
 
     </div>
-
-
-
-
-
 
     {{-- on top --}}
 
+    <div id="order_details_page">
+        {{-- first section --}}
+        <div class="row">
+            <!-- hall details -->
+            <div class="col-md-12">
+                <div class="card card-body my-4">
+                    <h4>Hall Details</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
 
-    <div class="card mb-4">
-        <div class="card-header">
-            Basic Information
-        </div>
-
-        <div class="card-body">
-
-
-
-            <div class="row">
-
-
+                            <tbody>
 
 
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Image</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> <img src="{{ $hall->primary_image_url }}" width="100px"></p>
+                                    </td>
 
-                {{-- title_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="title_ar">Title In Arabic <span class="text-danger">*</span></label>
-                        <input dir="rtl" readonly type="text" name="title_ar"
-                            class="form-control @error('title_ar') is-invalid @enderror" value="{{ $hall->title_ar }}">
+                                </tr>
+
+                                <!-- Item -->
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Name</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> {{ $hall->title_en }}</p>
+                                    </td>
+
+                                </tr>
+                                <!-- End of Item -->
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Email</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> {{ $hall->email }} </p>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Phone</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> {{ $hall->phone }} </p>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Address</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> {{ $hall->address_en }} </p>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Guest Capacity</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> {{ number_format($hall->guests_capacity) }} Guests</p>
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
                     </div>
-
-
-                    @error('title_ar')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
                 </div>
-
-                {{-- title_ar --}}
-
-
-                {{-- title_en --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="title_en">Title In English <span class="text-danger">*</span></label>
-                        <input readonly type="text" name="title_en"
-                            class="form-control @error('title_en') is-invalid @enderror" value="{{ $hall->title_en }}">
-                    </div>
-
-
-                    @error('title_en')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- title_en --}}
-
-
-                {{-- email --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <input readonly type="email" name="email"
-                            class="form-control @error('email') is-invalid @enderror" value="{{ $hall->email }}">
-                    </div>
-
-
-                    @error('email')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- email --}}
-
-
-                {{-- phone --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="phone">Phone <span class="text-danger">*</span></label>
-                        <input readonly type="text" name="phone"
-                            class="form-control @error('phone') is-invalid @enderror" value="{{ $hall->phone }}">
-                    </div>
-
-
-                    @error('phone')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- phone --}}
-
-
-
-                {{-- guests_capacity --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="guests_capacity">Hall guests Full capacity <span class="text-danger">*</span></label>
-                        <input value="{{ $hall->guests_capacity }}" readonly type="number" name="guests_capacity"
-                            class="form-control @error('guests_capacity') is-invalid @enderror"
-                            value="{{ old('guests_capacity') }}">
-                    </div>
-
-
-                    @error('guests_capacity')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- guests_capacity --}}
-
-
-
-
-                {{-- status --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="status">Status <span class="text-danger">*</span></label>
-                        {{-- <select  readonly name="status" id="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="1" {{ $hall->status =='1'?'selected':''}}>Active</option>
-                            <option value="0" {{ $hall->status =='0'?'selected':''}}>InActive</option>
-                        </select> --}}
-                        <input readonly type="text" name="status"
-                            class="form-control @error('status') is-invalid @enderror"
-                            value="@if ($hall->status == '1') Active @else InActive @endif">
-
-                    </div>
-
-
-                    @error('status')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- status --}}
-
-
-                {{-- vendor_id --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="vendor_id">Vendor <span class="text-danger">*</span></label>
-                        {{-- <select readonly name="vendor_id" id="vendor_id"
-                            class="form-select @error('vendor_id') is-invalid @enderror">
-
-                            @foreach ($vendors as $vendor)
-                                <option value="{{ $vendor->id }}" {{ $hall->vendor_id == $vendor->id ? 'selected' : '' }}>
-                                    {{ $vendor->title_en . ' - ' . $vendor->title_ar }}</option>
-                            @endforeach
-                        </select> --}}
-                        <input readonly type="text" name="vendor_id"
-                            class="form-control @error('vendor_id') is-invalid @enderror"
-                            value="{{ $hall->vendor->title_en . ' - ' . $hall->vendor->title_ar }}">
-                    </div>
-
-
-                    @error('vendor_id')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- vendor_id --}}
-
-
-                {{-- categories --}}
-                {{-- <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="categories">Categories <span class="text-danger">*</span></label>
-                        <select multiple readonly name="categories[]" id="categories"
-                            class="form-select @error('categories') is-invalid @enderror">
-
-                            @foreach ($hallCategories as $hallCategory)
-                                <option value="{{ $hallCategory->id }}"
-                                    {{ collect($hall->categories->pluck('id'))->contains($hallCategory->id) ? 'selected' : '' }}>
-                                    {{ $hallCategory->title_en . ' - ' . $hallCategory->title_ar }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-
-                    @error('categories')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div> --}}
-
-                {{-- categories --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
 
+
+
+            <div class="col-md-12">
+                <div class="card card-body my-4">
+                    <h4>Hall Packages</h4>
+                    <div class="table-responsive">
+
+                        <table class="table table-hover table-centered table-striped table-bordered text-center">
+                            <thead>
+                                <tr>
+                                    <th class="border-gray-200">Package Image </th>
+                                    <th class="border-gray-200">Package Name</th>
+                                    <th class="border-gray-200">Extra Guest Price </th>
+                                    <th class="border-gray-200">Number Of Tables</th>
+                                    <th class="border-gray-200">Number Of Guests</th>
+                                    <th class="border-gray-200">fake Price</th>
+                                    <th class="border-gray-200">real Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($packages as $package)
+                                    <tr>
+                                        <td><img src="{{ $package->image_url }}" width="80px"></td>
+                                        <td><a href="{{ route("admin.packages.show",$package->id) }}">{{ $package->title_en }}</a></td>
+                                        <td>{{ $package->extra_guest_price }} AED</td>
+                                        <td>{{ number_format($package->number_of_tables) }}</td>
+                                        <td>{{ number_format($package->number_of_guests) }}</td>
+                                        <td>{{ $package->fake_price }} AED</td>
+                                        <td>{{ $package->real_price }} AED</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12">
+                <div class="card card-body my-4">
+                    <h4>Options</h4>
+                    <div class="table-responsive">
+
+                        <table class="table table-hover table-centered table-striped table-bordered text-center">
+                            <thead>
+                                <tr>
+
+                                    <th class="border-gray-200">Option Image </th>
+                                    <th class="border-gray-200">Option Name</th>
+                                    <th class="border-gray-200">Quantity</th>
+                                    <th class="border-gray-200">Price</th>
+                                    <th class="border-gray-200">Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($options as $option)
+                                    <tr>
+                                        <td><img src="{{ $option->image_url }}" width="80px"></td>
+                                        <td>{{ $option->title_en }}</td>
+                                        <td>{{ number_format($option->quantity) }} Item</td>
+                                        <td>{{ number_format($option->price) }} AED</td>
+                                        <td>{{ number_format($option->price * $option->quantity) }} AED</td>
+                                     </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
+
     </div>
-
-
-
-
-
-
-
-
-    <div class="card mb-4">
-        <div class="card-header">
-            Summary
-        </div>
-
-        <div class="card-body">
-
-
-            <div class="row">
-
-
-                {{-- summary_ar --}}
-                <div class="col-md-12">
-                    <div class="form-group mb-4">
-                        <label for="summary_ar"> Summary In Arabic <span class="text-danger">*</span> </label>
-
-
-                        <textarea editor dir="rtl" name="summary_ar" id="summary_ar" cols="30" rows="6"
-                            class="form-control @error('summary_ar') is-invalid @enderror">{!! $hall->summary_ar !!}</textarea>
-                    </div>
-
-
-                    @error('summary_ar')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- summary_ar --}}
-
-
-
-                {{-- summary_en --}}
-                <div class="col-md-12">
-                    <div class="form-group mb-4">
-                        <label for="summary_en"> Summary In English <span class="text-danger">*</span> </label>
-                        <textarea editor name="summary_en" id="summary_en" cols="30" rows="6"
-                            class="form-control @error('summary_en') is-invalid @enderror">{!! $hall->summary_en !!}</textarea>
-                    </div>
-
-
-                    @error('summary_en')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- summary_en --}}
-
-
-
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-    <div class="card mb-4">
-        <div class="card-header">
-            Location Information
-        </div>
-
-        <div class="card-body">
-
-
-
-            <div class="row">
-
-
-
-
-
-                {{-- country_id --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="country_id">Country <span class="text-danger">*</span></label>
-                        {{-- <select readonly name="country_id" id="country_id"
-                            class="form-select @error('country_id') is-invalid @enderror">
-
-                            @foreach ($countries as $country)
-                                <option value="{{ $country->id }}"
-                                    {{ $hall->country_id == $country->id ? 'selected' : '' }}>{{ $country->title_en }}
-                                </option>
-                            @endforeach
-                        </select> --}}
-                        <input readonly type="text" name="country_id"
-                            class="form-control @error('country_id') is-invalid @enderror"
-                            value="{{ $hall->country->title_en . ' - ' . $hall->country->title_ar }}">
-                    </div>
-
-
-                    @error('country_id')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- country_id --}}
-
-
-                {{-- city_id --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="city_id">City <span class="text-danger">*</span></label>
-                        {{-- <select readonly name="city_id" id="city_id"
-                            class="form-select @error('city_id') is-invalid @enderror">
-
-
-                            @foreach ($firstCountryCities as $city)
-                                <option value="{{ $city->id }}" {{ $hall->city_id == $city->id ? 'selected' : '' }}>
-                                    {{ $city->title_en }}</option>
-                            @endforeach
-                        </select> --}}
-                        <input readonly type="text" name="city_id"
-                            class="form-control @error('city_id') is-invalid @enderror"
-                            value="{{ $hall->city->title_en . ' - ' . $hall->city->title_ar }}">
-                    </div>
-
-
-                    @error('city_id')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- city_id --}}
-
-
-                {{-- address_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="address_ar"> Address Details In Arabic </label>
-
-
-                        <textarea dir="rtl" name="address_ar" id="address_ar" cols="30" rows="3"
-                            class="form-control @error('address_ar') is-invalid @enderror">{{ $hall->address_ar }}</textarea>
-                    </div>
-
-
-                    @error('address_ar')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- address_ar --}}
-
-
-
-                {{-- address_en --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="address_en"> Address Details In English </label>
-
-
-                        <textarea name="address_en" id="address_en" cols="30" rows="3"
-                            class="form-control @error('address_en') is-invalid @enderror">{{ $hall->address_en }}</textarea>
-                    </div>
-
-
-                    @error('address_en')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- address_en --}}
-
-
-
-
-
-
-                {{-- latitude --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="latitude"> Map Latitude </label>
-                        <input readonly type="number" step="any" name="latitude"
-                            class="form-control @error('latitude') is-invalid @enderror" value="{{ $hall->latitude }}">
-                    </div>
-
-
-                    @error('latitude')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- latitude --}}
-
-
-
-                {{-- longitude --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="longitude"> Map Longitude </label>
-                        <input readonly type="number" step="any" name="longitude"
-                            class="form-control @error('longitude') is-invalid @enderror"
-                            value="{{ $hall->longitude }}">
-                    </div>
-
-
-                    @error('longitude')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- longitude --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-
-
-
-    <div class="card mb-4">
-
-        <div class="card-header">
-            SEO (Search Engine Optimization) Information
-
-
-        </div>
-
-        <div class="card-body">
-
-            <div class="row">
-
-
-
-
-
-                {{-- description_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="description_ar"> Meta Description In Arabic <span class="text-danger">*</span></label>
-
-
-                        <textarea readonly dir="rtl" name="description_ar" id="description_ar" cols="30" rows="3"
-                            class="form-control @error('description_ar') is-invalid @enderror">{{ $hall->description_ar }}</textarea>
-                    </div>
-
-
-                    @error('description_ar')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- description_ar --}}
-
-
-
-                {{-- description_en --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="description_en"> Meta Description In English <span
-                                class="text-danger">*</span></label>
-
-
-                        <textarea readonly name="description_en" id="description_en" cols="30" rows="3"
-                            class="form-control @error('description_en') is-invalid @enderror">{{ $hall->description_en }}</textarea>
-                    </div>
-
-
-                    @error('description_en')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- description_en --}}
-
-
-
-
-
-
-                {{-- keywords_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="keywords_ar"> Meta Keywords In Arabic <span class="text-danger">*</span></label>
-
-
-                        <textarea readonly dir="rtl" name="keywords_ar" id="keywords_ar" cols="30" rows="2"
-                            class="form-control @error('keywords_ar') is-invalid @enderror">{{ $hall->keywords_ar }}</textarea>
-                    </div>
-
-
-                    @error('keywords_ar')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- keywords_ar --}}
-
-
-
-                {{-- keywords_en --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="keywords_en"> Meta Keywords In English <span class="text-danger">*</span></label>
-
-
-                        <textarea readonly name="keywords_en" id="keywords_en" cols="30" rows="2"
-                            class="form-control @error('keywords_en') is-invalid @enderror">{{ $hall->keywords_en }}</textarea>
-                    </div>
-
-
-                    @error('keywords_en')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- keywords_en --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-    {{-- <div class="card mb-4">
-        <div class="card-header">
-            Primary Image <span class="text-danger">*</span>
-        </div>
-
-        <div class="card-body">
-
-
-            <span>Prefer 800*800 Pexel</span>
-            <div class="form-group mb-4 d-flex justify-content-center">
-                <input data-default-file="{{ $hall->primary_image_url }}" accept="image/*" type="file"
-                    name="primary_image" data-max-file-size="10M"
-                    class="dropify @error('primary_image') is-invalid @enderror" value="{{ old('primary_image') }}">
-            </div>
-
-
-            @error('primary_image')
-                <div class="d-flex justify-content-center ">
-
-                    <div class="text-danger">
-                        <strong>{{ $message }}</strong>
-                    </div>
-                </div>
-            @enderror
-
-
-
-        </div>
-    </div>
---}}
-
-
- {{--
-    <div class="card mb-4">
-        <div class="card-header">
-            Slider Images
-        </div>
-
-        <div class="card-body">
-            images
-
-            <span>Prefer 800*800 Pexel</span>
-            <div class="form-group mb-4 d-flex justify-content-center">
-
-                <input accept="image/*" multiple id="images" type="file" name="images[]"
-                    class=" @error('images') is-invalid @enderror" value="{{ old('images') }}">
-            </div>
-
-            <div class="py-3 " id="preview-images-container">
-
-                @foreach ($hall->media as $image)
-                    <img src="{{ $image->image_url }}" alt="" class="img-thumbnail  rounded m-2"
-                        style="width: 200px ; height:200px ; object-fit:cover;">
-                @endforeach
-
-            </div>
-
-
-            @error('images')
-                <div class="d-flex justify-content-center ">
-
-                    <div class="text-danger">
-                        <strong>{{ $message }}</strong>
-                    </div>
-                </div>
-            @enderror
-
-            {{-- images --}}
-        </div>
-    </div>
-
-
-
-
- <div class="card my-4">
-        <div class="card-body">
-
-
-            <div class="d-flex justify-content-center flex-wrap">
-                <div class="">
-                    <a class="btn btn-success m-1" class="dropdown-item"
-                        href="{{ route('admin.hall_request.hall_request_accept', $hall->id) }}" title="Edit"
-                        data-bs-toggle="tooltip" data-bs-placement="top">
-                        accept
-
-                    </a>
-                </div>
-
-                <div class="">
-                    <a class="btn btn-danger m-1" class="dropdown-item"
-                        href="{{ route('admin.hall_request.hall_request_reject', $hall->id) }}" title="Edit"
-                        data-bs-toggle="tooltip" data-bs-placement="top">
-                        Reject
-
-                    </a>
-                </div>
-
-
-
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-    <a href="{{ route("admin.halls.index") }}" class="btn btn-primary d-block m-auto">
-        back
-        <i class="fa-regular fa-pen-to-square icon icon-xs ms-2"></i>
-
-    </a>
 @endsection
 
 
@@ -835,7 +208,7 @@
 
     <script>
         ClassicEditor
-            .create(document.querySelector('#summary_ar'), {
+            .create(document.querySelector('#details_ar'), {
                 language: 'ar',
                 toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
                 heading: {
@@ -884,7 +257,7 @@
                 console.log(error);
             });
         ClassicEditor
-            .create(document.querySelector('#summary_en'), {
+            .create(document.querySelector('#details_en'), {
                 toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
                 heading: {
                     options: [{
@@ -932,23 +305,52 @@
 
 
 
-        $('#categories').select2({
+        $('#taxes').select2({
             width: "100%"
         });
 
-        $('#vendor_id').select2({
-            width: "100%"
-        });
-
-        $('#city_id').select2({
+        $('#category_id').select2({
             width: "100%"
         });
 
 
-        $('#country_id').select2({
-            width: "100%",
+        $('#category_id').select2({
+            width: "100%"
         });
-        let countrySelect = document.getElementById('country_id');
-        let citySelect = document.getElementById('city_id');
+        $('#occasion_id').select2({
+            width: "100%"
+        });
+
+        $('#products_with').select2({
+            width: "100%"
+        });
+
+
+
+
+        let mainCategoriesSelect = document.getElementById('category_id');
+        let subCategoriesSelect = document.getElementById('subCategoriesSelect');
+
+        $('#category_id').on('select2:select', async function(e) {
+            var id = e.params.data.id;
+            try {
+                let url = `{{ route('admin.products-categories.subCategoryByParentId') }}?id=${id}`;
+                let res = await fetch(url);
+                let data = await res.json();
+
+                let options = '';
+                if (data.length) {
+                    data.forEach((value, index, array) => {
+                        options +=
+                            `<option value='${value.id}'>${value.title_en} - ${value.title_ar} </option>`
+                    })
+                }
+
+                subCategoriesSelect.innerHTML = options;
+            } catch (error) {
+
+            }
+
+        });
     </script>
 @endsection

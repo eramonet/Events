@@ -71,7 +71,7 @@ class HallBookingController extends Controller
     public function show(Request $request, $id)
     {
         $booking = Hall_booking::find($id);
-
+        
         // return $booking->packge->options[0]->category ;
         if (!$booking) {
             $request->session()->flash('failed', 'Hall Booking Not Found');
@@ -83,7 +83,6 @@ class HallBookingController extends Controller
     public function successAction(Request $request, $id)
     {
         $booking =  Hall_booking::where("id", $id)->first();
-
         if (!$booking) {
             $request->session()->flash('failed', 'Hall Booking Not Found');
             return redirect()->back();
@@ -99,15 +98,21 @@ class HallBookingController extends Controller
 
         $getting_current_balance_of_this_vendor = WithDraw::where("vendor_name" , $booking->hall->vendor->email)->first();
 
-        WithDraw::create([
-            "vendor_name" => $booking->hall->vendor->email,
-            "vendor_phone" => $booking->hall->vendor->phone,
-            "money_type" => "Hall Booking",
-            "action_id" => $booking->id ,
-            "total" => $total_booking ,
-            "have" => ( $total_booking * ($booking->hall->vendor->commission / 100) ),
-            "our_commission" => ( $total_booking * ($booking->hall->vendor->commission / 100) )
-        ]);
+        if($getting_current_balance_of_this_vendor){
+            $getting_current_balance_of_this_vendor->update([
+                "total" => $getting_current_balance_of_this_vendor->total + $total_booking ,
+                "have" => $getting_current_balance_of_this_vendor->have + ( $total_booking * ($booking->hall->vendor->commission / 100) ),
+                "our_commission" => $getting_current_balance_of_this_vendor->our_commission + ( $total_booking * ($booking->hall->vendor->commission / 100) )
+            ]);
+        }else{
+            WithDraw::create([
+                "vendor_name" => $booking->hall->vendor->email,
+                "vendor_phone" => $booking->hall->vendor->phone,
+                "total" => $total_booking ,
+                "have" => ( $total_booking * ($booking->hall->vendor->commission / 100) ),
+                "our_commission" => ( $total_booking * ($booking->hall->vendor->commission / 100) )
+            ]);
+        }
 
 
         $updated = $booking->update([

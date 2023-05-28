@@ -2,9 +2,16 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Available_date;
+use App\Models\CategoryHall;
+use App\Models\Hall;
+use App\Models\HallMedia;
 use App\Models\HallPackage;
 use App\Models\Package;
+use App\Models\PackageOption;
+use App\Models\PackageOptionCategory;
 use Illuminate\Http\Resources\Json\JsonResource;
+use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
 class HallDetailsResource extends JsonResource
 {
@@ -26,15 +33,37 @@ class HallDetailsResource extends JsonResource
             $allpackages[$i]['description'] =  $lang == 'en' ? $package->description_en : $package->description_ar;
             $allpackages[$i]['image'] = $package->image_url;
             $allpackages[$i]['real_price'] = $package->real_price;
+
             $i++;
         }
         return $allpackages;
     }
 
-    // public function options($id, $lang)
-    // {
-
-    // }
+    public function decorations($id, $lang)
+    {
+        $getcats = CategoryHall::where('hall_id', $id)->pluck('category_id');
+        $cats = PackageOption::whereIn('category_id', $getcats)->pluck('category_id');
+        $decorations=PackageOptionCategory::whereIn('id', $cats)->get();
+        $alldecorations= array();
+        $i = 0;
+        foreach ($decorations as $decoration) {
+            $alldecorations[$i]['id'] = $decoration->id;
+            $alldecorations[$i]['name'] =  $lang == 'en' ? $decoration->title_en : $decoration->title_ar;
+            $alldecorations[$i]['image'] = $decoration->image_url;
+            if($lang=='en'){
+            $getOptions=PackageOption::where('category_id', $decoration->id)
+            ->select('id', 'title_en as title', 'image as image_url', 'quantity', 'limitation', 'price')
+            ->get();
+            }else{
+                $getOptions = PackageOption::where('category_id', $decoration->id)
+                    ->select('id', 'title_ar as title', 'image as image_url', 'quantity', 'limitation', 'price')
+                    ->get();
+            }
+            $alldecorations[$i]['options'] = $getOptions;
+            $i++;
+        }
+        return $alldecorations;
+    }
 
     public function toArray($request)
     {
@@ -51,7 +80,9 @@ class HallDetailsResource extends JsonResource
             'rate' => $this->rate,
             'about' => $lang == 'en' ? $this->description_en : $this->description_ar,
             'packages'=>$this->packages($this->id,$lang),
-         //   'extrea_decorations'=> $this->options($this->id, $lang),
+            'decorations' => $this->decorations($this->id, $lang),
+            'sliders'=> HallMedia::where('hall_id',$this->id)->select('id', 'image as image_url')->get(),
+            'available_dates'=>Available_date::where('hall_id',$this->id)->get(),
         ];
     }
 }

@@ -18,9 +18,4 @@ class Advertisement extends Model
         "description_en" ,
         "link"
     ] ;
-
-    public function clients_ads()
-    {
-        return $this->hasMany(ClientsAd::class , "ad_id");
-    }
 }
