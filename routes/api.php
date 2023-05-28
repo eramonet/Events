@@ -60,6 +60,11 @@ Route::controller(UserController::class)->group(function () {
 
     if (request()->header('Authorization')) {
         Route::group(['middleware' => 'auth:sanctum'], function () {
+            Route::get('home', 'home');
+            Route::get('events-categories', 'eventsCategories');
+            Route::post('search', 'search');
+            Route::get('all-products', 'getProducts');
+
         Route::get('event-halls/{category_id}', 'eventHalls');
             Route::get('latest-wedings-halls', 'latestWedingsHalls');
             Route::get('latest-birthdays-halls', 'latestBirthdaysHalls');
