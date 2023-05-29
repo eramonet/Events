@@ -377,6 +377,7 @@ class ProductController extends Controller
         }
 
         $product->status = 1;
+        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
         $product->save();
         $request->session()->flash('success', 'Product  Status Changed To Active');
 
@@ -392,6 +393,7 @@ class ProductController extends Controller
         }
 
         $product->status = '0';
+        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
 
         $product->save();
         $request->session()->flash('success', 'Product  Status Changed To InActive');

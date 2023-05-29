@@ -110,30 +110,25 @@ class OrderController extends Controller
         return $order;
     }
 
-
-
-
-
-
     public function newOrders(Request $request)
     {
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::pending();
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', compact('orders' , 'total_order_price'));
+            return \view('admin.order.index', compact('orders', 'total_order_price'));
         } else {
             $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
 
             $orders = Order::whereIn('order_number', $getOrders)->pending();
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', compact('orders' , 'total_order_price'));
+            return \view('admin.order.index', compact('orders', 'total_order_price'));
         }
     }
 
@@ -146,20 +141,20 @@ class OrderController extends Controller
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::inProgress();
             // return $orders;
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', \compact('orders', 'type' , 'total_order_price'));
+            return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
         } else {
             // $orders = Order::inProgress();
             $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
             $orders = Order::whereIn('order_number', $getOrders)->inProgress();
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', compact('orders' , 'total_order_price'));
+            return \view('admin.order.index', compact('orders', 'total_order_price'));
         }
     }
 
@@ -172,20 +167,20 @@ class OrderController extends Controller
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::delivered();
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', \compact('orders', 'type' , 'total_order_price'));
+            return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
         } else {
             $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
             $orders = Order::whereIn('order_number', $getOrders)->delivered();
 
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', compact('orders' , 'total_order_price'));
+            return \view('admin.order.index', compact('orders', 'total_order_price'));
         }
     }
 
@@ -201,19 +196,19 @@ class OrderController extends Controller
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::canceled();
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', \compact('orders', 'type' , 'total_order_price'));
+            return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
         } else {
             $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
             $orders = Order::whereIn('order_number', $getOrders)->canceled();
-            $total_order_price = 0 ;
-            foreach( $orders as $order ){
-                $total_order_price += $order->product_total_price + $order->total_taxes_price ;
+            $total_order_price = 0;
+            foreach ($orders as $order) {
+                $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
-            return \view('admin.order.index', compact('orders' , 'total_order_price'));
+            return \view('admin.order.index', compact('orders', 'total_order_price'));
         }
     }
 
@@ -245,6 +240,22 @@ class OrderController extends Controller
         }
 
 
+        $checkorder = [];
+
+
+        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
+            $checkorder = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
+            }])->where("order_number", $id)->first();
+        } else {
+            $checkorder = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->id);
+            }])->where("order_number", $id)->first();
+        }
+
+        $order["final_status"] = $checkorder->order_products[0]->status;
+
+
         if (!$order) {
             $request->session()->flash('failed', 'Order Not Found');
             return redirect()->back();
@@ -272,22 +283,46 @@ class OrderController extends Controller
 
     public function inprogressAction(Request $request, $id)
     {
-        $order =  Order::latest()->with("order_products")->where("order_number", $id)->first();
+        $updated = [];
+        // $order =  Order::latest()->with("order_products")->where("order_number", $id)->first();
+
+        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
+            $order = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
+            }])->where("order_number", $id)->first();
+        } else {
+            $order = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->id);
+            }])->where("order_number", $id)->first();
+        }
+
+
         if (!$order) {
             $request->session()->flash('failed', 'Order Not Found');
             return redirect()->back();
         }
 
-
-        $updated = $order->update([
-            "status" => "inprogress"
-        ]);
-
-        if ($updated) {
-            $request->session()->flash('success', 'Order Now In Progress ');
-        } else {
-            $request->session()->flash('failed', 'Something Wrong');
+        foreach ($order->order_products as $order_product) {
+            $order_product->update([
+                "status" => "inprogress"
+            ]);
         }
+
+        // count all order products
+        $order_counter =  OrderProduct::where("order_number", $id)->count();
+
+        $inprogress_counter = OrderProduct::where([
+            ["order_number", $id],
+            ["status", "inprogress"]
+        ])->count();
+
+        if ($inprogress_counter == $order_counter) {
+            $updated = $order->update([
+                "status" => "inprogress"
+            ]);
+        }
+
+        $request->session()->flash('success', 'Order Now In Progress ');
 
 
         return redirect()->back();
@@ -296,7 +331,15 @@ class OrderController extends Controller
 
     public function deliveredAction(Request $request, $id)
     {
-        $order = Order::latest()->with("order_products")->where("order_number", $id)->first();
+        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
+            $order = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
+            }])->where("order_number", $id)->first();
+        } else {
+            $order = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->id);
+            }])->where("order_number", $id)->first();
+        }
 
         if (!$order) {
             $request->session()->flash('failed', 'Order Not Found');
@@ -313,82 +356,122 @@ class OrderController extends Controller
             }
         }
 
-        $updated = $order->update([
-            "status" => "delivered"
-        ]);
-
-        $total_vendor_budget = 0;
-
         foreach ($order->order_products as $order_product) {
+            $order_product->update([
+                "status" => "delivered"
+            ]);
+        }
 
-            // not exist
-            $total_taxes = 0 ;
-            if( $order_product->product->taxes->count() > 0 ){
-                foreach( $order_product->product->taxes as $taxe ){
-                    $total_taxes += $order->product_total_price * ( $taxe->percentage / 100 ) ;
-                }
+        // count all order products
+        $order_counter =  OrderProduct::where("order_number", $id)->count();
+
+        $inprogress_counter = OrderProduct::where([
+            ["order_number", $id],
+            ["status", "delivered"]
+        ])->count();
+
+        if ($inprogress_counter == $order_counter) {
+            $updated = $order->update([
+                "status" => "delivered"
+            ]);
+
+
+            $order = [];
+
+            if (auth()->guard('admin')->user()->vendor) {
+                $order = Order::latest()->with(["order_products" => function ($order_products) {
+                    $order_products->where("vendor_id",  auth()->guard('admin')->user()->vendor->id);
+                }])->where("order_number", $id)->first();
+            } else {
+                $order = Order::latest()->with(["order_products" => function ($order_products) {
+                    $order_products->where("vendor_id", "!=",  auth()->guard('admin')->user()->id);
+                }])->where("order_number", $id)->first();
             }
 
             $our_commission = 0 ;
+            $final_price = 0 ;
 
-            if( $order_product->product->admin ){
-                $our_commission = $order->product_total_price * ( $order_product->product->admin->commission / 100 ) ;
+            foreach ($order->order_products as $order_product) {
+
+                $total_taxes = 0;
+
+                if ($order_product->product->taxes->count() > 0) {
+                    foreach ($order_product->product->taxes as $taxe) {
+                        $total_taxes += $order_product->price * ($taxe->tax->percentage / 100);
+                    }
+                }
+
+                $our_commission += $order_product->price * $order_product->product_quantity * ($order_product->product->admin->commission / 100);
+
+                $final_price += ($order_product->price  + ($total_taxes )) * $order_product->product_quantity ;
+
+
+                $total_taxes = 0;
             }
 
             WithDraw::create([
-                "vendor_name" => $order_product->product->admin->email,
-                "vendor_phone" => $order_product->product->admin->phone,
+                "vendor_name" => $order_product->product->owner->email,
+                "vendor_phone" => $order_product->product->owner->phone,
                 "money_type" => "Product Order",
-                "order_number" => $order->order_number ,
-                "action_id" => $order->id ,
-                "total" => ( $order_product->price + $total_taxes ) * $order_product->product_quantity ,
-                "have" => ( ( $order_product->price + $total_taxes ) * $order_product->product_quantity ) - $our_commission,
+                "order_number" => $order->order_number,
+                "action_id" => $order->id,
+                "total" => $final_price ,
+                "have" => $final_price - $our_commission,
                 "our_commission" => $our_commission
             ]);
-
-            $total_taxes = 0 ;
         }
 
-        if ($updated) {
-            $request->session()->flash('success', 'Order delivered SuccessFully');
-        } else {
-            $request->session()->flash('failed', 'Something Wrong');
-        }
+        $total_vendor_budget = 0;
+
+
+        $request->session()->flash('success', 'Order delivered SuccessFully');
 
 
         return redirect()->back();
     }
 
-
-
-
-
     public function cancelledAction(Request $request, $id)
     {
-        $order = Order::latest()->with("order_products")->where("order_number", $id)->first();
+        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
+            $order = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
+            }])->where("order_number", $id)->first();
+        } else {
+            $order = Order::latest()->with(["order_products" => function ($order_products) {
+                $order_products->where("vendor_id", auth()->guard('admin')->user()->id);
+            }])->where("order_number", $id)->first();
+        }
+
         if (!$order) {
             $request->session()->flash('failed', 'Order Not Found');
             return redirect()->back();
         }
 
 
-        $updated = $order->update([
-            "status" => "cancelled"
-        ]);
-
-        if ($updated) {
-            $request->session()->flash('success', 'Order Cancelled SuccessFully');
-        } else {
-            $request->session()->flash('failed', 'Something Wrong');
+        foreach ($order->order_products as $order_product) {
+            $order_product->update([
+                "status" => "cancelled"
+            ]);
         }
 
+        // count all order products
+        $order_counter =  OrderProduct::where("order_number", $id)->count();
+
+        $inprogress_counter = OrderProduct::where([
+            ["order_number", $id],
+            ["status", "cancelled"]
+        ])->count();
+
+        if ($inprogress_counter == $order_counter) {
+            $updated = $order->update([
+                "status" => "cancelled"
+            ]);
+        }
+
+        $request->session()->flash('success', 'Order Cancelled SuccessFully');
 
         return redirect()->back();
     }
-
-
-
-
 
     public function AddExtraFees(Request $request, $id)
     {

@@ -373,7 +373,6 @@
                                     </td>
                                     <td class=" font-weight-bold">
 
-
                                         @php
                                             $order_status_color = 'secondary';
 
@@ -694,7 +693,7 @@
                                 <tr>
 
                                     <td class="">
-                                        <p class="h5 text-nowrap"> {{ $product->product->admin->title_en }}</p>
+                                        <p class="h5 text-nowrap"> {{ $product->product->owner ? $product->product->owner->title_en : "Events" }}</p>
                                     </td>
 
                                     <td class="">
@@ -719,18 +718,18 @@
                                         </td>
                                         <td class="">
                                             <p class="h5 text-nowrap">
-                                                {{ $product->product->admin->vendor ? $product->product->admin->vendor->commission : '0' }}
+                                                {{ $product->product->owner ? $product->product->owner->commission : '0' }}
                                                 %</p>
                                         </td>
                                     @endif
                                     <td class="">
                                         <p class="h5 text-nowrap">
-                                            {{ $product->product->admin->vendor
-                                                ? number_format($product->price * $product->product_quantity * ($product->product->admin->vendor->commission / 100))
+                                            {{ $product->product->owner
+                                                ? number_format($product->price * $product->product_quantity * ($product->product->owner->commission / 100))
                                                 : 0 }}
                                             AED</p>
-                                        @if ($product->product->admin->vendor)
-                                            <?php $our_comission_price += $product->price * $product->product_quantity * ($product->product->admin->vendor->commission / 100); ?>
+                                        @if ($product->product->owner)
+                                            <?php $our_comission_price += $product->price * $product->product_quantity * ($product->product->owner->commission / 100); ?>
                                         @else
                                             <?php $our_comission_price += 0; ?>
                                         @endif
@@ -1091,7 +1090,7 @@
 
 
 
-                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->status == 'pending')
+                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->final_status == 'new')
                     <form class="action_btn"
                         data-message="Are You Sure You Want To Move This Order To Inprogress Status ?"
                         action="{{ route('admin.orders.inprogressAction', $order->order_number) }}" method="POST">
@@ -1123,7 +1122,7 @@
                 @endif
 
 
-                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->status == 'in_progress')
+                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->final_status == 'inprogress')
                     <form class="action_btn" data-message="Are You Sure You Want To Move This Order To Delivered Status ?"
                         action="{{ route('admin.orders.deliveredAction', $order->order_number) }}" method="POST">
                         @csrf
@@ -1135,8 +1134,7 @@
                     </form>
                 @endif
 
-                @if (Auth::guard('admin')->user()->hasPermission('orders-update') &&
-                        ($order->status == 'new' || $order->status == 'in_progress'))
+                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->final_status == 'inprogress'))
                     <form class="action_btn" data-message="Are You Sure You Want To Move This Order To Cancelled Status ?"
                         action="{{ route('admin.orders.cancelledAction', $order->order_number) }}" method="POST">
                         @csrf

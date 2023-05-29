@@ -14,7 +14,8 @@ class OrderProduct extends Model
         "order_number" ,
         "product_title" ,
         "price" ,
-        "product_quantity"
+        "product_quantity" ,
+        "status"
     ];
 
     /////////////////////////////////////////////// Relationship //////////////////////////////////
