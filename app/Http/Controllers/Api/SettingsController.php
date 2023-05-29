@@ -31,7 +31,7 @@ class SettingsController extends Controller
     public function getRegions($city_id)
     {
         $lang = getLang();
-        $city  = City::where('id', $city_id)->where('country_id','3')->first();
+        $city  = City::where('id', $city_id)->where('country_id', '2')->first();
         if (!isset($city)) {
             return response()->json(res($lang, failed(), 'city_not_found'), 400);
         } else {
@@ -89,7 +89,7 @@ class SettingsController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(),'data'=>[]], 200);
         }
         $a = $request->header('Authorization');
         if (isset($a)) {
@@ -142,7 +142,7 @@ class SettingsController extends Controller
             "message" => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 404);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
         }
 
         $user = User::where('id', $request->user()->id)->first();
@@ -233,5 +233,33 @@ class SettingsController extends Controller
 
     }
 
+    public function becomeVendor(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+                'email' => 'required',
+                'phone_number' => 'required',
+                'coment' => 'required',
+                'sign_from' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+            $request['name'] = $request->name;
+            $request['email'] = $request->email;
+            $request['phone_number'] = $request->phone_number;
+            $request['coment'] = $request->coment;
+            $request['sign_from'] = $request->sign_from;
+            $this->settingObject->becomeVendor($request);
+            return response()->json(res($lang, success(), 'request_sent', []), 200);
+
+    }
 
 }

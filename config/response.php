@@ -413,6 +413,46 @@ return [
     [
         'en'=> 'query sent',
         'ar'=>'تم ارسال استفسارك'
-    ]
+    ],
+    'search'=>
+    [
+        'en'=> 'search',
+        'ar'=>'البحث'
+    ],
+    'add_to_cart'=>
+    [
+        'en'=> 'add to cart',
+        'ar'=>'تم اضافة الكارت'
+    ],
+    'get_cart'=>
+    [
+        'en'=> 'cart',
+        'ar'=>'الكارت'
+    ],
+    'cart_exist'=>
+    [
+        'en'=> 'cart exist',
+        'ar'=>'الكارت موجود من قبل'
+    ],
+    'cart_not_exist'=>
+    [
+        'en'=> 'cart not exist',
+        'ar'=>'لا توجد كارت'
+    ],
+    'checkout'=>
+    [
+        'en'=> 'checkout',
+        'ar' => 'الدفع',
+    ],
+    'years_small_than_17'=>
+    [
+        'en'=> 'years small than 17',
+        'ar'=>'السن اقل من 17 عام'
+    ],
+    'request_sent'=>
+    [
+        'en'=> 'request sent',
+        'ar'=>'تم ارسال الطلب'
+    ],
 
 ];

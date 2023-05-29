@@ -36,6 +36,7 @@ Route::controller(SettingsController::class)->group(function () {
         });
     } else {
         Route::post('contactus', 'insertContactForm');
+        Route::post('become-vendor', 'becomeVendor');
     }
 });
 
@@ -64,8 +65,7 @@ Route::controller(UserController::class)->group(function () {
             Route::get('events-categories', 'eventsCategories');
             Route::post('search', 'search');
             Route::get('all-products', 'getProducts');
-
-        Route::get('event-halls/{category_id}', 'eventHalls');
+            Route::get('event-halls/{category_id}', 'eventHalls');
             Route::get('latest-wedings-halls', 'latestWedingsHalls');
             Route::get('latest-birthdays-halls', 'latestBirthdaysHalls');
             Route::get('latest-engagements-halls', 'latestEngagementsHalls');
@@ -74,9 +74,11 @@ Route::controller(UserController::class)->group(function () {
             Route::post('add-fav', 'addFavorite');
             Route::get('product-details/{product_id}', 'getProduct');
             Route::get('hall-details/{hall_id}', 'getHall');
-
+            Route::post('add-halls-cart', 'createHallsCart');
+            Route::get('get-halls-cart', 'getHallsCart');
+            Route::post('checkout-hall', 'checkoutHall');
         });
-    }else{
+    } else {
         Route::get('home', 'home');
         Route::post('search', 'search');
         Route::get('events-categories', 'eventsCategories');
@@ -91,6 +93,5 @@ Route::controller(UserController::class)->group(function () {
         Route::get('product-details/{product_id}', 'getProduct');
         Route::get('hall-details/{hall_id}', 'getHall');
         Route::get('package-details/{package_id}', 'getPackage');
-
     }
 });

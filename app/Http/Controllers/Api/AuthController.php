@@ -135,7 +135,7 @@ class AuthController extends Controller
             )
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(), 'data' => []],404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(), 'data' => []],200);
         }
 
         $emialex = User::whereEmail($request->email)->get();
@@ -194,7 +194,7 @@ class AuthController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]], 200);
         }
         $user = User::where('email',$request->email)->first();
         if (!$user) {
@@ -351,7 +351,7 @@ class AuthController extends Controller
             )
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]], 404);
+            return response()->json(['status' => 0, 'message' => $validator->errors()->first(),'data'=>[]], 200);
         }
         if (isset($user)) {
             $user->update(['lang' => $request->lang]);

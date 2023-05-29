@@ -10,6 +10,7 @@ use App\Http\Resources\NotificationResource;
 use App\Http\Resources\RegionResource;
 use App\Http\Resources\TermsResource;
 use App\Models\About;
+use App\Models\Become_vendor;
 use App\Models\Brand;
 use App\Models\City;
 use App\Models\Color;
@@ -27,7 +28,7 @@ class SettingsRepository implements SettingsRepositoryInterface
 {
     public function getCities($lang)
     {
-            $cities = City::where('country_id','3')->where('status', '1')->get();
+            $cities = City::where('country_id','2')->where('status', '1')->get();
             return CityResource::collection($cities);
     }
 
@@ -116,5 +117,24 @@ class SettingsRepository implements SettingsRepositoryInterface
         $notifications= Notification::where('user_id', $user->id)->latest()->get();
         return NotificationResource::collection($notifications);
 
+    }
+
+    public function becomeVendor($request)
+    {
+        $become = Become_vendor::create(array_merge($request->all(), [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'coment' => $request->coment,
+            'sign_from' => $request->sign_from,
+        ]));
+
+        Notification::create([
+            'request_id' => $become->id,
+            'title_ar' => 'لديك طلب جديد',
+            'title_en' => 'you have new request',
+            'desc_ar' => 'طلب تقديم بائع جديد',
+            'desc_en' => 'you have new become vendor request',
+        ]);
     }
 }

@@ -39,7 +39,7 @@ class ProductResource extends JsonResource
             $total=$div * $reaL_price->real_price;
             return $total;
         } else {
-            return "0";
+            return 0;
         }
     }
 

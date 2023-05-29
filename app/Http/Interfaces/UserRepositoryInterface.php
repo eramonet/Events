@@ -35,4 +35,11 @@ interface UserRepositoryInterface
     public function getHall($lang, $hall_id);
 
     public function search($request,$lang);
+
+    public function createHallsCart($request);
+
+    public function getHallsCart($user, $lang);
+
+    public function checkoutHall($request);
+
 }

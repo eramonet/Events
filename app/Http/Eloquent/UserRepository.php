@@ -9,16 +9,22 @@ use App\Http\Resources\HallResource;
 use App\Http\Resources\PackageResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Ad;
+use App\Models\BookingDetail;
 use App\Models\Brand;
+use App\Models\CartHall;
+use App\Models\CartHallOption;
 use App\Models\CategoryHall;
 use App\Models\ClientsAd;
 use App\Models\Favourite;
 use App\Models\Hall;
+use App\Models\Hall_booking;
 use App\Models\HallCategory;
+use App\Models\Notification;
 use App\Models\Occasion;
 use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Package;
+use App\Models\PackageOption;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
@@ -497,5 +503,81 @@ class UserRepository implements UserRepositoryInterface
             'latest_conferences_halls' => $allconferenceshalls
         ];
         return $data;
+    }
+
+    public function createHallsCart($request)
+    {
+        $cart=CartHall::create([
+            'package_id'=>$request->package_id,
+            'hall_id'=>$request->hall_id,
+            'user_id'=>$request->user_id
+        ]);
+        $options=$request->option_id;
+        $quantities = $request->quantity;
+        for($i=0;$i<sizeof($options);$i++)
+        {
+            CartHallOption::create([
+                'cart_hall_id'=>$cart->id,
+                'option_id'=>$options[$i],
+                'quantity' => $quantities[$i],
+            ]);
+        }
+    }
+
+    public function getHallsCart($user, $lang)
+    {
+        $carts = CartHall::where('user_id', $user->id)->latest()->get();
+        $allcarts = array();
+        $i = 0;
+        foreach ($carts as $cart) {
+            $allcarts[$i]['id'] = $cart->id;
+            $allcarts[$i]['hall_id'] = $cart->hall_id;
+            $allcarts[$i]['hall_name'] =  $lang == 'en' ? Hall::where('id',$cart->hall_id)->first()->title_en : Hall::where('id', $cart->hall_id)->first()->title_ar;
+            $allcarts[$i]['package_id'] = $cart->package_id;
+            $allcarts[$i]['package_name'] =  $lang == 'en' ? Package::where('id', $cart->package_id)->first()->title_en : Package::where('id', $cart->package_id)->first()->title_ar;
+            $getOptions=CartHallOption::where('cart_hall_id',$cart->id)->pluck('option_id');
+            $options=PackageOption::whereIn('id', $getOptions)->
+            select('id','title_'.$lang.' as name','limitation','quantity','price')->get();
+            $allcarts[$i]['options'] = $options;
+             $i++;
+        }
+        return $allcarts;
+    }
+
+    public function checkoutHall($request)
+    {
+        $vendor= Hall::where('id', $request->hall_id)->first();
+        $booking=Hall_booking::create([
+            'date'=>$request->date,
+            'time_from' => $request->time_from,
+            'time_to' => $request->time_to,
+            'packge_id' => $request->package_id,
+            'hall_id' => $request->hall_id,
+            'user_id' => $request->user_id,
+            'vendor_id' => $vendor->admin_id,
+            'total'=>$request->total,
+            'extra_guest'=>$request->extra_guest,
+        ]);
+        $options = $request->option_id;
+        $quantities = $request->quantity;
+        for ($i = 0; $i < sizeof($options); $i++) {
+            BookingDetail::create([
+                'booking' => $booking->id,
+                'option_id' => $options[$i],
+                'quantity' => $quantities[$i],
+            ]);
+        }
+        CartHall::where('hall_id', $request->hall_id)->delete();
+
+        Notification::create(
+            [
+                'user_id'=>$request->user_id,
+                'title_ar'=>"تم حجز القاعة بنجاح",
+                'title_en' => "hall booked successfully",
+                "desc_ar" => "برجاء انتظار موافقة الادارة",
+                'desc_en'=> "please wait management acception",
+                "booking_id"=> $booking->id
+            ]
+        );
     }
 }

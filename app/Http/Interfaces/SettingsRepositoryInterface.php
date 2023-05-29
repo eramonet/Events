@@ -24,4 +24,8 @@ interface SettingsRepositoryInterface
 
     public function getCategories($lang);
 
+    public function getNotifications($user);
+
+    public function becomeVendor($request);
+
 }

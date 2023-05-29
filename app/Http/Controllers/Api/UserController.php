@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\UserRepositoryInterface;
+use App\Models\CartHall;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -85,7 +86,7 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []]);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []],200);
         }
         $user = User::where('id', $request->user()->id)->first();
         if ($user == 'false') {
@@ -160,10 +161,117 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []]);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []],200);
         }
         $request['search']=$request->search;
         $result = $this->userObject->search($request,$lang);
         return response(res($lang, success(), 'search', $result), 200);
     }
+
+    public function createHallsCart(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'package_id' => 'required|exists:packages,id',
+                'hall_id' => 'required|exists:halls,id',
+                'option_id' => 'required|array|exists:package_options,id',
+                'option_id.*' => 'required',
+                'quantity' => 'required|array',
+                'quantity.*' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []],200);
+        }
+        $user = User::where('id', $request->user()->id)->first();
+            if ($user == 'false') {
+                return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+            }
+        $cartHall = CartHall::where('hall_id', $request->hall_id)->first();
+        if ($cartHall == null) {
+        $request['user_id'] = $user->id;
+        $request['package_id'] = $request->package_id;
+        $request['hall_id'] = $request->hall_id;
+
+        $result = $this->userObject->createHallsCart($request);
+        return response(res($lang, success(), 'add_to_cart', $result), 200);
+        }else{
+            return response()->json(res($lang, failed(), 'cart_exist', []), 404);
+        }
+    }
+
+    public function getHallsCart(Request $request)
+    {
+        $lang = getLang();
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $result = $this->userObject->getHallsCart($user, $lang);
+        return response(res($lang, success(), 'get_cart', $result), 200);
+    }
+
+    public function checkoutHall(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'fname' => 'required',
+                'lname' => 'required',
+                'email' => 'required',
+                'phone' => 'required',
+                'city_id' => 'required|exists:cities,id',
+                'region_id' => 'required|exists:regions,id',
+                'address' => 'required',
+                'comment' => 'required',
+                'extra_guest' => 'required',
+                'date' => 'required',
+                'time_from' => 'required',
+                'time_to' => 'required',
+                'hall_id' =>'required|exists:halls,id',
+                'package_id' => 'required|exists:packages,id',
+                'option_id' => 'required|array|exists:package_options,id',
+                'option_id.*' => 'required',
+                'quantity' => 'required|array',
+                'quantity.*' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $cartHall = CartHall::where('hall_id', $request->hall_id)->first();
+        if ($cartHall!=null) {
+            $request['fname'] = $request->fname;
+            $request['lname'] = $request->lname;
+            $request['email'] = $request->email;
+            $request['phone'] = $request->phone;
+            $request['city_id'] = $request->city_id;
+            $request['region_id'] = $request->region_id;
+            $request['address'] = $request->address;
+            $request['comment'] = $request->comment;
+            $request['extra_guest'] = $request->extra_guest;
+            $request['date'] = $request->date;
+            $request['time_from'] = $request->time_from;
+            $request['time_to'] = $request->time_to;
+            $request['hall_id'] = $request->hall_id;
+            $request['user_id'] = $user->id;
+            $request['package_id'] = $request->package_id;
+
+            $this->userObject->checkoutHall($request);
+            return response(res($lang, success(), 'checkout', []), 200);
+        } else {
+            return response()->json(res($lang, failed(), 'cart_not_exist', []), 404);
+        }
+    }
+
+
 }
