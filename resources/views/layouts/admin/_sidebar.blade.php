@@ -1,5 +1,130 @@
 @php
     $useradmin = App\Models\Admin::where('id', Auth::guard('admin')->id())->first();
+
+    $current_login = Auth::guard('admin')->user()->vendor;
+
+    $shippings = $current_login
+        ? App\Models\Shipping::where('status', 1)
+            ->where('admin_id', $current_login->id)
+            ->count()
+        : App\Models\Shipping::where('status', 1)->count();
+
+    $promocode = $current_login ? App\Models\PromoCode::where('admin_id', $current_login->id)->count() : App\Models\PromoCode::count();
+
+    $all_categories = $current_login
+        ? \App\Models\ProductCategory::main()
+                ->where('admin_id', $current_login->id)
+                ->count() +
+            \App\Models\ProductCategory::sub()
+                ->where('admin_id', $current_login->id)
+                ->count()
+        : \App\Models\ProductCategory::main()->count() + \App\Models\ProductCategory::sub()->count();
+
+    $main_categories = $current_login
+        ? \App\Models\ProductCategory::main()
+            ->where('admin_id', $current_login->id)
+            ->count()
+        : \App\Models\ProductCategory::main()->count();
+
+    $sub_categories = $current_login
+        ? \App\Models\ProductCategory::sub()
+            ->where('admin_id', $current_login->id)
+            ->count()
+        : \App\Models\ProductCategory::sub()->count();
+
+    $products = $current_login
+        ? \App\Models\Product::where('admin_id', $current_login->id)
+            ->accept()
+            ->count()
+        : \App\Models\Product::accept()->count();
+
+    $in_stock = $current_login
+        ? \App\Models\Product::where('admin_id', $current_login->id)
+            ->inStock()
+            ->count()
+        : \App\Models\Product::accept()
+            ->inStock()
+            ->count();
+
+    $out_stock = $current_login
+        ? \App\Models\Product::where('admin_id', $current_login->id)
+            ->outOfStock()
+            ->count()
+        : \App\Models\Product::accept()
+            ->outOfStock()
+            ->count();
+
+    $accept_products = \App\Models\Product::accept()->count();
+
+    $all_orders_count_for_vendor = 0;
+    if ($current_login) {
+        foreach (App\Models\Order::get() as $item) {
+            foreach ($item->order_products as $order_product) {
+                if ($order_product->vendor_id == $current_login->id) {
+                    $all_orders_count_for_vendor++;
+                }
+            }
+        }
+    }
+
+    $all_orders = $current_login ? $all_orders_count_for_vendor : App\Models\Order::count();
+
+    $pending_orders_count = 0;
+    if ($current_login) {
+        foreach (App\Models\Order::pending() as $item) {
+            foreach ($item->order_products as $order_product) {
+                if ($order_product->vendor_id == $current_login->id) {
+                    $pending_orders_count++;
+                }
+            }
+        }
+    }
+
+    $pending_orders = $current_login ? $pending_orders_count : App\Models\Order::pending()->count();
+
+    $in_progress_count = 0;
+    if ($current_login) {
+        foreach (App\Models\Order::inProgress() as $item) {
+            foreach ($item->order_products as $order_product) {
+                if ($order_product->vendor_id == $current_login->id) {
+                    $in_progress_count++;
+                }
+            }
+        }
+    }
+
+    $in_progress = $current_login ? $in_progress_count : App\Models\Order::inProgress()->count();
+
+    $delivered_count = 0;
+    if ($current_login) {
+        foreach (App\Models\Order::delivered() as $item) {
+            foreach ($item->order_products as $order_product) {
+                if ($order_product->vendor_id == $current_login->id) {
+                    $delivered_count++;
+                }
+            }
+        }
+    }
+
+    $delivered = $current_login ? $delivered_count : App\Models\Order::delivered()->count();
+
+    $canceled_counter = 0;
+    if ($current_login) {
+        foreach (App\Models\Order::canceled() as $item) {
+            foreach ($item->order_products as $order_product) {
+                if ($order_product->vendor_id == $current_login->id) {
+                    $canceled_counter++;
+                }
+            }
+        }
+    }
+
+    $canceled = $current_login ? $canceled_counter : App\Models\Order::canceled()->count();
+
+    $colors = \App\Models\Color::count() ;
+
+    $tax = $current_login ? App\Models\Tax::where('admin_id', $current_login->id)->count() : App\Models\Tax::count() ;
+
 @endphp
 <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="../../index.html">
@@ -53,6 +178,7 @@
                     <span class="mt-1 ms-1 sidebar-text">{{ Auth::guard('admin')->user()->roles[0]->name }}</span>
                 </a>
             </li>
+            
             <li class="nav-item    {{ Route::is('admin.dashboard') ? 'active' : '' }} ">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">
                     <span class="sidebar-icon">
@@ -64,7 +190,6 @@
                 </a>
             </li>
 
-
             @if (Auth::guard('admin')->user()->hasPermission('shipping-read'))
                 <li class="nav-item {{ Route::is('admin.shippings.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.shippings.index') }}" class="nav-link ">
@@ -74,7 +199,7 @@
                         <span class="sidebar-text">Shippings</span>
                         <span
                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                            {{ App\Models\Shipping::where('status', 1)->count() }}
+                            {{ $shippings }}
                         </span>
                     </a>
                 </li>
@@ -98,80 +223,7 @@
                 @endif
             @endif
 
-            {{-- <li class="nav-item ">
-                <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
-                    data-bs-toggle="collapse" data-bs-target="#orders" aria-expanded="false">
-                    <span>
-                        <span class="sidebar-icon">
-                            <i class="fa-solid fa-cart-arrow-down icon-xs me-2"></i>
-                        </span>
-                        <span class="sidebar-text">With Draw
-                            <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Order::canceled()->count() }}
-                                </span>
-                        </span>
-                    </span>
-                    <span class="link-arrow">
-                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </span>
-                </span>
 
-                <div class="multi-level collapse " role="list" id="orders" aria-expanded="true">
-                    <ul class="flex-column nav">
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.with-draw-request.index') }}"
-                                class="nav-link ">
-                                <span class="sidebar-icon">
-                                    <i class="fas fa-spinner icon icon-xs me-2 text-info"></i>
-                                </span>
-                                <span class="sidebar-text"> Send Request </span>
-                                <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Order::inProgress()->count() }}
-                                </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.orders.deliveredOrders', 'delivered') }}" class="nav-link ">
-                                <span class="sidebar-icon">
-                                    <i class="fas fa-check-double icon icon-xs me-2 text-success"></i>
-                                </span>
-                                <span class="sidebar-text"> Accepted Requests </span>
-                                <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Order::delivered()->count() }}
-                                </span>
-                            </a>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <a href="{{ route('admin.orders.cancelledOrders', 'cancelled') }}" class="nav-link ">
-                                <span class="sidebar-icon">
-                                    <i class="fas fa-window-close icon icon-xs me-2 text-danger"></i>
-                                </span>
-                                <span class="sidebar-text"> Rejected Requests </span>
-                                <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Order::canceled()->count() }}
-                                </span>
-                            </a>
-                        </li>
-
-
-
-
-
-                    </ul>
-                </div>
-            </li> --}}
             @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
                 @if (Auth::guard('admin')->user()->hasPermission('with-darw-read'))
                     <li class="nav-item ">
@@ -330,43 +382,6 @@
                 </li>
             @endif
 
-            {{-- @if (Auth::guard('admin')->user()->hasPermission('contacts-read'))
-                <li
-                    class="nav-item  {{ Route::is('admin.contact-messages.*') && request()->type && request()->type == 'main' ? 'active' : '' }}">
-                    <a href="{{ route('admin.contact-messages.index', ['type' => 'main']) }}" class="nav-link ">
-                        <span class="sidebar-icon">
-                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                        </span>
-                        <span class="sidebar-text">Contact Us</span>
-                        <span
-                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                            0
-                        </span>
-                    </a>
-                </li>
-            @endif --}}
-
-
-
-            {{-- shippings --}}
-            {{-- @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
-            @if (Auth::guard('admin')->user()->hasPermission('shippings-read'))
-         <li class="nav-item {{ Route::is('admin.shippings.*')?'active':'' }}">
-             <a href="{{ route('admin.shippings.index') }}" class="nav-link ">
-               <span class="sidebar-icon">
-                 <i class="fa-solid fa-truck-fast icon icon-xs me-2"></i>
-               </span>
-               <span class="sidebar-text">Shippings</span>
-               <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                   0
-                                </span>
-             </a>
-           </li>
-         @endif
-          @endif --}}
-            {{-- shippings --}}
-
             {{-- promo-codes --}}
 
             @if (Auth::guard('admin')->user()->hasPermission('promo-codes-read'))
@@ -378,14 +393,12 @@
                         <span class="sidebar-text">Promo Codes</span>
                         <span
                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                            {{ App\Models\PromoCode::count() }}
+                            {{ $promocode }}
                         </span>
                     </a>
                 </li>
             @endif
             {{-- promo-codes --}}
-
-
 
             {{-- vendors --}}
 
@@ -420,7 +433,7 @@
                             <span class="sidebar-text">Products Categories</span>
                             <span
                                 style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                {{ \App\Models\ProductCategory::main()->count() + \App\Models\ProductCategory::sub()->count() }}
+                                {{ $all_categories }}
                             </span>
                         </span>
                         <span class="link-arrow">
@@ -449,7 +462,7 @@
                                     <span class="sidebar-text">Main Categories</span>
                                     <span
                                         style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                        {{ \App\Models\ProductCategory::main()->count() }}
+                                        {{ $main_categories }}
                                     </span>
                                 </a>
                             </li>
@@ -465,7 +478,7 @@
                                     <span class="sidebar-text"> Sub Categories</span>
                                     <span
                                         style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                        {{ \App\Models\ProductCategory::sub()->count() }}
+                                        {{ $sub_categories }}
                                     </span>
                                 </a>
                             </li>
@@ -487,22 +500,18 @@
                             <i class="far fa-file-alt icon icon-xs me-2"></i>
                         </span>
                         <span class="sidebar-text"> Occasions</span>
+                        <span
+                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                            {{ \App\Models\Occasion::count() }}
+                        </span>
                     </a>
                 </li>
             @endif
 
-
             {{-- test --}}
-
-
-
-
-
-
 
             {{-- Products  --}}
             @if (Auth::guard('admin')->user()->vendor)
-
                 @if (Auth::guard('admin')->user()->vendor->type == 'product' ||
                         Auth::guard('admin')->user()->vendor->type == 'product_hall')
 
@@ -518,7 +527,7 @@
                                     <span class="sidebar-text">Products </span>
                                     <span
                                         style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                        {{ \App\Models\Product::count() }}
+                                        {{ $products }}
                                     </span>
                                 </span>
                                 <span class="link-arrow">
@@ -544,7 +553,7 @@
                                             <span class="sidebar-text">All Products</span>
                                             <span
                                                 style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                                {{ \App\Models\Product::where('admin_id', Auth::guard('admin')->user()->vendor->id)->count() }}
+                                                {{ $products }}
                                             </span>
                                         </a>
                                     </li>
@@ -558,7 +567,7 @@
                                             <span class="sidebar-text">In Stock</span>
                                             <span
                                                 style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                                {{ \App\Models\Product::where('admin_id', Auth::guard('admin')->user()->vendor->id)->inStock()->count() }}
+                                                {{ $in_stock }}
                                             </span>
                                         </a>
                                     </li>
@@ -572,7 +581,7 @@
                                             <span class="sidebar-text"> Out Of Stock</span>
                                             <span
                                                 style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                                {{ \App\Models\Product::where('admin_id', Auth::guard('admin')->user()->vendor->id)->outOfStock()->count() }}
+                                                {{ $out_stock }}
                                             </span>
                                         </a>
                                     </li>
@@ -595,7 +604,7 @@
                                 <span class="sidebar-text">Products </span>
                                 <span
                                     style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ \App\Models\Product::accept()->count() }}
+                                    {{ $products }}
                                 </span>
                             </span>
                             <span class="link-arrow">
@@ -621,7 +630,7 @@
                                         <span class="sidebar-text">All Products</span>
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\Product::accept()->count() }}
+                                            {{ $accept_products }}
                                         </span>
                                     </a>
                                 </li>
@@ -635,7 +644,7 @@
                                         <span class="sidebar-text">In Stock</span>
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\Product::accept()->inStock()->count() }}
+                                            {{ $in_stock }}
                                         </span>
                                     </a>
                                 </li>
@@ -649,7 +658,7 @@
                                         <span class="sidebar-text"> Out Of Stock</span>
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\Product::accept()->outOfStock()->count() }}
+                                            {{ $out_stock }}
                                         </span>
                                     </a>
                                 </li>
@@ -750,19 +759,9 @@
                                 @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
                                     <span
                                         style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                        {{ App\Models\Order::count() }}
+                                        {{ $all_orders }}
                                     </span>
                                 @else
-                                    <?php $all_orders = 0; ?>
-                                    @foreach (App\Models\Order::get() as $item)
-                                        @foreach ($item->order_products as $order_product)
-                                            @if (
-                                                $order_product->vendor_id ==
-                                                    auth()->guard('admin')->user()->id)
-                                                <?php $all_orders++; ?>
-                                            @endif
-                                        @endforeach
-                                    @endforeach
                                     <span
                                         style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
                                         {{ $all_orders }}
@@ -782,9 +781,6 @@
 
                     <div class="multi-level collapse " role="list" id="orders" aria-expanded="true">
                         <ul class="flex-column nav">
-
-
-
                             <li class="nav-item">
                                 <a href="{{ route('admin.orders.newOrders', 'new') }}" class="nav-link ">
                                     <span class="sidebar-icon">
@@ -794,19 +790,9 @@
                                     @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ App\Models\Order::pending()->count() }}
+                                            {{ $pending_orders }}
                                         </span>
                                     @else
-                                        <?php $pending_orders = 0; ?>
-                                        @foreach (App\Models\Order::pending() as $item)
-                                            @foreach ($item->order_products as $order_product)
-                                                @if (
-                                                    $order_product->vendor_id ==
-                                                        auth()->guard('admin')->user()->id)
-                                                    <?php $pending_orders++; ?>
-                                                @endif
-                                            @endforeach
-                                        @endforeach
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
                                             {{ $pending_orders }}
@@ -826,22 +812,12 @@
                                     @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ App\Models\Order::inProgress()->count() }}
+                                            {{ $in_progress }}
                                         </span>
                                     @else
-                                        <?php $inprogress_order = 0; ?>
-                                        @foreach (App\Models\Order::inProgress() as $item)
-                                            @foreach ($item->order_products as $order_product)
-                                                @if (
-                                                    $order_product->vendor_id ==
-                                                        auth()->guard('admin')->user()->vendor->id)
-                                                    <?php $inprogress_order++; ?>
-                                                @endif
-                                            @endforeach
-                                        @endforeach
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ $inprogress_order }}
+                                            {{ $in_progress }}
                                         </span>
                                     @endif
                                 </a>
@@ -855,22 +831,12 @@
                                     @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ App\Models\Order::delivered()->count() }}
+                                            {{ $delivered }}
                                         </span>
                                     @else
-                                        <?php $delievered_orders = 0; ?>
-                                        @foreach (App\Models\Order::delivered() as $item)
-                                            @foreach ($item->order_products as $order_product)
-                                                @if (
-                                                    $order_product->vendor_id ==
-                                                        auth()->guard('admin')->user()->vendor->id)
-                                                    <?php $delievered_orders++; ?>
-                                                @endif
-                                            @endforeach
-                                        @endforeach
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ $delievered_orders }}
+                                            {{ $delivered }}
                                         </span>
                                     @endif
                                 </a>
@@ -886,22 +852,12 @@
                                     @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ App\Models\Order::canceled()->count() }}
+                                            {{ $canceled }}
                                         </span>
                                     @else
-                                        <?php $canceled_orders = 0; ?>
-                                        @foreach (App\Models\Order::canceled() as $item)
-                                            @foreach ($item->order_products as $order_product)
-                                                @if (
-                                                    $order_product->vendor_id ==
-                                                        auth()->guard('admin')->user()->vendor->id)
-                                                    <?php $canceled_orders++; ?>
-                                                @endif
-                                            @endforeach
-                                        @endforeach
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ $canceled_orders }}
+                                            {{ $canceled }}
                                         </span>
                                     @endif
                                 </a>
@@ -910,15 +866,6 @@
                     </div>
                 </li>
             @endif
-
-
-
-
-
-
-
-
-
 
             {{-- Halls  --}}
             {{-- @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) --}}
@@ -1056,10 +1003,6 @@
                 @endif
             @endif
 
-            {{-- Halls  --}}
-
-
-            {{-- Halls  --}}
             @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
 
                 @if (Auth::guard('admin')->user()->hasPermission('hall_request-read'))
@@ -1137,12 +1080,9 @@
 
             @endif
 
-            {{-- @endif --}}
 
 
             @if (Auth::guard('admin')->user()->hasPermission('packages-read'))
-
-                {{-- Hall Packages Options  --}}
                 <li class="nav-item ">
                     <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
                         data-bs-toggle="collapse" data-bs-target="#halls-packages-options"
@@ -1220,9 +1160,6 @@
                         </ul>
                     </div>
                 </li>
-
-
-                {{-- Hall Packages Options  --}}
             @endif
 
 
@@ -1372,344 +1309,6 @@
             @endif
 
 
-
-            {{--
-                <li class="nav-item ">
-                    <a href="#" class="nav-link ">
-                      <span class="sidebar-icon">
-                        <i class="fa-solid fa-truck-fast icon icon-xs me-2"></i>
-                      </span>
-                      <span class="sidebar-text">Shippings</span>
-                      <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                   0
-                                </span>
-                    </a>
-                  </li> --}}
-
-            {{-- @if (Auth::guard('admin')->user()->hasPermission('promocodes-read'))
-                <li class="nav-item {{ Route::is('admin.promo-codes.*') ? 'active' : '' }}">
-                    <a href="{{ route('admin.promo-codes.index') }}" class="nav-link ">
-                        <span class="sidebar-icon">
-                            <i class="fa-solid fa-money-bill-wheat icon icon-xs me-2"></i>
-                        </span>
-                        <span class="sidebar-text">Promo Codes</span>
-                    </a>
-                </li>
-            @endif --}}
-
-            <!--@if (Auth::guard('admin')->user()->hasPermission('reports-read'))
--->
-            <!--<li class="nav-item ">-->
-            <!--    <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"-->
-            <!--        data-bs-toggle="collapse" data-bs-target="#reports" aria-expanded="false">-->
-            <!--        <span>-->
-            <!--            <span class="sidebar-icon">-->
-            <!--                <i class="fa-solid fa-chart-line icon-xs me-2"></i>-->
-            <!--            </span>-->
-            <!--            <span class="sidebar-text">Reports</span>-->
-            <!--            <span-->
-            <!--                        style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">-->
-            <!--                       30-->
-            <!--                    </span>-->
-            <!--        </span>-->
-            <!--        <span class="link-arrow">-->
-            <!--            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"-->
-            <!--                xmlns="http://www.w3.org/2000/svg">-->
-            <!--                <path fill-rule="evenodd"-->
-            <!--                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"-->
-            <!--                    clip-rule="evenodd"></path>-->
-            <!--            </svg>-->
-            <!--        </span>-->
-            <!--    </span>-->
-
-            <!--    <div class="multi-level collapse " role="list" id="reports" aria-expanded="true">-->
-            <!--        <ul class="flex-column nav">-->
-
-
-            <!--            @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.registered-users') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Registered users</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.area-users') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Area users</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.gender-users') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Gender users</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.area-statistics') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Area Statistics</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.orders-statistics') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Orders Statistics</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.orders-reports') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Orders Report</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.orders-areas') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Orders areas</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.halls-statistics') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Halls Statistics</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="{{ route('admin.reports.halls-reports') }}" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Halls Reports</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">All Orders Profits</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Booking Statistics</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Booking Reports</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Sales Reports</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Registered vendors</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">All Vendors Balance</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Vendors according to <br>areas</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Vendors according to <br>Type(Is it an individual or <br>an-->
-            <!--                            institution(</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Vendors According to <br>Areas</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Vendors According to <br>Areas</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Most Sales Products</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Product statistics based <br>on categories)<br>Main category –-->
-            <!--                            Sub category)-->
-            <!--                        </span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Products In Stock</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Products Out Of Stock</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Most Promo codes Used</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Promo codes Expired</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Promo codes according to <br>User’s Uses</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Withdraw Statistics</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Withdraw Be <br>(Paid-not paid)</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Withdraw Requests</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-
-            <!--                <li class="nav-item">-->
-            <!--                    <a href="#" class="nav-link ">-->
-            <!--                        <span class="sidebar-icon">-->
-            <!--                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-            <!--                        </span>-->
-            <!--                        <span class="sidebar-text">Upcoming payment <br>(Withdraw)dates</span>-->
-            <!--                    </a>-->
-            <!--                </li>-->
-            <!--
-@endif-->
-
-            <!--        </ul>-->
-            <!--    </div>-->
-            <!--</li>-->
-            <!--
-@endif-->
             @if (Auth::guard('admin')->user()->hasPermission('become_vendor-read'))
                 @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
                     <li class="nav-item ">
@@ -1796,89 +1395,6 @@
                     </li>
                 @endif
             @endif
-
-
-
-
-            @if (Auth::guard('admin')->user()->hasPermission('pages-read'))
-                <li class="nav-item ">
-                    <a href="#" class="nav-link ">
-                        <span class="sidebar-icon">
-                            <i class="far fa-file-alt icon icon-xs me-2"></i>
-                        </span>
-                        <span class="sidebar-text">Pages</span>
-                        <span
-                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                            0
-                        </span>
-                    </a>
-                </li>
-            @endif
-
-            {{-- <li class="nav-item ">
-                    <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" data-bs-target="#fqa" aria-expanded="false">
-                        <span>
-                            <span class="sidebar-icon">
-                                <i class="fa-solid fa-question icon-xs me-2"></i>
-                            </span>
-                            <span class="sidebar-text">FAQ</span>
-                            <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                   0
-                                </span>
-                        </span>
-                        <span class="link-arrow">
-                            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                    </span>
-
-                    <div class="multi-level collapse " role="list" id="fqa" aria-expanded="true">
-                        <ul class="flex-column nav">
-
-
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link ">
-                                    <span class="sidebar-icon">
-                                        <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                    </span>
-                                    <span class="sidebar-text">All FAQ`s</span>
-                                    <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                  0
-                                </span>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link ">
-                                    <span class="sidebar-icon">
-                                        <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                    </span>
-                                    <span class="sidebar-text"> FAQ Categories</span>
-                                    <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                   0
-                                </span>
-                                </a>
-                            </li>
-
-
-
-
-
-                        </ul>
-                    </div>
-                </li> --}}
-
-
 
             @if (Auth::guard('admin')->user()->hasPermission('reports-read'))
                 <li class="nav-item ">
@@ -1989,54 +1505,7 @@
                                     </a>
                                 </li>
                             @endif
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">All Orders Profits</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">Booking Statistics</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">Booking Reports</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">Sales Reports</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
+
                             @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
                                 <li class="nav-item">
                                     <a href="{{ route('admin.reports.registered-vendors-statistics') }}"
@@ -2048,18 +1517,7 @@
                                     </a>
                                 </li>
                             @endif
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">All Vendors Balance</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
+
                             @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
                                 <li class="nav-item">
                                     <a href="{{ route('admin.reports.vendors-areas') }}" class="nav-link ">
@@ -2070,33 +1528,7 @@
                                     </a>
                                 </li>
                             @endif
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">Vendors according to <br>Type(Is it an individual-->
-                            <!--                or-->
-                            <!--                <br>an-->
-                            <!--                institution(</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
-                            <!--@if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
--->
-                            <!--    <li class="nav-item">-->
-                            <!--        <a href="#" class="nav-link ">-->
-                            <!--            <span class="sidebar-icon">-->
-                            <!--                <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--            </span>-->
-                            <!--            <span class="sidebar-text">Vendors According to <br>Areas</span>-->
-                            <!--        </a>-->
-                            <!--    </li>-->
-                            <!--
-@endif-->
+
                             @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
                                 <li class="nav-item">
                                     <a href="{{ route('admin.reports.vendors-areas') }}" class="nav-link ">
@@ -2107,14 +1539,7 @@
                                     </a>
                                 </li>
                             @endif
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Most Sales Products</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
+
 
                             <li class="nav-item">
                                 <a href="{{ route('admin.reports.products-statistics') }}" class="nav-link ">
@@ -2128,86 +1553,7 @@
                                 </a>
                             </li>
 
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Products In Stock</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
 
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Products Out Of Stock</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Most Promo codes Used</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Promo codes Expired</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Promo codes according to <br>User’s Uses</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Withdraw Statistics</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Withdraw Be <br>(Paid-not paid)</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Withdraw Requests</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
-
-                            <!--<li class="nav-item">-->
-                            <!--    <a href="#" class="nav-link ">-->
-                            <!--        <span class="sidebar-icon">-->
-                            <!--            <i class="fa-regular fa-circle icon icon-xs me-2"></i>-->
-                            <!--        </span>-->
-                            <!--        <span class="sidebar-text">Upcoming payment <br>(Withdraw)dates</span>-->
-                            <!--    </a>-->
-                            <!--</li>-->
 
                         </ul>
                     </div>
@@ -2222,21 +1568,13 @@
                             <i class="far fa-file-alt icon icon-xs me-2"></i>
                         </span>
                         <span class="sidebar-text">Colors</span>
-                    </a>
-                </li>
-            @endif
-
-            @if (Auth::guard('admin')->user()->hasPermission('sizes-read'))
-                <li class="nav-item ">
-                    <a href="{{ route('admin.sizes.index') }}" class="nav-link ">
-                        <span class="sidebar-icon">
-                            <i class="far fa-file-alt icon icon-xs me-2"></i>
+                        <span
+                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                            {{ $colors }}
                         </span>
-                        <span class="sidebar-text">Sizes</span>
                     </a>
                 </li>
             @endif
-
 
             @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
                 @if (Auth::guard('admin')->user()->hasPermission('ads-read'))
@@ -2305,8 +1643,7 @@
 
                                 @if (Auth::guard('admin')->user()->hasPermission('settings-read'))
                                     <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
-                                        <a href="{{ route('admin.advertisements.clients_ads') }}"
-                                            class="nav-link ">
+                                        <a href="{{ route('admin.advertisements.clients_ads') }}" class="nav-link ">
                                             <span class="sidebar-icon">
                                                 <i class="fa-regular fa-circle icon icon-xs me-2"></i>
                                             </span>
@@ -2397,7 +1734,7 @@
                         <span class="sidebar-text">Taxes</span>
                         <span
                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                            {{ App\Models\Tax::count() }}
+                            {{ $tax }}
                         </span>
                     </a>
                 </li>

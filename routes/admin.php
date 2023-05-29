@@ -640,7 +640,8 @@ Route::prefix('acp')->name('admin.')->group(function () {
 
 
         Route::get('/{status}', 'index')->name('index');
-        Route::get('/status/accpted/{id}', 'update_accept')->name('accpted');
+        Route::get('/status/edit/{id}', 'edit')->name('edit');
+        Route::post('/status/accpted/{id}', 'update_accept')->name('accpted');
         Route::get('/status/reject/{id}', 'update_Reject')->name('reject');
         Route::get('/{id}/show', 'show')->name('show');
     });

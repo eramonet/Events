@@ -27,7 +27,7 @@
 
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            {{-- @if (Auth::guard('admin')->user()->hasPermission('products-categories-create')) --}}
+            @if (Auth::guard('admin')->user()->hasPermission('products-categories-create'))
                 <a href="{{ route('admin.products-categories.create') }}"
                     class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                     <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -37,7 +37,7 @@
                     </svg>
                     Create New Category
                 </a>
-            {{-- @endif --}}
+            @endif
 
             <div class="btn-group ms-2 ms-lg-3">
                 <a href="{{ route('admin.products-categories.export', ['type' => $type]) }}"

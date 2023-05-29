@@ -201,6 +201,7 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+                    <th class="border-gray-200">Added By</th>
                     <th class="border-gray-200">City</th>
                     <th class="border-gray-200">Cost</th>
                     <th class="border-gray-200">Created At</th>
@@ -214,6 +215,8 @@
                 @foreach ($shippings as $shipping)
                     <tr>
                         <td>{{ $shipping->id }}</td>
+
+                        <td>{{ $shipping->admin ? $shipping->admin->title_en : "Events"  }}</td>
 
                         <td>{{ $shipping->city ? $shipping->city->title_en : '--' }}</td>
                         <td>{{ number_format($shipping->cost) . " AED"}}</td>

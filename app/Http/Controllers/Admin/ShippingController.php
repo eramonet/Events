@@ -10,6 +10,8 @@ use Illuminate\Validation\Rule;
 use App\Services\ShippingService;
 use App\Http\Controllers\Controller;
 use App\Models\Shipping;
+use App\Models\Vendor;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ShippingController extends Controller
@@ -32,10 +34,14 @@ class ShippingController extends Controller
 
     public function index(Request $request)
     {
+        $shippings = [];
+        if (Auth::guard('admin')->user()->vendor) { // vendor
+            $vendor = Vendor::where("id" , Auth::guard('admin')->user()->vendor_id)->first() ;
+            $shippings = Shipping::where("admin_id" , $vendor->id )->latest()->paginate(10);
+        }else{
+            $shippings = $this->shippingService->getAll($request);
+        }
 
-
-        $shippings = $this->shippingService->getAll($request);
-        // return $shippings;
         return \view('admin.shipping.index', \compact('shippings'));
     }
 

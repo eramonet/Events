@@ -27,15 +27,18 @@
 
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            <a href="{{ route('admin.taxes.create') }}" class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
-                    </path>
-                </svg>
-                Create New Tax
-            </a>
-
+            @if (Auth::guard('admin')->user()->hasPermission('taxes-create'))
+                <a href="{{ route('admin.taxes.create') }}"
+                    class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                    <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                        </path>
+                    </svg>
+                    Create New Tax
+                </a>
+            @endif
 
             <div class="btn-group ms-2 ms-lg-3">
                 <a href="{{ route('admin.taxes.export') }}"
@@ -241,24 +244,18 @@
                             @endif
                         </td>
                         <td>
-                            <button data-bs-toggle="modal" data-bs-target="#modal-{{ $tax->id }}"
-                                class="btn btn-info"><span class="fas fa-eye"></span></button>
+                            @if (Auth::guard('admin')->user()->hasPermission('taxes-read'))
+                                <button data-bs-toggle="modal" data-bs-target="#modal-{{ $tax->id }}"
+                                    class="btn btn-info"><span class="fas fa-eye"></span></button>
+                            @endif
+                            @if (Auth::guard('admin')->user()->hasPermission('taxes-update'))
+                                <a class="btn btn-primary" href="{{ route('admin.taxes.edit', $tax->id) }}"><span
+                                        class="fas fa-edit"></span></a>
+                            @endif
 
-                            <a class="btn btn-primary" href="{{ route('admin.taxes.edit', $tax->id) }}"><span
-                                    class="fas fa-edit"></span></a>
-
-
-                            @if ($tax->deleted_at)
-                                <form style="display: contents" action="{{ route('admin.taxes.restore', $tax->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-success">
-                                        <span class="fa-solid fa-trash-can-arrow-up"></span>
-                                    </button>
-                                </form>
-                            @else
-                                <form style="display: contents" class="delete-btn" action="{{ route('admin.taxes.destroy', $tax->id) }}"
-                                    method="POST">
+                            @if (Auth::guard('admin')->user()->hasPermission('taxes-delete'))
+                                <form style="display: contents" class="delete-btn"
+                                    action="{{ route('admin.taxes.destroy', $tax->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger">

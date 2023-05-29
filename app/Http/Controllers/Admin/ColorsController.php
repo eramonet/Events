@@ -16,8 +16,8 @@ class ColorsController extends Controller
      */
     public function index()
     {
-        $colors= Color::paginate(10);
-        return view('admin.colors.index',[
+        $colors = Color::latest()->paginate(10);
+        return view('admin.colors.index', [
             'colors' => $colors,
         ]);
     }
@@ -32,46 +32,35 @@ class ColorsController extends Controller
         return view('admin.colors.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
-        
+
         $request->validate([
-            'name'=>['required','string','min:2' , 'unique:colors'],
-            'code'=>['required','string','min:2','unique:colors'],
-         ]);
-        
-         $created = Color::create($request->all());
+            'name_en' => ['required', 'string', 'min:2', 'unique:colors'],
+            'name_ar' => ['required', 'string', 'min:2', 'unique:colors'],
+            'code' => ['required', 'string', 'min:2', 'unique:colors'],
+        ]);
 
-         if($created){
-             $request->session()->flash('success', 'Color Added SuccessFully');
- 
-         }else{
-             $request->session()->flash('failed', 'Something Wrong');
- 
-         }
+        $created = Color::create($request->all());
 
-         return redirect('acp/colors');
+        if ($created) {
+            $request->session()->flash('success', 'Color Added SuccessFully');
+        } else {
+            $request->session()->flash('failed', 'Something Wrong');
+        }
 
-
- 
+        return redirect('acp/colors');
     }
 
-   
+
     public function edit($id)
     {
 
-        $color = Color::where('id',$id)->frist();
-        return view('admin.colors.edit',[
+        $color = Color::where('id', $id)->frist();
+        return view('admin.colors.edit', [
             'color' => $color
         ]);
-       
-
     }
 
     /**
@@ -83,19 +72,18 @@ class ColorsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $color = Color::where('id',$id)->first();
-       
+        $color = Color::where('id', $id)->first();
+
 
         $request->validate([
-            'name'=>['required','string'],
-            'code'=>['required','string',],
-         ]);
+            'name_en' => ['required', 'string'],
+            'name_ar' => ['required', 'string'],
+            'code' => ['required', 'string',],
+        ]);
 
-         $color->update($request->all());
-         $request->session()->flash('success', 'Color Added SuccessFully');
-         return redirect('acp/colors');
-
-
+        $color->update($request->all());
+        $request->session()->flash('success', 'Color Added SuccessFully');
+        return redirect('acp/colors');
     }
 
     /**
@@ -106,11 +94,9 @@ class ColorsController extends Controller
      */
     public function destroy($id)
     {
-        $color = Color::where('id',$id)->first();
+        $color = Color::where('id', $id)->first();
         $color->delete();
         session()->flash('success', 'Color deleted SuccessFully');
         return redirect('acp/colors');
-
-
     }
 }

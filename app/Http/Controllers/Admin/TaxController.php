@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Tax;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -35,7 +36,8 @@ class TaxController extends Controller
             // return $taxes;
             return \view('admin.tax.index', \compact('taxes'));
         } else {
-            $taxes = $this->texService->getAllAdmin($request, $useradmin);
+            $vendor = Vendor::where("id" , Auth::guard('admin')->user()->vendor_id)->first() ;
+            $taxes = $this->texService->getAllAdmin($request, $vendor->id);
             // return $taxes;
             return \view('admin.tax.index', \compact('taxes'));
         }

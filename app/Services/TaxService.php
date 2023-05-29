@@ -70,7 +70,7 @@ public function getAll(Request $request){
         $limit = isset($request->limit) && filter_var($request->limit, FILTER_VALIDATE_INT) ? $request->limit : 5;
         $order = isset($request->order) && $request->order == 'ASC' ? 'ASC' : 'DESC';
         $countries = $this->tax::with('admin')
-            ->where('admin_id', $useradmin->id)
+            ->where('admin_id', $useradmin)
         ->where(function ($query) use ($request) {
             return $query->when($request->search, function ($q) use ($request) {
                 return $q->where('title_ar', 'like', '%' . $request->search . '%')
@@ -115,7 +115,8 @@ public function store(Request $request  ){
             'status'
 
         ]);
-        $data['admin_id'] = Auth::guard('admin')->id();
+        $current_login = Auth::guard('admin')->user() ;
+        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id() ;
 
         Tax::create($data);
 
@@ -134,7 +135,7 @@ public function update(Request $request ,Tax $tax){
         'percentage',
         'status'
     ]);
-    
+
     $tax->update($data);
 
 

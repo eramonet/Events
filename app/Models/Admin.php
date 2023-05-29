@@ -57,7 +57,7 @@ class Admin extends Authenticatable
 
     public function vendor()
     {
-        return $this->belongsTo(Vendor::class , 'id' , 'vendor_admin');
+        return $this->belongsTo(Vendor::class , 'vendor_id' , 'id');
     }
 
     public function added_by_admin()

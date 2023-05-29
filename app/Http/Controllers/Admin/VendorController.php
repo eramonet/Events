@@ -66,9 +66,7 @@ class VendorController extends Controller
     }
 
 
-
     public function store(Request $request)
-
     {
         if (!$request->can_add_products) {
             $request->merge(['can_add_products' => '0']);
@@ -109,9 +107,11 @@ class VendorController extends Controller
             'commercial_registration_number' => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        if( $request->Tax_Number_expiration_date < Carbon::now() ){
-            $request->session()->flash('failed', 'Expiration Date is Expired');
-            return redirect()->back();
+        if( $request->Tax_Number_expiration_date ){
+            if( $request->Tax_Number_expiration_date < Carbon::now() ){
+                $request->session()->flash('failed', 'Expiration Date is Expired');
+                return redirect()->back();
+            }
         }
 
         $created = $this->vendorService->store($request);
@@ -192,9 +192,11 @@ class VendorController extends Controller
 
         ]);
 
-        if( $request->Tax_Number_expiration_date < Carbon::now() ){
-            $request->session()->flash('failed', 'Expiration Date is Expired');
-            return redirect()->back();
+        if( $request->Tax_Number_expiration_date ){
+            if( $request->Tax_Number_expiration_date < Carbon::now() ){
+                $request->session()->flash('failed', 'Expiration Date is Expired');
+                return redirect()->back();
+            }
         }
 
 

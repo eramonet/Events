@@ -45,7 +45,6 @@
                         </a>
                     @endif
                 @endif
-
             @else
                 {{-- @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-create')) --}}
 
@@ -55,14 +54,14 @@
             @endif
 
             <a href="{{ route('admin.vendor-admins.create') }}"
-                        class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
-                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                        Create New Vendor Admin
-                    </a>
+                class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
+                <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                    </path>
+                </svg>
+                Create New Vendor Admin
+            </a>
 
             <div class="btn-group ms-2 ms-lg-3">
                 <a href="{{ route('admin.vendor-admins.export') }}"
@@ -285,57 +284,36 @@
                         </td>
                         <td>
 
-                            <div class="btn-group">
-                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="icon icon-sm">
-                                        <span class="fas fa-ellipsis-h icon-dark"></span>
-                                    </span>
-                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu py-0">
-                                    <button data-bs-toggle="modal" data-bs-target="#modal-{{ $admin->id }}"
-                                        class="dropdown-item rounded-top"><span class="fas fa-eye me-2"></span>View
-                                        Details</button>
+                            <a href="#" class="btn btn-primary"><span class="fas fa-eye"></span></a>
 
-                                    @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-update'))
-                                        <a class="dropdown-item"
-                                            href="{{ route('admin.vendor-admins.edit', $admin->id) }}"><span
-                                                class="fas fa-edit me-2"></span>Edit</a>
-                                    @endif
+                            @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-update'))
+                                <a class="btn btn-info" href="{{ route('admin.vendor-admins.edit', $admin->id) }}"><span
+                                        class="fas fa-edit"></span></a>
+                            @endif
 
 
-                                    @if ($admin->deleted_at)
-                                        @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-update'))
-                                            <form action="{{ route('admin.vendor-admins.restore', $admin->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <button type="submit" class="dropdown-item text-success rounded-bottom">
-                                                    <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
-                                                </button>
-                                            </form>
-                                        @endif
-                                    @else
-                                        @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-delete'))
-                                            <form class="delete-btn"
-                                                action="{{ route('admin.vendor-admins.destroy', $admin->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item text-danger rounded-bottom">
-                                                    <span class="fas fa-trash-alt me-2"></span>Delete
-                                                </button>
-                                            </form>
-                                        @endif
-                                    @endif
-
-
-
-
-
-                                </div>
-                            </div>
+                            @if ($admin->deleted_at)
+                                @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-update'))
+                                    <form style="display: contents" action="{{ route('admin.vendor-admins.restore', $admin->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn btn-success">
+                                            <span class="fa-solid fa-trash-can-arrow-up"></span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @else
+                                @if (Auth::guard('admin')->user()->hasPermission('vendor-admins-delete'))
+                                    <form style="display: contents" class="delete-btn"
+                                        action="{{ route('admin.vendor-admins.destroy', $admin->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger">
+                                            <span class="fas fa-trash-alt"></span>
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
 
 
                         </td>

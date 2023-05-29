@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\PromoCode;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -120,7 +121,8 @@ class PromoCodeService
             'maximum_times_of_use',
             'product_id',
         ]);
-        $data['admin_id'] = Auth::guard('admin')->id();
+        $current_login = Auth::guard('admin')->user() ;
+        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id() ;
         if ($request->dedicated_to == 'spacial_user') {
             $data['product_id'] = NULL;
             $data['user_id'] = $request->user_id;

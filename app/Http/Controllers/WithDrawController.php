@@ -146,23 +146,8 @@ class WithDrawController extends Controller
                     }
                 }
 
-                // getting this order
-                $this_order = Order::find(explode('0000', $order_number)[1]);
 
-
-                // getting order details
-                $order = OrderProduct::where([
-                    ["order_number", $this_order->order_number],
-                    ["vendor_id", $vendor->id]
-                ])->get();
-
-                if (count($order) > 0) {
-                    foreach ($order as $item) {
-                        $total_product_price += $item->price * $item->product_quantity;
-                    }
-                }
-
-                return [($total_product_price * ($vendor->commission / 100)) - $total_sent];
+                return [$withdraw_requests->have - $total_sent];
             } else if ($key == "hall") {
 
                 $total_sent = 0;
@@ -575,7 +560,6 @@ class WithDrawController extends Controller
 
         $our_balance = $vendor_have_money - $total_sent_money;
 
-
         return view('admin.send_with_draw_request.send_request', compact('our_balance'));
     }
 
@@ -806,11 +790,14 @@ class WithDrawController extends Controller
                 $with_draw_request->fromAdmin()->accepted();
             }])->first();
 
-            if (count($withdraw_requests->with_draw_requests) > 0) {
-                foreach ($withdraw_requests->with_draw_requests as $with_draw_request) {
-                    $total_sent += $with_draw_request->budget;
+            if( $withdraw_requests ){
+                if (count($withdraw_requests->with_draw_requests) > 0) {
+                    foreach ($withdraw_requests->with_draw_requests as $with_draw_request) {
+                        $total_sent += $with_draw_request->budget;
+                    }
                 }
             }
+
 
             // getting this order
             $this_order = Order::find($order);

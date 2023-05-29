@@ -164,7 +164,8 @@ class ProductCategoryService {
 
         ]);
 
-        $data['admin_id'] = Auth::guard('admin')->id();
+        $current_login = Auth::guard('admin')->user() ;
+        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id() ;
 
         $this->category::create($data);
 

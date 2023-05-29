@@ -10,6 +10,7 @@ use App\Services\PromoCodeService;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\PromoCode;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -45,7 +46,8 @@ class PromoCodeController extends Controller
 
             return \view('admin.promoCode.index', \compact('promo_codes'));
         } else {
-            $promo_codes = $this->promoServices->getAllAdmin($request, $useradmin);
+            $vendor = Vendor::where("id" , Auth::guard('admin')->user()->vendor_id)->first() ;
+            $promo_codes = PromoCode::where("admin_id" , $vendor->id)->latest()->paginate(10);
             foreach ($promo_codes as $promo_code) {
                 if ($promo_code->expiration_date < $today) {
                     $promo_code->update([

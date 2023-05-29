@@ -121,13 +121,15 @@ class OrderController extends Controller
             }
             return \view('admin.order.index', compact('orders', 'total_order_price'));
         } else {
-            $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
+            $vendor = Vendor::where("id" , $useradmin->vendor_id)->first() ;
 
+            $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
             $orders = Order::whereIn('order_number', $getOrders)->pending();
             $total_order_price = 0;
             foreach ($orders as $order) {
                 $total_order_price += $order->product_total_price + $order->total_taxes_price;
             }
+
             return \view('admin.order.index', compact('orders', 'total_order_price'));
         }
     }
@@ -147,8 +149,8 @@ class OrderController extends Controller
             }
             return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
         } else {
-            // $orders = Order::inProgress();
-            $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
+            $vendor = Vendor::where("id" , $useradmin->vendor_id)->first() ;
+            $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
             $orders = Order::whereIn('order_number', $getOrders)->inProgress();
             $total_order_price = 0;
             foreach ($orders as $order) {
@@ -173,7 +175,8 @@ class OrderController extends Controller
             }
             return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
         } else {
-            $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
+            $vendor = Vendor::where("id" , $useradmin->vendor_id)->first() ;
+            $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
             $orders = Order::whereIn('order_number', $getOrders)->delivered();
 
             $total_order_price = 0;
@@ -241,7 +244,6 @@ class OrderController extends Controller
 
 
         $checkorder = [];
-
 
         if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
             $checkorder = Order::latest()->with(["order_products" => function ($order_products) {

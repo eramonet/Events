@@ -48,166 +48,79 @@
 
         <div class="card-body">
 
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header">
+                                Basic information
+                            </div>
+                            <div class=" card-body ">
+                                <div class="wrapper m-auto">
+                                    <ul class="list-group list-group-flush">
+
+                                        <li class="list-group-item">Name : {{ $become->name }} </li>
+
+                                        <li class="list-group-item">Email : {{ $become->email }} </li>
+                                        <li class="list-group-item">Phone Number : {{ $become->phone_number }} </li>
+                                        <li class="list-group-item">Vendor Comment : {{ $become->comment ? $become->comment : "----" }} </li>
+                                        <li class="list-group-item">Request Sent From :
+                                            <span class="badge bg-primary">
+                                                {{ $become->sign_from }}
+                                            </span>
+                                        </li>
+                                        <li class="list-group-item">Request Status : {{ $become->status }} </li>
+
+
+                                        <li class="list-group-item">Added Date : <i
+                                                class="fas fa-calendar-week text-info"></i>
+                                            {{ \Carbon\Carbon::parse($become->created_at)->format('d/m/Y') }} </li>
+                                        <li class="list-group-item">Added Time : <i class="fas fa-clock text-success"></i>
+                                            {{ \Carbon\Carbon::parse($become->created_at)->format('h:i:s A') }}</li>
+
+                                    </ul>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
 
 
             <div class="row">
 
-                {{-- title_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="title_ar"> Name </label>
-                        <input readonly type="text" name="name"
-                            class="form-control @error('name') is-invalid @enderror" value="{{ $become->name }}">
-                    </div>
 
 
-                    @error('name')
-                        <div class="d-flex justify-content-center ">
 
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
+                <div class="card my-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center flex-wrap">
+                            <a style="color: #fff" class="btn btn-success m-1" class="dropdown-item"
+                                href="{{ route('admin.become.edit', $become->id) }}" title="Accept"
+                                data-bs-toggle="tooltip" data-bs-placement="top">
+                                Accept
+                            </a>
+                            <a style="color: #fff" class="btn btn-danger m-1" class="dropdown-item"
+                                href="{{ route('admin.become.reject', $become->id) }}" title="Reject"
+                                data-bs-toggle="tooltip" data-bs-placement="top">
+                                Reject
+
+                            </a>
+
+                            <a href="{{ route('admin.become.index', 'pending') }}" class="btn btn-info m-1"">
+                                Back
+                            </a>
                         </div>
-                    @enderror
+                    </div>
                 </div>
 
-                {{-- title_ar --}}
-
-
-                {{-- title_en --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <input readonly type="email" name="email"
-                            class="form-control @error('email') is-invalid @enderror" value="{{ $become->email }}">
-                    </div>
-
-
-                    @error('email')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- title_en --}}
 
 
 
-
-
-                {{-- nickname_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="phone">Phone <span class="text-danger">*</span></label>
-                        <input required type="text" name="phone"
-                            class="form-control @error('phone') is-invalid @enderror" value="{{ $become->phone }}">
-                    </div>
-
-
-                    @error('phone')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- nickname_ar --}}
-
-
-                {{-- nickname_en --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="status"> status</label>
-                        <input readonly type="text" name="status"
-                            class="form-control @error('status') is-invalid @enderror" value="{{ $become->status }}">
-                    </div>
-
-
-                    @error('status')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- nickname_en --}}
-
-
-
-                {{-- slogan_ar --}}
-                <div class="col-md-6">
-                    <div class="form-group mb-4">
-                        <label for="comment"> comment</label>
-                        <input readonly type="text" name="comment"
-                            class="form-control @error('comment') is-invalid @enderror" value="{{ $become->comment }}">
-                    </div>
-
-
-                    @error('comment')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                    @enderror
-                </div>
-
-                {{-- slogan_ar --}}
-
-
-    <div class="card my-4">
-        <div class="card-body">
-
-
-            <div class="d-flex justify-content-center flex-wrap">
-
-
-
-
-                {{-- @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->status == 'new') --}}
-                     <a class="btn btn-success m-1" class="dropdown-item"
-                                                href="{{ route('admin.become.accpted', $become->id) }}" title="Edit"
-                                                data-bs-toggle="tooltip" data-bs-placement="top">
-                                                accept
-
-                                            </a>
-
-
-                {{-- @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->status == 'inprogress') --}}
-                          <a class="btn btn-danger m-1" class="dropdown-item"
-                                                href="{{ route('admin.become.reject', $become->id) }}" title="Edit"
-                                                data-bs-toggle="tooltip" data-bs-placement="top">
-                                                Reject
-
-                                            </a>
-                {{-- @endif --}}
-
-               
-
-
-
-            </div>
-        </div>
-    </div>
-
-
-
-                <a href="{{ route('admin.become.index','pending') }}" class="btn btn-primary d-block m-auto">
-                    back
-                    <i class="fa-regular fa-pen-to-square icon icon-xs ms-2"></i>
-
-                </a>
             @endsection
 
 

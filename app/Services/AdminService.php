@@ -107,7 +107,6 @@ public function store(Request $request  ){
 
 public function update(Request $request ,Admin $admin){
 
-
     $data =[
         'name'=>$request->name,
         'phone'=>$request->phone,
@@ -116,11 +115,10 @@ public function update(Request $request ,Admin $admin){
         'gender'=>$request->gender,
     ];
 
-
-
     if($request->input('password')){
         $data['password']= Hash::make($request->password);
     }
+
     $admin->update($data);
     $admin->syncPermissions($request->permissions);
     if($request->hasFile('image')){

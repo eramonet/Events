@@ -10,7 +10,8 @@ class Color extends Model
     use HasFactory;
     public $table = 'colors';
     public $fillable = [
-        "name",
+        "name_en",
+        "name_ar",
         "code",
     ];
 }

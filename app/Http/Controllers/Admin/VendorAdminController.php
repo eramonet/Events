@@ -139,14 +139,25 @@ class VendorAdminController extends Controller
      */
     public function edit(Request $request, $id)
     {
-
         $admin = $this->adminService->getAdminById($id);
+        $permissions = [] ;
+
         if (!$admin) {
             $request->session()->flash('failed', 'Admin Not Found');
             return redirect()->back();
         }
 
-        $permissions = AdminPermission::vendor();
+        $vendor =  Vendor::where("id" , $admin->vendor_id )->first() ;
+
+        if( $vendor->type == "product" ){
+            $permissions = AdminPermission::vendor_product();
+        }elseif( $vendor->type == "hall" ){
+            $permissions = AdminPermission::vendor_halls();
+        }elseif( $vendor->type == "product_hall" ){
+            $permissions = AdminPermission::vendor();
+        }
+
+
         $categories = $this->adminCategoryServices->getActiveCategories();
 
         $vendors = $this->vendorService->getActiveVendors();
@@ -164,13 +175,14 @@ class VendorAdminController extends Controller
             $request->session()->flash('failed', 'Admin Not Found');
             return redirect()->back();
         }
+
         $this->validate(
             $request,
             [
                 'name' => ['required', 'string', 'min:2'],
                 'email' => ['required', 'email',  Rule::unique('admins')->ignore($admin->id),],
-                'password' => ['nullable', 'string', 'min:6', 'confirmed'],
-                'password_confirmation' => ['nullable', 'string', 'same:password'],
+                'password' => ['sometimes', 'confirmed'],
+                'password_confirmation' => ['sometimes', 'same:password'],
                 'permissions' => ['required'],
                 'gender' => ['required', 'string', Rule::in(['male', 'female'])],
                 'phone' => ['required', 'string', Rule::unique('admins')->ignore($admin->id)],
@@ -181,8 +193,6 @@ class VendorAdminController extends Controller
 
             ]
         );
-
-
 
         $adminUpdated = $this->adminService->update($request, $admin);
 

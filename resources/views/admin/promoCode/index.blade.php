@@ -27,7 +27,7 @@
 
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-            {{-- @if (Auth::guard('admin')->user()->hasPermission('promo-codes-create')) --}}
+            @if (Auth::guard('admin')->user()->hasPermission('promo-codes-create'))
             <a href="{{ route('admin.promo-codes.create') }}"
                 class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                 <svg class="icon icon-xsEdit" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -37,7 +37,7 @@
                 </svg>
                 Create New Promo Code
             </a>
-            {{-- @endif --}}
+            @endif
 
             <div class="btn-group ms-2 ms-lg-3">
                 <a href="{{ route('admin.promo-codes.export') }}"
@@ -220,7 +220,7 @@
 
                         <td>{{ $promo->type == "amount" ? "Amount" : "%" }}</td>
 
-                        <td>{{ $promo->type == "amount" ? $promo->value . " AED" : " %" }}</td>
+                        <td>{{ $promo->type == "amount" ? $promo->value . " AED" : $promo->value . " %" }}</td>
 
                         <td>
                             @if ($promo->created_at)
@@ -263,7 +263,7 @@
                                 </form>
                                 {{-- @endif --}}
                             @else
-                                {{-- @if (Auth::guard('admin')->user()->hasPermission('promo-codes-delete')) --}}
+                                @if (Auth::guard('admin')->user()->hasPermission('promo-codes-delete'))
                                 <form style="display: contents" class="delete-btn" action="{{ route('admin.promo-codes.destroy', $promo->id) }}"
                                     method="POST">
                                     @csrf
@@ -272,7 +272,7 @@
                                         <span class="fas fa-trash-alt Edit"></span>
                                     </button>
                                 </form>
-                                {{-- @endif --}}
+                                @endif
                             @endif
 
                         </td>

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text("product_title");
             $table->text("price");
             $table->text("product_quantity");
+            $table->enum("status" , ['new','inprogress','delivered','cancelled'])->default("new");
             $table->timestamps();
         });
     }

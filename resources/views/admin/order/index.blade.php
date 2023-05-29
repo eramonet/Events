@@ -4,7 +4,7 @@
 @endsection
 
 @section('content')
-    
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class=" d-md-inline-block">
@@ -101,7 +101,7 @@
 
                             <div class="d-flex  align-items-center justify-content-center flex-md-nowrap">
 
-
+                                @if (Auth::guard('admin')->user()->hasPermission('orders-read'))
                                 <div class="">
                                     <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
 
@@ -111,6 +111,9 @@
                                                 class="fas fa-eye "></span></a>
                                     </div>
                                 </div>
+                                @endif
+
+                                @if (Auth::guard('admin')->user()->hasPermission('orders-update'))
 
                                 @if ($order->status == 'pending')
                                     <form class="action_btn"
@@ -183,6 +186,7 @@
                                 @else
                                 @endif
 
+                                @endif
 
 
 
