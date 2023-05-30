@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Eloquent;
+
 use App\Http\Interfaces\SettingsRepositoryInterface;
 use App\Http\Resources\BrandResource;
 use App\Http\Resources\CityResource;
@@ -15,6 +17,7 @@ use App\Models\Brand;
 use App\Models\City;
 use App\Models\Color;
 use App\Models\ContactMessage;
+use App\Models\Country;
 use App\Models\Faq;
 use App\Models\Notification;
 use App\Models\OrderProduct;
@@ -28,8 +31,9 @@ class SettingsRepository implements SettingsRepositoryInterface
 {
     public function getCities($lang)
     {
-            $cities = City::where('country_id','2')->where('status', '1')->get();
-            return CityResource::collection($cities);
+        $country = Country::first();
+        $cities = City::where('country_id', $country->id)->where('status', '1')->get();
+        return CityResource::collection($cities);
     }
 
     public function getRegions($city)
@@ -58,10 +62,10 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function getColors($lang)
     {
-        $getProducts=OrderProduct::pluck('product_id');
+        $getProducts = OrderProduct::pluck('product_id');
         $usedColors = ProductColor::whereIn('product_id', $getProducts)
-        ->pluck('color_id');
-        $colors = Color::whereIn('id',$usedColors)->get();
+            ->pluck('color_id');
+        $colors = Color::whereIn('id', $usedColors)->get();
         return ColorResource::collection($colors);
     }
 
@@ -79,11 +83,11 @@ class SettingsRepository implements SettingsRepositoryInterface
             'email' => $request->email,
             'message' => $request->message,
         ]));
-        Notification:: create([
-            'user_id'=>$contact->user_id,
-            'message_id'=>$contact->id,
-            'title_ar'=>'لديك رسالة تواصل جديدة',
-            'title_en'=>'you have new contacts message',
+        Notification::create([
+            'user_id' => $contact->user_id,
+            'message_id' => $contact->id,
+            'title_ar' => 'لديك رسالة تواصل جديدة',
+            'title_en' => 'you have new contacts message',
             'desc_ar' => 'لديك رسالة تواصل جديدة',
             'desc_en' => 'you have new contacts message',
         ]);
@@ -95,7 +99,7 @@ class SettingsRepository implements SettingsRepositoryInterface
             'name' => $request->name,
             'email' => $request->email,
             'message' => $request->message,
-         ]));
+        ]));
 
         Notification::create([
             'message_id' => $contact->id,
@@ -108,15 +112,14 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function getCategories($lang)
     {
-        $categories =ProductCategory::whereNull('parent_id')->where('status', 1)->get();
+        $categories = ProductCategory::whereNull('parent_id')->where('status', 1)->get();
         return MainCategoryResource::collection($categories);
     }
 
     public function getNotifications($user)
     {
-        $notifications= Notification::where('user_id', $user->id)->latest()->get();
+        $notifications = Notification::where('user_id', $user->id)->latest()->get();
         return NotificationResource::collection($notifications);
-
     }
 
     public function becomeVendor($request)

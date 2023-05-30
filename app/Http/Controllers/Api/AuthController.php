@@ -177,7 +177,8 @@ class AuthController extends Controller
         $data['country_id'] = $city->country->id;
         $user=User::create($data);
         $this->authObject->sendVerificationCode($request);
-        return response()->json(res($lang, success(), 'registered', ["code"=> "1234"]),200);
+        $code=Verification::where('user_id',$user->id)->first();
+        return response()->json(res($lang, success(), 'registered', ["code"=> "$code->code"]),200);
     }
 
     public function login(Request $request)
