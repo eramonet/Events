@@ -29,6 +29,7 @@ use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
 use App\Models\User;
+use App\Models\Vendor;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
@@ -142,8 +143,8 @@ class UserRepository implements UserRepositoryInterface
         $i = 0;
         foreach ($brands as $brand) {
             $allbrands[$i]['id'] = $brand->id;
-            $allbrands[$i]['name'] =  $lang == 'en' ? $brand->name_en : $brand->name_ar;
-            $allbrands[$i]['logo'] = $brand->logo;
+            $allbrands[$i]['name'] =  $lang == 'en' ? $brand->title_en : $brand->title_ar;
+            $allbrands[$i]['logo'] = $brand->image_url;
             $i++;
         }
 
@@ -347,8 +348,8 @@ class UserRepository implements UserRepositoryInterface
 
     public function getBrandProducts($lang, $brand_id)
     {
-        $brand=ProductBrand::where('brand_id',$brand_id)->pluck('product_id');
-        $products = Product::whereIn('id',$brand)
+        $brand=Vendor::where('id',$brand_id)->first();
+        $products = Product::where('admin_id',$brand->id)
         ->where('status', 1)
         ->where('stock', '>', '0')
         ->latest()->get();

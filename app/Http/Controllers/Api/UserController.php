@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Interfaces\UserRepositoryInterface;
 use App\Models\CartHall;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
@@ -118,8 +119,13 @@ class UserController extends Controller
     public function getBrandProducts($brand_id)
     {
         $lang = getLang();
+        $brand = Vendor::where('id', $brand_id)->first();
+        if(isset($brand)){
         $result = $this->userObject->getBrandProducts($lang, $brand_id);
         return response(res($lang, success(), 'brand_products', $result), 200);
+        }else{
+            return response()->json(res($lang, expired(), 'brand_not_found', []), 404);
+        }
     }
 
     public function getCategoryProducts($category_id)
