@@ -98,6 +98,11 @@ class PromoCodeController extends Controller
             }
         }
 
+        if( $request->expiration_date < Carbon::now() ){
+            $request->session()->flash('failed', 'Invalid Expiration Date');
+                return redirect()->back();
+        }
+
         $created = $this->promoServices->store($request);
 
         if ($created) {
@@ -153,6 +158,11 @@ class PromoCodeController extends Controller
                 $request->session()->flash('failed', 'Invalid Value');
                 return redirect()->back();
             }
+        }
+
+        if( $request->expiration_date < Carbon::now() ){
+            $request->session()->flash('failed', 'Invalid Expiration Date');
+                return redirect()->back();
         }
 
         $updated = $this->promoServices->update($request, $promo);

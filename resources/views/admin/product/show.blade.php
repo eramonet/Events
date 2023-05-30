@@ -23,21 +23,36 @@
                                         <li class="list-group-item"><img src="{{ $product->primary_image_url }}"
                                                 style="width: 150px"> </li>
 
-                                        <li class="list-group-item">Name : {{ $product->title_en }} </li>
+                                        <li class="list-group-item">Name En : {{ $product->title_en }} </li>
 
-                                        <li class="list-group-item">Description : {{ $product->description_en }} </li>
-                                        <li class="list-group-item">Details : {{ $product->details_en }} </li>
-                                        <li class="list-group-item">Features : {{ $product->features_en }} </li>
-                                        <li class="list-group-item">Instruction : {{ $product->instructions_en }} </li>
+                                        <li class="list-group-item">Name Ar : {{ $product->title_ar }} </li>
 
-                                        <li class="list-group-item">Summary : {{ $product->summary_en }} </li>
+                                        <li class="list-group-item">Description En : {{ $product->description_en }} </li>
+                                        <li class="list-group-item">Description Ar : {{ $product->description_ar }} </li>
 
-                                        <li class="list-group-item">Extras : {{ $product->extras_en }} </li>
+                                        <li class="list-group-item">Details En : {!! $product->details_en !!} </li>
+                                        <li class="list-group-item">Features En : {!! $product->features_en !!} </li>
+                                        <li class="list-group-item">Instruction En : {!! $product->instructions_en !!} </li>
 
-                                        <li class="list-group-item">Real Price : {{ $product->real_price }} </li>
-                                        <li class="list-group-item">Fake Price : {{ $product->fake_price }} </li>
+                                        <li class="list-group-item">Summary En : {!! $product->summary_en !!} </li>
 
-                                        <li class="list-group-item">Stock : {{ $product->stock }} </li>
+                                        <li class="list-group-item">Extras En : {!! $product->extras_en !!} </li>
+
+
+                                        <li class="list-group-item">Details Ar : {!! $product->details_ar !!} </li>
+                                        <li class="list-group-item">Features Ar : {!! $product->features_ar !!} </li>
+                                        <li class="list-group-item">Instruction Ar : {!! $product->instructions_ar !!} </li>
+
+                                        <li class="list-group-item">Summary Ar : {!! $product->summary_ar !!} </li>
+
+                                        <li class="list-group-item">Extras Ar : {!! $product->extras_ar !!} </li>
+
+                                        <li class="list-group-item">Real Price : {{ $product->real_price . " AED" }} </li>
+                                        <li class="list-group-item">Fake Price : {{ $product->fake_price . " AED" }} </li>
+
+                                        <li class="list-group-item">Offet Ended At : {{ $product->stock }} Item </li>
+
+                                        <li class="list-group-item">Stock : {{ $product->stock }} Item </li>
 
                                         <li class="list-group-item">Added By :
                                             {{ $product->owner ? $product->owner->title_en : 'Events' }} </li>
@@ -54,11 +69,9 @@
 
                                         <li class="list-group-item">Occasions :
                                             @foreach ($product->occasions as $occasion)
-                                                <a>
-                                                    <span class="badge bg-primary">
-                                                        {{ $occasion->title_en }}
-                                                    </span>
-                                                </a>
+                                            <span class="badge bg-primary">
+                                                {{ $occasion->title_en }}
+                                            </span>
                                             @endforeach
                                         </li>
 

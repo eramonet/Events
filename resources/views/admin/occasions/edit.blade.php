@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    Occasion
+    Edit Occasion
 @endsection
 @section('content')
     {{-- on top --}}
@@ -19,15 +19,12 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="breadcrumb-item ">
-                        <a href="{{ route('admin.products-categories.index') }}">Occasion</a>
-                    </li>
 
-                    <li class="breadcrumb-item active" aria-current="page">Create New Occasion</li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Occasion</li>
 
                 </ol>
             </nav>
-            <h2 class="h4">Create New Occasion</h2>
+            <h2 class="h4">Edit Occasion</h2>
 
         </div>
 

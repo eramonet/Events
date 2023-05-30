@@ -152,7 +152,7 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="real_price">Real Price (AED) <span class="text-danger">*</span></label>
-                            <input minlength="0" min="1" required type="number" name="real_price"
+                            <input step="0.01" minlength="0" min="1" required type="number" name="real_price"
                                 class="form-control @error('real_price') is-invalid @enderror"
                                 value="{{ $product->real_price }}">
                         </div>
@@ -175,7 +175,7 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="fake_price">Fake Price (AED) <span class="text-danger">*</span></label>
-                            <input minlength="0" min="1" required type="number" name="fake_price"
+                            <input step="0.01" minlength="0" min="1" required type="number" name="fake_price"
                                 class="form-control @error('fake_price') is-invalid @enderror"
                                 value="{{ $product->fake_price }}">
                         </div>
@@ -195,7 +195,26 @@
 
 
 
+                    {{-- Offer ending --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="offer_end_at">Offer Ending At <span class="text-danger">*</span></label>
+                            <input value="{{ old('offer_end_at') }}" required type="date" name="offer_end_at"
+                                class="form-control @error('offer_end_at') is-invalid @enderror"
+                                value="{{ old('offer_end_at') }}">
+                        </div>
 
+
+                        @error('offer_end_at')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+                    {{-- Offer ending --}}
 
 
                     {{-- category_id --}}
@@ -333,7 +352,7 @@
                                 @foreach ($colors as $color)
                                     <option value="{{ $color->id }}"
                                         {{ collect($product->colors->pluck('id'))->contains($color->id) ? 'selected' : '' }}>
-                                        {{ $color->name }}</option>
+                                        {{ $color->name_en }}</option>
                                 @endforeach
                             </select>
                         </div>

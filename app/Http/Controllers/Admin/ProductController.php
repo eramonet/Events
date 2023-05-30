@@ -53,7 +53,7 @@ class ProductController extends Controller
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
 
-            $products = Product::accept()->latest()->paginate(10);
+            $products = $this->productService->getAll($request);
 
             $type = $request->type && ($request->type == 'in-stock' || $request->type == 'out-of-stock') ? $request->type : 'all';
 
@@ -86,7 +86,6 @@ class ProductController extends Controller
             $sizes = Size::get();
             $cities = City::get();
             $occasions = Occasion::forProduct()->get();
-            // return $products;
 
 
             return \view('admin.product.create', \compact('mainCategories', 'occasions', 'sizes', 'cities', 'taxes', 'firstMainCategorySubCategories', 'products', 'colors'));
@@ -144,14 +143,19 @@ class ProductController extends Controller
             'taxes.*' => ['nullable', 'exists:taxes,id'],
             'color_id.*' => ['nullable', 'exists:colors,id'],
             'stock' => ['required', 'integer'],
-            'fake_price' => ['required', 'integer', 'min:1'],
-            'real_price' => ['required', 'integer', 'min:1', 'lt:fake_price'],
+            'fake_price' => ['required', 'min:1'],
+            'real_price' => ['required', 'min:1', 'lt:fake_price'],
+            'offer_end_at' => ['required'],
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['required', 'exists:occasions,id'],
 
         ]);
 
+        if ($request->offer_end_at < Carbon::now()) {
+            $request->session()->flash('failed', 'Invalid Date in Offer Ended At');
+            return redirect()->back();
+        }
 
         if (Auth::guard('admin')->user()->vendor) {
 
@@ -210,8 +214,6 @@ class ProductController extends Controller
             $sizes = Size::get();
             $occasions = Occasion::get();
 
-
-
             return \view('admin.product.edit', \compact('product', 'cities', 'occasions', 'colors', 'sizes', 'mainCategories', 'taxes', 'firstMainCategorySubCategories', 'products'));
         } else {
             $mainCategories = $this->productCategoryService->getActiveMainCategoriesAdmin($useradmin);
@@ -256,8 +258,8 @@ class ProductController extends Controller
             'color_id.*' => ['nullable', 'exists:colors,id'],
             'size_id.*' => ['nullable', 'exists:sizes,id'],
             'stock' => ['required', 'integer'],
-            'fake_price' => ['required', 'integer', 'min:1'],
-            'real_price' => ['required', 'integer', 'min:1', 'lte:fake_price'],
+            'fake_price' => ['required', 'min:1'],
+            'real_price' => ['required', 'min:1', 'lte:fake_price'],
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['nullable', 'exists:occasions,id'],
@@ -287,13 +289,19 @@ class ProductController extends Controller
             $request->session()->flash('failed', 'Product Not Found');
             return redirect()->back();
         }
+
         $validator = Validator::make($request->all(), [
-            'fake_price' => ['required', 'integer', 'min:0'],
-            'real_price' => ['required', 'integer', 'min:0'],
+            'fake_price' => ['required'],
+            'real_price' => ['required'],
         ]);
 
         if ($validator->fails()) {
             $request->session()->flash('failed', 'Something Wrong');
+            return redirect()->back();
+        }
+
+        if( $request->fake_price <= $request->real_price ||  $request->fake_price <= 0 || $request->real_price <= 0 ){
+            $request->session()->flash('failed', 'invalid price');
             return redirect()->back();
         }
 
@@ -317,11 +325,16 @@ class ProductController extends Controller
             return redirect()->back();
         }
         $validator = Validator::make($request->all(), [
-            'stock' => ['required', 'integer', 'min:0'],
+            'stock' => ['required'],
         ]);
 
         if ($validator->fails()) {
             $request->session()->flash('failed', 'Something Wrong');
+            return redirect()->back();
+        }
+
+        if( $request->stock <= 0 ){
+            $request->session()->flash('failed', 'invalid value');
             return redirect()->back();
         }
 
@@ -377,7 +390,7 @@ class ProductController extends Controller
         }
 
         $product->status = 1;
-        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
+        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted";
         $product->save();
         $request->session()->flash('success', 'Product  Status Changed To Active');
 
@@ -393,7 +406,7 @@ class ProductController extends Controller
         }
 
         $product->status = '0';
-        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
+        $product->accept = Auth::guard('admin')->user()->vendor ? "new" : "accepted";
 
         $product->save();
         $request->session()->flash('success', 'Product  Status Changed To InActive');

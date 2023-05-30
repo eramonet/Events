@@ -57,7 +57,6 @@ class VendorAdminController extends Controller
     public function create(Request $request)
     {
 
-
         $permissions = AdminPermission::vendor();
 
         $categories = $this->adminCategoryServices->getActiveCategories();

@@ -11,9 +11,9 @@ class Notification extends Model
     use HasFactory, SoftDeletes;
     protected $table='notifications';
     protected $fillable=[
-        'user_id','order_id', 'code_id','title_en','title_ar',
-        'desc_en','desc_ar',
-        'vendor_id', 'message_id'
+        'user_id','order_id', 'code_id','title_en','title_ar', 'type' ,
+        'desc_en','desc_ar' , "send_from",
+        'vendor_id', 'admin_id' , 'message_id'
     ];
 
     public function user()
@@ -24,7 +24,12 @@ class Notification extends Model
 
     public function vendor()
     {
-        return $this->belongsTo(Admin::class, 'vendor_id', 'id');
+        return $this->belongsTo(Vendor::class, 'vendor_id', 'id');
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id', 'id');
     }
 
     public function code()

@@ -218,7 +218,7 @@
 
                         <td>{{ $promo->title }}</td>
 
-                        <td>{{ $promo->type == "amount" ? "Amount" : "%" }}</td>
+                        <td>{{ $promo->type == "amount" ? "Amount" : "Percentage %" }}</td>
 
                         <td>{{ $promo->type == "amount" ? $promo->value . " AED" : $promo->value . " %" }}</td>
 

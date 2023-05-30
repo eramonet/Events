@@ -36,9 +36,9 @@ class ShippingController extends Controller
     {
         $shippings = [];
         if (Auth::guard('admin')->user()->vendor) { // vendor
-            $vendor = Vendor::where("id" , Auth::guard('admin')->user()->vendor_id)->first() ;
-            $shippings = Shipping::where("admin_id" , $vendor->id )->latest()->paginate(10);
-        }else{
+            $vendor = Vendor::where("id", Auth::guard('admin')->user()->vendor_id)->first();
+            $shippings = Shipping::where("admin_id", $vendor->id)->latest()->paginate(10);
+        } else {
             $shippings = $this->shippingService->getAll($request);
         }
 
@@ -48,7 +48,6 @@ class ShippingController extends Controller
     public function create(Request $request)
     {
         $cities = $this->cityService->getActiveCities();
-
 
         return \view('admin.shipping.create', \compact('cities'));
     }
@@ -69,9 +68,27 @@ class ShippingController extends Controller
             'text_ar' => ['required', 'string', 'min:2'],
             'text_en' => ['required', 'string', 'min:2'],
             'cost' => ['required', 'numeric', 'min:1'],
-            'city_id' => ['required', 'exists:cities,id', 'unique:shippings'],
+            'city_id' => ['required', 'exists:cities,id'],
             'status' => ['required', 'string', Rule::in([1, 0])],
         ]);
+
+        // check if exist
+        $vendor = "";
+
+        if (Auth::guard('admin')->user()->vendor) { // vendor
+            $vendor = Vendor::where("id", Auth::guard('admin')->user()->vendor_id)->first()->id;
+        } else {
+            $vendor = Auth::guard('admin')->id();
+        }
+        $exist = Shipping::where([
+            ["city_id", $request->city_id],
+            ["admin_id", $vendor]
+        ])->first();
+
+        if ($exist) {
+            $request->session()->flash('failed', 'Assigned Before');
+            return redirect()->route('admin.shippings.index');
+        }
 
         $created = $this->shippingService->store($request);
 
@@ -110,10 +127,18 @@ class ShippingController extends Controller
         $request->validate([
             'text_ar' => ['required', 'string', 'min:2',],
             'text_en' => ['required', 'string', 'min:2',],
-            'cost' => ['required', 'numeric','min:1'],
-            'city_id' => ['required', 'exists:cities,id', Rule::unique('shippings', 'city_id')->ignore($shipping->id)],
+            'cost' => ['required', 'numeric', 'min:1'],
+            'city_id' => ['required', 'exists:cities,id'],
             'status' => ['required', 'string', Rule::in([1, 0])],
         ]);
+
+        $vendor = "";
+
+        if (Auth::guard('admin')->user()->vendor) { // vendor
+            $vendor = Vendor::where("id", Auth::guard('admin')->user()->vendor_id)->first()->id;
+        } else {
+            $vendor = Auth::guard('admin')->id();
+        }
 
         $updated = $this->shippingService->update($request, $shipping);
 
@@ -157,7 +182,7 @@ class ShippingController extends Controller
 
     public function show($id)
     {
-        $shipping = Shipping::find($id) ;
-        return view('admin.shipping.show' , compact('shipping'));
+        $shipping = Shipping::find($id);
+        return view('admin.shipping.show', compact('shipping'));
     }
 }

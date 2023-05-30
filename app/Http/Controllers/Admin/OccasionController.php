@@ -114,6 +114,7 @@ class OccasionController extends Controller
     {
         $occasion = Occasion::where('id', $id)->first();
 
+        // return $occasion ;
 
         $request->validate([
             'primary_image' => ['sometimes', 'image', 'max:10240'],
@@ -125,35 +126,11 @@ class OccasionController extends Controller
             'description_ar' => ['required', 'string', 'min:2'],
             'description_en' => ['required', 'string', 'min:2'],
         ]);
-        if ($request->hasFile('icon')) {
 
-
-            if (File::exists(public_path('uploads/occasions/' . $occasion->icon))) {
-
-                Storage::disk('public_uploads')->delete('occasions/' . $occasion->icon);
-            }
-
-            $iconName = UploadHelper::upload('occasions', $request->file('icon'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height'));
-
-            $occasion->icon = $iconName;
-        }
-
-        if ($request->hasFile('primary_image')) {
-
-
-            if (File::exists(public_path('uploads/occasions/' . $occasion->primary_image))) {
-
-                Storage::disk('public_uploads')->delete('occasions/' . $occasion->primary_image);
-            }
-
-            $imageName = UploadHelper::upload('occasions', $request->file('primary_image'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height'));
-
-            $occasion->primary_image = $imageName;
-        }
 
         $occasion->update([
-            'primary_image' => $request->hasFile('primary_image') ? UploadHelper::upload('occasions', $request->file('primary_image'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')) : $occasion->primary_image ,
-            'icon' => $request->hasFile('icon') ? UploadHelper::upload('occasions', $request->file('icon'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')) : $occasion->icon ,
+            'primary_image' => $request->hasFile('primary_image') ? UploadHelper::upload('occasions', $request->file('primary_image'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')):str_replace('http://127.0.0.1:8000/uploads/occasions/', '',$occasion->primary_image) ,
+            'icon' => $request->hasFile('icon') ? UploadHelper::upload('occasions', $request->file('icon'), config('imageDimensions.products_categories.width'), config('imageDimensions.products_categories.height')) : str_replace('http://127.0.0.1:8000/uploads/occasions/', '',$occasion->icon),
             'title_ar' => $request->title_ar,
             'title_en' => $request->title_en,
             'country_id' => $request->country_id,

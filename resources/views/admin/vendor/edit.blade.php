@@ -707,7 +707,7 @@
 
 
         <button type="submit" class="btn btn-primary d-block m-auto">
-            Edit
+            Save
             <i class="fa-regular fa-pen-to-square icon icon-xs ms-2"></i>
         </button>
     </form>

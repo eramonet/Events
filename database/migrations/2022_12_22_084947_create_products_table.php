@@ -38,6 +38,7 @@ return new class extends Migration
 
             $table->double('fake_price', 8, 2)->nullable();
             $table->double('real_price', 8, 2)->nullable();
+            $table->date('offer_end_at')->nullable();
             $table->bigInteger('stock')->nullable();
             $table->enum('status',[1,0])->default(1)->nullable();
             $table->enum('accept',['accepted','rejected','new'])->default('new');

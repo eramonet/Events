@@ -145,7 +145,7 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="real_price">Real Price (AED) <span class="text-danger">*</span></label>
-                            <input minlength="0" min="1" value="{{ old('real_price') }}" required type="number"
+                            <input step="0.01" minlength="0" min="1" value="{{ old('real_price') }}" required type="number"
                                 name="real_price" class="form-control @error('real_price') is-invalid @enderror"
                                 value="{{ old('real_price') }}">
                         </div>
@@ -168,7 +168,7 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="fake_price">Fake Price (AED) <span class="text-danger">*</span></label>
-                            <input minlength="0" min="1" value="{{ old('fake_price') }}" required type="number"
+                            <input step="0.01" minlength="0" min="1" value="{{ old('fake_price') }}" required type="number"
                                 name="fake_price" class="form-control @error('fake_price') is-invalid @enderror"
                                 value="{{ old('fake_price') }}">
                         </div>
@@ -189,14 +189,14 @@
                     {{-- Offer ending --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
-                            <label for="to">Offet Ending At <span class="text-danger">*</span></label>
-                            <input value="{{ old('to') }}" required type="date"
-                                name="to" class="form-control @error('to') is-invalid @enderror"
-                                value="{{ old('to') }}">
+                            <label for="offer_end_at">Offer Ending At <span class="text-danger">*</span></label>
+                            <input value="{{ old('offer_end_at') }}" required type="date"
+                                name="offer_end_at" class="form-control @error('offer_end_at') is-invalid @enderror"
+                                value="{{ old('offer_end_at') }}">
                         </div>
 
 
-                        @error('to')
+                        @error('offer_end_at')
                             <div class="d-flex justify-content-center ">
 
                                 <div class="text-danger">
@@ -337,7 +337,7 @@
                                 @foreach ($colors as $color)
                                     <option value="{{ $color->id }}"
                                         {{ collect(old('color_id'))->contains($color->id) ? 'selected' : '' }}>
-                                        {{ $color->name }}</option>
+                                        {{ $color->name_en }}</option>
                                 @endforeach
                             </select>
                         </div>

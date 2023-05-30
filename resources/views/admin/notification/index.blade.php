@@ -6,6 +6,14 @@
 @section('content')
     {{-- on top --}}
 
+    <style>
+        .card .table td,
+        .card .table th {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+    </style>
+
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class=" d-md-inline-block">
@@ -27,11 +35,10 @@
 
         </div>
         <div class="btn-toolbar mb-2 mb-md-0">
-           @php
-            $useradmin = App\Models\Admin::where('id', Auth::guard('admin')->id())->first();
+            @php
+                $useradmin = App\Models\Admin::where('id', Auth::guard('admin')->id())->first();
             @endphp
 
-            @if ($useradmin->hasRole('super-admin')||$useradmin->hasRole('admin'))
             @if (Auth::guard('admin')->user()->hasPermission('notifications-create'))
                 <a href="{{ route('admin.notifications.create') }}"
                     class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
@@ -43,7 +50,6 @@
                     Create New Notification
                 </a>
             @endif
- @endif
 
         </div>
     </div>
@@ -139,8 +145,8 @@
 
                                     <div class="form-group mb-3">
                                         <label for="from">From</label>
-                                        <input type="date" id="from" value="{{ request()->from }}"
-                                            name="from" class="form-control search-docs" placeholder="From">
+                                        <input type="date" id="from" value="{{ request()->from }}" name="from"
+                                            class="form-control search-docs" placeholder="From">
 
                                     </div>
                                 </div>
@@ -184,9 +190,10 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+                    <th class="border-gray-200">Sent From</th>
+                    <th class="border-gray-200">Type</th>
                     <th class="border-gray-200">Title </th>
                     <th class="border-gray-200">Created At</th>
-                    <th class="border-gray-200">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -194,10 +201,16 @@
 
                 @foreach ($notifications as $notification)
                     <td>
-                        <p class="text-nowrap">{{ $notification->id }}.</p>
+                        <p class="text-nowrap">{{ $notification->id }}</p>
                     </td>
 
+                    <td>
+                        <p class="text-nowrap">{{ $notification->send_from }}.</p>
+                    </td>
 
+                    <td>
+                        <p class="text-nowrap">{{ $notification->type }}</p>
+                    </td>
 
                     <td>
 
@@ -220,46 +233,6 @@
                         @endif
 
                     </td>
-
-
-
-
-
-
-
-
-                    <td>
-
-
-
-
-                        {{-- actions --}}
-                        <div class="d-flex  align-items-center justify-content-center flex-md-nowrap">
-
-
-
-
-
-
-
-
-
-                        </div>
-                        {{-- actions --}}
-
-
-
-
-
-
-                    </td>
-
-
-
-
-
-
-
 
 
 

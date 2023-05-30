@@ -88,6 +88,7 @@ class ProductService
 
 
             ->orderBy('created_at', $order)
+            ->accept()
             ->paginate($limit)
             ->withQueryString();
 
@@ -191,7 +192,7 @@ class ProductService
             'summary_en',
             'extras_ar',
             'extras_en',
-
+            'offer_end_at' ,
         ]);
 
         $request->all() ;
@@ -276,7 +277,8 @@ class ProductService
             'summary_ar',
             'summary_en',
             'extras_ar',
-            'extras_en'
+            'extras_en' ,
+            'offer_end_at'
         ]);
 
         $data["accept"] = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;
@@ -332,27 +334,6 @@ class ProductService
         }
         $product->save();
 
-        // $sizes = $request->sizes;
-        // if (isset($sizes)) {
-        //     ProductSize::where('product_id',$product->id)->delete();
-        //     for ($i = 0; $i < sizeof($sizes); $i++) {
-        //         ProductSize::create([
-        //             'product_id' => $product->id,
-        //             'size' => $sizes[$i]
-        //         ]);
-        //     }
-        // }
-
-        // $colors = $request->colors;
-        // if (isset($colors)) {
-        //     ProductColor::where('product_id', $product->id)->delete();
-        //     for ($i = 0; $i < sizeof($colors); $i++) {
-        //         ProductColor::create([
-        //             'product_id' => $product->id,
-        //             'color' => $colors[$i]
-        //         ]);
-        //     }
-        // }
         return $product ? true : false;
     }
 

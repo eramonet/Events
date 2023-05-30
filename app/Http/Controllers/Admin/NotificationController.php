@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Notification;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Services\NotificationService;
@@ -25,24 +26,21 @@ class NotificationController extends Controller
 
     public function index(Request $request)
     {
-
-
-        // $notifications = $this->notificationService->getAll($request);
-
-
-
-        // // return $countries;
-        // return \view('admin.notification.index', \compact('notifications'));
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
+
+
+
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
+
         $notifications =$this->notificationService->getAll($request);
 
-        // return $categories;
         return \view('admin.notification.index' ,\compact('notifications'));
-        }else{
-            $notifications = $this->notificationService->getAllAdmin($request, $useradmin);
 
-            // return $categories;
+        }else{
+            $vendor = Vendor::where("id" , $useradmin->vendor_id)->first();
+
+            $notifications = Notification::where("admin_id" , $vendor->id )->orWhere("vendor_id" , $vendor->id )->latest()->paginate(10) ;
+
             return \view('admin.notification.index', \compact('notifications'));
         }
     }
@@ -72,7 +70,6 @@ class NotificationController extends Controller
             'desc_ar' => ['required', 'string', 'min:2'],
             'desc_en' => ['required', 'string', 'min:2'],
         ]);
-
 
 
         $created = $this->notificationService->store($request);

@@ -178,7 +178,7 @@
                     <span class="mt-1 ms-1 sidebar-text">{{ Auth::guard('admin')->user()->roles[0]->name }}</span>
                 </a>
             </li>
-            
+
             <li class="nav-item    {{ Route::is('admin.dashboard') ? 'active' : '' }} ">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">
                     <span class="sidebar-icon">
@@ -190,7 +190,7 @@
                 </a>
             </li>
 
-            @if (Auth::guard('admin')->user()->hasPermission('shipping-read'))
+            @if (Auth::guard('admin')->user()->hasPermission('shippings-read'))
                 <li class="nav-item {{ Route::is('admin.shippings.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.shippings.index') }}" class="nav-link ">
                         <span class="sidebar-icon">
