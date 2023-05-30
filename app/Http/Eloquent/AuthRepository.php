@@ -24,12 +24,12 @@ class AuthRepository implements AuthRepositoryInterface
             $userToVerify->save();
             $this->verification_Ob->user_id = $userToVerify->id;
             $digits = 4;
-            //$code = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
-            $code ="1234";
+            $code = rand(pow(10, $digits - 1), pow(10, $digits) - 1);
+            //$code ="1234";
             $this->verification_Ob->code = $code;
             $this->verification_Ob->save();
-            // $data = array('name' => $userToVerify->name, 'code' => $code);
-            // Mail::send('verify', $data, function ($message) use ($userToVerify) {
+           // $data = array('name' => $userToVerify->name, 'code' => $code);
+            // Mail::send('email.verify', $data, function ($message) use ($userToVerify) {
             //     $message->to($userToVerify->email)->subject('activation code');
             //     $message->from('events@gmail.com', 'Events App');
             // });

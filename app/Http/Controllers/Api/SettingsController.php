@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\SettingsRepositoryInterface;
 use App\Models\City;
+use App\Models\Country;
 use App\Models\Inquery;
 use App\Models\InqueryReply;
 use App\Models\Region;
@@ -31,7 +32,9 @@ class SettingsController extends Controller
     public function getRegions($city_id)
     {
         $lang = getLang();
-        $city  = City::where('id', $city_id)->where('country_id', '2')->first();
+        $country=Country::first();
+
+        $city  = City::where('id', $city_id)->where('country_id', $country->id)->first();
         if (!isset($city)) {
             return response()->json(res($lang, failed(), 'city_not_found'), 400);
         } else {
