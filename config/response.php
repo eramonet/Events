@@ -454,5 +454,20 @@ return [
         'en'=> 'request sent',
         'ar'=>'تم ارسال الطلب'
     ],
+    'brand_not_found'=>
+    [
+        'en'=> 'brand not found',
+        'ar'=>'البراند غير موجود'
+    ],
+    'user_account_has_been_suspended'=>
+    [
+        'en'=> 'user account has been suspended',
+        'ar'=>'تم ايقاف '
+    ],
+    'filter'=>
+    [
+        'en'=> 'filter',
+        'ar' => 'فلتر',
+    ]
 
 ];

@@ -77,6 +77,8 @@ Route::controller(UserController::class)->group(function () {
             Route::post('add-halls-cart', 'createHallsCart');
             Route::get('get-halls-cart', 'getHallsCart');
             Route::post('checkout-hall', 'checkoutHall');
+            Route::post('rate-booking', 'rateBooking');
+            Route::post('rate-order', 'rateOrder');
         });
     } else {
         Route::get('home', 'home');
@@ -93,5 +95,6 @@ Route::controller(UserController::class)->group(function () {
         Route::get('product-details/{product_id}', 'getProduct');
         Route::get('hall-details/{hall_id}', 'getHall');
         Route::get('package-details/{package_id}', 'getPackage');
+        Route::post('filter', 'filter');
     }
 });
