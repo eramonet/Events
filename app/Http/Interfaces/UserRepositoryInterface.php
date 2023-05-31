@@ -42,4 +42,10 @@ interface UserRepositoryInterface
 
     public function checkoutHall($request);
 
+    public function filter($request,$lang);
+
+    public function rateBooking($request);
+
+    public function rateOrder($request);
+
 }

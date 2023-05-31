@@ -99,7 +99,7 @@ class UserController extends Controller
 
         $return = $this->userObject->addFavorite($request);
         if ($return == "false") {
-            return response()->json(res($lang, success(), 'fave_deleted', []), 404);
+            return response()->json(res($lang, success(), 'fave_deleted', []), 200);
         }
         return response()->json(res($lang, success(), 'fave_done', []), 200);
     }
@@ -279,5 +279,82 @@ class UserController extends Controller
         }
     }
 
+    public function filter(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'price_from' => 'nullable',
+                'price_to' => 'nullable',
+                'brand_id' => 'nullable|exists:vendors,id',
+                'color_id' => 'nullable|exists:colors,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+        $result = $this->userObject->filter($request, $lang);
+        return response(res($lang, success(), 'filter', $result), 200);
+    }
 
+    public function rateBooking(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'rate' => 'required',
+                'review' => 'required',
+                'transaction_id'=>'required'
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+            $user = User::where('id', $request->user()->id)->first();
+            if ($user == 'false') {
+                return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+            }
+            $request['user_id'] = $user->id;
+            $request['rate'] = $request->rate;
+            $request['review'] = $request->review;
+            $request['transaction_id'] = $request->transaction_id;
+            $this->userObject->rateBooking($request);
+            return response()->json(res($lang, success(), 'done', []), 200);
+
+    }
+
+    public function rateOrder(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'rate' => 'required',
+                'review' => 'required',
+                'transaction_id' => 'required'
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['rate'] = $request->rate;
+        $request['review'] = $request->review;
+        $request['transaction_id'] = $request->transaction_id;
+        $this->userObject->rateOrder($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
+    }
 }

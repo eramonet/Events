@@ -218,7 +218,7 @@ class AuthController extends Controller
                     new UserResource($user)
                 ), 200);
             } else {
-                return response()->json(res($lang, failed(), 'user_not_activated', []), 404);
+                return response()->json(res($lang, failed(), 'user_not_activated', new UserResource($user)), 200);
             }
         }
     }
@@ -437,7 +437,7 @@ class AuthController extends Controller
         }
         if (isset($user)) {
             $user->update(['status' => $request->status]);
-            return response()->json(res($lang, success(), 'updated', []), 200);
+            return response()->json(res($lang, success(), 'user_account_has_been_suspended', []), 200);
         } else {
             return response()->json(res($lang, failed(), 'user_not_found', []), 404);
         }
