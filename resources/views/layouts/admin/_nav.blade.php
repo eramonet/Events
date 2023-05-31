@@ -52,7 +52,7 @@
                                 <a href="#"
                                     class="text-center text-primary fw-bold border-bottom border-light py-3">Become
                                     Vendors Requests</a>
-                                @foreach (App\Models\Become_vendor::where('status', 'pending')->get() as $bNotification)
+                                @foreach (App\Models\Become_vendor::where('status', 'pending')->latest()->get() as $bNotification)
                                     <a href="{{ route('admin.become.show', $bNotification->id) }}"
                                         class="list-group-item list-group-item-action border-bottom">
                                         <div class="row align-items-center">
@@ -98,7 +98,7 @@
                                 <a href="#"
                                     class="text-center text-primary fw-bold border-bottom border-light py-3">Contacts
                                     Messages</a>
-                                @foreach (App\Models\ContactMessage::where('seen', '0')->get() as $cNotification)
+                                @foreach (App\Models\ContactMessage::where('seen', '0')->latest()->get() as $cNotification)
                                     <a href="{{ route('admin.contact-messages.show', $cNotification->id) }}"
                                         class="list-group-item list-group-item-action border-bottom">
                                         <div class="row align-items-center">
@@ -194,7 +194,7 @@
                                     class="text-center text-primary fw-bold border-bottom border-light py-3">New
                                     Products
                                     Requests</a>
-                                @foreach (App\Models\Product::where('accept', 'new')->get() as $p)
+                                @foreach (App\Models\Product::where('accept', 'new')->latest()->get() as $p)
                                     <a href="{{ route('admin.products.show', $p->id) }}"
                                         class="list-group-item list-group-item-action border-bottom">
                                         <div class="row align-items-center">
@@ -241,7 +241,7 @@
                                 <a href="#"
                                     class="text-center text-primary fw-bold border-bottom border-light py-3">New Halls
                                     Requests</a>
-                                @foreach (App\Models\Hall::where('accept', 'new')->get() as $h)
+                                @foreach (App\Models\Hall::where('accept', 'new')->latest()->get() as $h)
                                     <a href="{{ route('admin.halls.show', $h->id) }}"
                                         class="list-group-item list-group-item-action border-bottom">
                                         <div class="row align-items-center">
@@ -287,7 +287,7 @@
                                     Products
                                     Notification
                                 </a>
-                                @foreach (App\Models\Order::where('status', 'pending')->get() as $opNotification)
+                                @foreach (App\Models\Order::where('status', 'pending')->latest()->get() as $opNotification)
                                     <a href="{{ route('admin.orders.show', $opNotification->order_number) }}"
                                         class="list-group-item list-group-item-action border-bottom">
                                         <div class="row align-items-center">
@@ -338,7 +338,7 @@
                                     Bookings
                                     Notification
                                 </a>
-                                @foreach (App\Models\Hall_booking::where('status', 'pending')->get() as $hb)
+                                @foreach (App\Models\Hall_booking::where('status', 'pending')->latest()->get() as $hb)
                                     <a href="{{ route('admin.hall-booking.show', $hb->id) }}"
                                         class="list-group-item list-group-item-action border-bottom">
                                         <div class="row align-items-center">
@@ -379,7 +379,7 @@
 
                                 <span
                                     style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Product::where('admin_id', $useradmin->id)->where('accept', 'accepted')->count() }}
+                                    {{ App\Models\Product::where('admin_id', $useradmin->vendor->id)->where('accept', 'accepted')->count() }}
                                 </span>
 
                             </a>
@@ -390,7 +390,7 @@
                                         class="text-center text-primary fw-bold border-bottom border-light py-3">Accepted
                                         Products
                                         Requests</a>
-                                    @foreach (App\Models\Product::where('admin_id', $useradmin->id)->where('accept', 'accepted')->get() as $p)
+                                    @foreach (App\Models\Product::where('admin_id', $useradmin->vendor->id)->where('accept', 'accepted')->latest()->get() as $p)
                                         <a href="{{ route('admin.products.show', $p->id) }}"
                                             class="list-group-item list-group-item-action border-bottom">
                                             <div class="row align-items-center">
@@ -428,7 +428,7 @@
 
                                 <span
                                     style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Hall::where('admin_id', $useradmin->id)->where('accept', 'accepted')->count() }}
+                                    {{ App\Models\Hall::where('vendor_id', $useradmin->vendor->id)->where('accept', 'accepted')->count() }}
                                 </span>
 
                             </a>
@@ -439,7 +439,7 @@
                                         class="text-center text-primary fw-bold border-bottom border-light py-3">Accepted
                                         Halls
                                         Requests</a>
-                                    @foreach (App\Models\Hall::where('admin_id', $useradmin->id)->where('accept', 'accepted')->get() as $h)
+                                    @foreach (App\Models\Hall::where('vendor_id', $useradmin->vendor->id)->where('accept', 'accepted')->latest()->get() as $h)
                                         <a href="{{ route('admin.halls.show', $h->id) }}"
                                             class="list-group-item list-group-item-action border-bottom">
                                             <div class="row align-items-center">
@@ -465,7 +465,26 @@
                         </li>
                     @endif
 
-                    @if ($vendor->type == 'product' || $vendor->type == 'product_hall')
+
+                    @if($vendor->type == 'product' || $vendor->type == 'product_hall')
+
+                    <?php
+                    $products = [];
+                    $getOrdersProducts = [];
+
+                    foreach(App\Models\OrderProduct::where('vendor_id', $useradmin->vendor->id)->get() as $pro) {
+                        $products[] = $pro->order_number;
+
+                    }
+                    foreach ($products as $value) {
+                        $getOrdersProducts[] = App\Models\Order::where('order_number', $value)->first();
+
+                    }
+
+                    ?>
+
+
+
 
                         <li class="nav-item dropdown">
                             <a class="nav-link text-dark notification-bell  dropdown-toggle"
@@ -476,7 +495,7 @@
                                     style="color:black;font-size:18px"></i>
                                 <span
                                     style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Order::whereIn('id', $getOrdersProducts)->where('status', 'pending')->count() }}
+                                    {{$getOrdersProducts ? count($getOrdersProducts) : 0 }}
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0"
@@ -488,7 +507,7 @@
                                         Notification
                                     </a>
 
-                                    @foreach (App\Models\Order::whereIn('id', $getOrdersProducts)->where('status', 'pending')->get() as $opNotification)
+                                    @foreach ($getOrdersProducts as $opNotification)
                                         <a href="{{ route('admin.orders.show', $opNotification->order_number) }}"
                                             class="list-group-item list-group-item-action border-bottom">
                                             <div class="row align-items-center">
@@ -529,7 +548,7 @@
                                     style="color:black;font-size:18px"></i>
                                 <span
                                     style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ App\Models\Hall_booking::where('vendor_id', $vendor->id)->where('status', 'pending')->count() }}
+                                    {{ App\Models\Hall_booking::where('vendor_id', $useradmin->vendor->id)->where('status', 'pending')->count() }}
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-center mt-2 py-0"
@@ -540,8 +559,8 @@
                                         Bookings
                                         Notification
                                     </a>
-                                    @foreach (App\Models\Hall_booking::where('vendor_id', $vendor->id)->where('status', 'pending')->get() as $hb)
-                                        <a href="{{ route('admin.orders.show', $opNotification->order_number) }}"
+                                    @foreach (App\Models\Hall_booking::where('vendor_id', $useradmin->vendor->id)->where('status', 'pending')->latest()->get() as $hb)
+                                        <a href="{{ route('admin.halls.show' , $hb->id) }}"
                                             class="list-group-item list-group-item-action border-bottom">
                                             <div class="row align-items-center">
 

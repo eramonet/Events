@@ -220,7 +220,7 @@
                     {{-- category_id --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
-                            <label for="category_id">Main Category <span class="text-danger">*</span></label>
+                            <label for="category_id">Category <span class="text-danger">*</span></label>
                             <select required name="category_id"
                                 class="form-select @error('category_id') is-invalid @enderror">
                                 <option value="">Select Category</option>

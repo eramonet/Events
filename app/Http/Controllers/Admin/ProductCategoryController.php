@@ -44,7 +44,7 @@ class ProductCategoryController extends Controller
             $categories = $this->productCategoryService->getAllAdmin($request, $useradmin);
             $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
-           
+
             return \view('admin.productCategory.index', \compact('categories', 'type'));
         }
     }
@@ -83,12 +83,10 @@ class ProductCategoryController extends Controller
 
     {
 
-
-
-
         $data=$request->all();
         $data['admin_id'] = Auth::id();
-       
+        $data['parent_id'] = null;
+
         $request->validate([
 
             'title_ar' => ['required', 'string', 'min:2', 'unique:product_categories'],
@@ -102,15 +100,7 @@ class ProductCategoryController extends Controller
         ]);
 
 
-       
-              
-       
-
-
         $created = ProductCategory::create($data);
-
-        
-
         if ($created) {
             $request->session()->flash('success', 'Category Added SuccessFully');
         } else {
@@ -125,6 +115,7 @@ class ProductCategoryController extends Controller
     {
 
         $category = $this->productCategoryService->getById($id);
+
         if (!$category) {
             $request->session()->flash('failed', 'Category Not Found');
             return redirect()->back();
@@ -133,8 +124,11 @@ class ProductCategoryController extends Controller
 
 
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
+
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
+
             $mainCategories = $this->productCategoryService->getActiveMainCategories();
+            
             return \view('admin.productCategory.edit', \compact('category', 'mainCategories'));
         } else {
             $mainCategories = $this->productCategoryService->getActiveMainCategoriesAdmin($useradmin);
@@ -146,6 +140,7 @@ class ProductCategoryController extends Controller
 
     public function update(Request $request, $id)
     {
+        // return $request;
         $category = $this->productCategoryService->getById($id);
         if (!$category) {
             $request->session()->flash('failed', 'Category Not Found');
@@ -162,6 +157,7 @@ class ProductCategoryController extends Controller
 
             $request->merge(['can_add_halls' => '0']);
         }
+
         $request->validate([
 
             'title_ar' => ['required', 'string', 'min:2',  Rule::unique('product_categories', 'title_ar')->ignore($category->id)],
@@ -219,7 +215,7 @@ class ProductCategoryController extends Controller
 
     public function subCategoryByParentId(Request $request)
     {
-        
+
 
         if (!$request->input('id')) {
             return response()->json(['id is required']);

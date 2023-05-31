@@ -145,17 +145,17 @@ class ProductController extends Controller
             'stock' => ['required', 'integer'],
             'fake_price' => ['required', 'min:1'],
             'real_price' => ['required', 'min:1', 'lt:fake_price'],
-            'offer_end_at' => ['required'],
+            'offer_end_at' => ['required','after_or_equal:today'],
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['required', 'exists:occasions,id'],
 
         ]);
 
-        if ($request->offer_end_at < Carbon::now()) {
-            $request->session()->flash('failed', 'Invalid Date in Offer Ended At');
-            return redirect()->back();
-        }
+        // if ($request->offer_end_at < Carbon::now()) {
+        //     $request->session()->flash('failed', 'Invalid Date in Offer Ended At');
+        //     return redirect()->back();
+        // }
 
         if (Auth::guard('admin')->user()->vendor) {
 
@@ -263,6 +263,7 @@ class ProductController extends Controller
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['nullable', 'exists:occasions,id'],
+            'offer_end_at' => ['required','after_or_equal:today'],
 
         ]);
 

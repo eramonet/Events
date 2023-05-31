@@ -12,13 +12,19 @@
     $promocode = $current_login ? App\Models\PromoCode::where('admin_id', $current_login->id)->count() : App\Models\PromoCode::count();
 
     $all_categories = $current_login
+
         ? \App\Models\ProductCategory::main()
                 ->where('admin_id', $current_login->id)
-                ->count() +
-            \App\Models\ProductCategory::sub()
-                ->where('admin_id', $current_login->id)
                 ->count()
-        : \App\Models\ProductCategory::main()->count() + \App\Models\ProductCategory::sub()->count();
+
+            //      +
+
+            // \App\Models\ProductCategory::sub()
+            //     ->where('admin_id', $current_login->id)
+            //     ->count()
+        : \App\Models\ProductCategory::main()->count()
+        // + \App\Models\ProductCategory::sub()->count()
+        ;
 
     $main_categories = $current_login
         ? \App\Models\ProductCategory::main()
@@ -221,6 +227,21 @@
                         </a>
                     </li>
                 @endif
+            @endif
+
+            @if ($useradmin->hasRole('super-admin'))
+                    <li class="nav-item {{ Route::is('admin.contact-messages.*') ? 'active' : '' }}">
+                        <a href="{{ route('admin.contact-messages.index') }}" class="nav-link ">
+                            <span class="sidebar-icon">
+                                <i class="fa-solid fa-list icon-xs me-2"></i>
+                            </span>
+                            <span class="sidebar-text">Contact Messages</span>
+                            <span
+                                style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                                {{ App\Models\ContactMessage::count() }}
+                            </span>
+                        </a>
+                    </li>
             @endif
 
 
@@ -459,7 +480,7 @@
                                     <span class="sidebar-icon">
                                         <i class="fa-regular fa-circle icon icon-xs me-2"></i>
                                     </span>
-                                    <span class="sidebar-text">Main Categories</span>
+                                    <span class="sidebar-text">Categories</span>
                                     <span
                                         style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
                                         {{ $main_categories }}
@@ -468,7 +489,7 @@
                             </li>
 
 
-                            <li
+                            {{-- <li
                                 class="nav-item  {{ Route::is('admin.products-categories.*') && request()->type && request()->type == 'sub' ? 'active' : '' }}">
                                 <a href="{{ route('admin.products-categories.index', ['type' => 'sub']) }}"
                                     class="nav-link ">
@@ -481,7 +502,7 @@
                                         {{ $sub_categories }}
                                     </span>
                                 </a>
-                            </li>
+                            </li> --}}
 
 
 
