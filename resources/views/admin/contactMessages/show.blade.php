@@ -41,100 +41,96 @@
     {{-- on top --}}
 
 
-        <div class="card mb-4">
+    <div class="card mb-4">
 
-            <div class="card-body">
-
-
-
-                <div class="row">
-
-                    <div class="col-md-12">
-                        <div class="form-group mb-5">
-                            <label for="name">name</label>
-                            <input type="text" value="{{ $contact_message->name }}" readonly  name="name" class="form-control @error('name') is-invalid @enderror">
-                        </div>
+        <div class="card-body">
 
 
-                        @error('name')
-                            <div class="d-flex justify-content-center ">
 
-                                <div class="text-danger">
-                                    <strong>{{ $name }}</strong>
-                                </div>
-                            </div>
-                        @enderror
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="form-group mb-5">
+                        <label for="name">name</label>
+                        <input type="text" value="{{ $contact_message->name }}" readonly name="name"
+                            class="form-control @error('name') is-invalid @enderror">
                     </div>
 
 
-                    <div class="col-md-12">
-                        <div class="form-group mb-5">
-                            <label for="email">email</label>
-                            <input type="text" value="{{ $contact_message->email }}" readonly name="email" class="form-control  @error('email') is-invalid @enderror">
-                        </div>
+                    @error('name')
+                        <div class="d-flex justify-content-center ">
 
-
-                        @error('email')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
+                            <div class="text-danger">
+                                <strong>{{ $name }}</strong>
                             </div>
-                        @enderror
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-group mb-5">
-                            <label for="message">message</label>
-                            <input type="text" value="{{ $contact_message->message }}" readonly name="message" class="form-control  @error('message') is-invalid @enderror">
                         </div>
-
-
-                        @error('message')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    @enderror
                 </div>
 
+
+                <div class="col-md-12">
+                    <div class="form-group mb-5">
+                        <label for="email">email</label>
+                        <input type="text" value="{{ $contact_message->email }}" readonly name="email"
+                            class="form-control  @error('email') is-invalid @enderror">
+                    </div>
+
+
+                    @error('email')
+                        <div class="d-flex justify-content-center ">
+
+                            <div class="text-danger">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="col-md-12">
+                    <div class="form-group mb-5">
+                        <label for="message">message</label>
+                        <input type="text" value="{{ $contact_message->message }}" readonly name="message"
+                            class="form-control  @error('message') is-invalid @enderror">
+                    </div>
+
+
+                    @error('message')
+                        <div class="d-flex justify-content-center ">
+
+                            <div class="text-danger">
+                                <strong>{{ $message }}</strong>
+                            </div>
+                        </div>
+                    @enderror
+                </div>
+
+
+
+
             </div>
+
         </div>
+    </div>
 
 
 
 
 
 
-        <a href="{{ route("admin.contact-messages.index") }}"  class="btn btn-primary d-block m-auto">
-            back<i class="fa-regular fa-pen-to-square icon icon-xs ms-2"></i>
-        </a>
+    <a href="{{ route('admin.contact-messages.index') }}" class="btn btn-primary d-block m-auto">
+        back<i class="fa-regular fa-pen-to-square icon icon-xs ms-2"></i>
+    </a>
 
 
-        {{-- <button type="submit" class="btn btn-primary d-block m-auto">
+
+
+
+
+
+    </div>
+
+    {{-- <button type="submit" class="btn btn-primary d-block m-auto">
             Edit
             <i class="fa-regular fa-pen-to-square icon icon-xs ms-2"></i>
         </button> --}}
-
 @endsection
-
-
-

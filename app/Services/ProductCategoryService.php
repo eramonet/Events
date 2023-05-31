@@ -140,7 +140,7 @@ class ProductCategoryService {
 
     public function store(Request $request)
     {
-       return $request ;
+    //    return $request ;
 
         $data = $request->only([
             'title_ar',
@@ -164,8 +164,9 @@ class ProductCategoryService {
 
         ]);
 
-        $current_login = Auth::guard('admin')->user() ;
-        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id() ;
+        $current_login = Auth::guard('admin')->user();
+
+        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id();
 
         $this->category::create($data);
 
@@ -196,6 +197,16 @@ class ProductCategoryService {
             'keywords_en',
             'status',
             'parent_id',
+            'features_ar',
+            'features_en',
+            'instructions_ar',
+            'instructions_en',
+            'summary_ar',
+            'summary_en',
+            'extras_ar',
+            'extras_en',
+            'image',
+
 
         ]);
 
@@ -204,7 +215,8 @@ class ProductCategoryService {
         // if ($request->hasFile('image')) {
 
 
-        //     if (File::exists(public_path('uploads/products_categories_images/' . $category->image))) {
+        //     if (
+        //         File::exists(public_path('uploads/products_categories_images/' . $category->image))) {
 
         //         Storage::disk('public_uploads')->delete('products_categories_images/' . $category->image);
         //     }
@@ -213,6 +225,7 @@ class ProductCategoryService {
 
         //     $category->image = $imageName;
         // }
+
         $category->save();
 
 

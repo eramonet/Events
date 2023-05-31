@@ -47,8 +47,8 @@
 
                                         <li class="list-group-item">Extras Ar : {!! $product->extras_ar !!} </li>
 
-                                        <li class="list-group-item">Real Price : {{ $product->real_price . " AED" }} </li>
-                                        <li class="list-group-item">Fake Price : {{ $product->fake_price . " AED" }} </li>
+                                        <li class="list-group-item">Real Price : {{ $product->real_price . ' AED' }} </li>
+                                        <li class="list-group-item">Fake Price : {{ $product->fake_price . ' AED' }} </li>
 
                                         <li class="list-group-item">Offet Ended At : {{ $product->stock }} Item </li>
 
@@ -69,9 +69,9 @@
 
                                         <li class="list-group-item">Occasions :
                                             @foreach ($product->occasions as $occasion)
-                                            <span class="badge bg-primary">
-                                                {{ $occasion->title_en }}
-                                            </span>
+                                                <span class="badge bg-primary">
+                                                    {{ $occasion->title_en }}
+                                                </span>
                                             @endforeach
                                         </li>
 
@@ -94,5 +94,30 @@
             </div>
         </div>
     </div>
+    @if (Auth::guard('admin')->user()->hasRole('super-admin') || Auth::guard('admin')->user()->hasRole('admin'))
+        @if (Auth::guard('admin')->user()->hasPermission('product_request-update'))
+            @if ($product->accept == 'new')
+                <div class="card my-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-center flex-wrap">
+                            <a style="color: #fff" class="btn btn-success m-1"
+                                href="{{ route('admin.product_request.product_request_accept', $product->id) }}" title=""
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Accept">
+                                Accept
+                            </a>
+                            <a style="color: #fff" class="btn btn-danger m-1"
+                                href="{{ route('admin.product_request.product_request_reject', $product->id) }}" title=""
+                                data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Reject">
+                                Reject
+
+                            </a>
+
+
+                        </div>
+                    </div>
+                </div>
+            @endif
+        @endif
+    @endif
     {{-- on top --}}
 @endsection
