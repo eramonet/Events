@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\UserRepositoryInterface;
 use App\Models\CartHall;
+use App\Models\Order;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -87,7 +88,7 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []],200);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
         }
         $user = User::where('id', $request->user()->id)->first();
         if ($user == 'false') {
@@ -120,10 +121,10 @@ class UserController extends Controller
     {
         $lang = getLang();
         $brand = Vendor::where('id', $brand_id)->first();
-        if(isset($brand)){
-        $result = $this->userObject->getBrandProducts($lang, $brand_id);
-        return response(res($lang, success(), 'brand_products', $result), 200);
-        }else{
+        if (isset($brand)) {
+            $result = $this->userObject->getBrandProducts($lang, $brand_id);
+            return response(res($lang, success(), 'brand_products', $result), 200);
+        } else {
             return response()->json(res($lang, expired(), 'brand_not_found', []), 404);
         }
     }
@@ -167,10 +168,10 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []],200);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
         }
-        $request['search']=$request->search;
-        $result = $this->userObject->search($request,$lang);
+        $request['search'] = $request->search;
+        $result = $this->userObject->search($request, $lang);
         return response(res($lang, success(), 'search', $result), 200);
     }
 
@@ -190,21 +191,21 @@ class UserController extends Controller
             ]
         );
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []],200);
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
         }
         $user = User::where('id', $request->user()->id)->first();
-            if ($user == 'false') {
-                return response()->json(res($lang, expired(), 'user_not_found', []), 404);
-            }
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
         $cartHall = CartHall::where('hall_id', $request->hall_id)->first();
         if ($cartHall == null) {
-        $request['user_id'] = $user->id;
-        $request['package_id'] = $request->package_id;
-        $request['hall_id'] = $request->hall_id;
+            $request['user_id'] = $user->id;
+            $request['package_id'] = $request->package_id;
+            $request['hall_id'] = $request->hall_id;
 
-        $result = $this->userObject->createHallsCart($request);
-        return response(res($lang, success(), 'add_to_cart', $result), 200);
-        }else{
+            $result = $this->userObject->createHallsCart($request);
+            return response(res($lang, success(), 'add_to_cart', $result), 200);
+        } else {
             return response()->json(res($lang, failed(), 'cart_exist', []), 404);
         }
     }
@@ -239,7 +240,7 @@ class UserController extends Controller
                 'date' => 'required',
                 'time_from' => 'required',
                 'time_to' => 'required',
-                'hall_id' =>'required|exists:halls,id',
+                'hall_id' => 'required|exists:halls,id',
                 'package_id' => 'required|exists:packages,id',
                 'option_id' => 'required|array|exists:package_options,id',
                 'option_id.*' => 'required',
@@ -255,7 +256,7 @@ class UserController extends Controller
             return response()->json(res($lang, expired(), 'user_not_found', []), 404);
         }
         $cartHall = CartHall::where('hall_id', $request->hall_id)->first();
-        if ($cartHall!=null) {
+        if ($cartHall != null) {
             $request['fname'] = $request->fname;
             $request['lname'] = $request->lname;
             $request['email'] = $request->email;
@@ -309,24 +310,23 @@ class UserController extends Controller
             [
                 'rate' => 'required',
                 'review' => 'required',
-                'transaction_id'=>'required'
+                'transaction_id' => 'required'
             ]
         );
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
         }
 
-            $user = User::where('id', $request->user()->id)->first();
-            if ($user == 'false') {
-                return response()->json(res($lang, expired(), 'user_not_found', []), 404);
-            }
-            $request['user_id'] = $user->id;
-            $request['rate'] = $request->rate;
-            $request['review'] = $request->review;
-            $request['transaction_id'] = $request->transaction_id;
-            $this->userObject->rateBooking($request);
-            return response()->json(res($lang, success(), 'done', []), 200);
-
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['rate'] = $request->rate;
+        $request['review'] = $request->review;
+        $request['transaction_id'] = $request->transaction_id;
+        $this->userObject->rateBooking($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
     }
 
     public function rateOrder(Request $request)
@@ -356,5 +356,109 @@ class UserController extends Controller
         $request['transaction_id'] = $request->transaction_id;
         $this->userObject->rateOrder($request);
         return response()->json(res($lang, success(), 'done', []), 200);
+    }
+
+    public function checkDate(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'date' => 'required|date',
+                'hall_id' => 'required|exists:halls,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+        $request['date'] = $request->date;
+        $request['hall_id'] = $request->hall_id;
+        $result = $this->userObject->checkDate($request, $lang);
+        return response(res($lang, success(), 'dates', $result), 200);
+    }
+
+    public function orderProductCart(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'quantity' => 'required|integer|min:1',
+                'product_id' => 'required|exists:products,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['quantity'] = $request->quantity;
+        $request['product_id'] = $request->product_id;
+        $this->userObject->orderProductCart($request);
+        return response(res($lang, success(), 'add_to_cart', []), 200);
+    }
+
+    public function getProductsCart(Request $request)
+    {
+        $lang = getLang();
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $result = $this->userObject->getProductsCart($user, $lang);
+        return response(res($lang, success(), 'get_cart', $result), 200);
+    }
+
+    public function checkoutProduct(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'city_id' => 'required|exists:cities,id',
+                'region_id' => 'required|exists:regions,id',
+                'customer_name' => 'required',
+                'customer_email' => 'required',
+                'customer_address' => 'required',
+                'customer_phone' => 'required',
+                'order_from' => 'required',
+                'product_id' => 'required|array|exists:products,id',
+                'product_id.*' => 'required',
+                'quantity' => 'required|array',
+                'quantity.*' => 'required',
+                'promo_code'=>'nullable',
+
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['city_id'] = $request->city_id;
+        $request['region_id'] = $request->region_id;
+        $request['customer_name'] = $request->customer_name;
+        $request['customer_email'] = $request->customer_email;
+        $request['customer_address'] = $request->customer_address;
+        $request['customer_phone'] = $request->customer_phone;
+        $request['product_id'] = $request->product_id;
+        $request['quantity'] = $request->quantity;
+        $request['promo_code'] = $request->promo_code;
+        $request['order_from'] = $request->order_from;
+
+        $this->userObject->checkoutProduct($request);
+        return response(res($lang, success(), 'checkout', []), 200);
     }
 }

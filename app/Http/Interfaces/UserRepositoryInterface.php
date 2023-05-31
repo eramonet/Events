@@ -48,4 +48,12 @@ interface UserRepositoryInterface
 
     public function rateOrder($request);
 
+    public function checkDate($request);
+
+    public function orderProductCart($request);
+
+    public function getProductsCart($user, $lang);
+
+    public function checkoutProduct($request);
+
 }
