@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use App\Exports\VendorAdminExport;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\PermissionUser;
 use App\Models\Vendor;
 use App\Services\VendorAdminService;
 use Maatwebsite\Excel\Facades\Excel;
@@ -56,7 +57,6 @@ class VendorAdminController extends Controller
 
     public function create(Request $request)
     {
-
         $permissions = AdminPermission::vendor();
 
         $categories = $this->adminCategoryServices->getActiveCategories();
@@ -139,6 +139,7 @@ class VendorAdminController extends Controller
     public function edit(Request $request, $id)
     {
         $admin = $this->adminService->getAdminById($id);
+
         $permissions = [] ;
 
         if (!$admin) {
@@ -148,13 +149,36 @@ class VendorAdminController extends Controller
 
         $vendor =  Vendor::where("id" , $admin->vendor_id )->first() ;
 
-        if( $vendor->type == "product" ){
-            $permissions = AdminPermission::vendor_product();
-        }elseif( $vendor->type == "hall" ){
-            $permissions = AdminPermission::vendor_halls();
-        }elseif( $vendor->type == "product_hall" ){
-            $permissions = AdminPermission::vendor();
+        $permissions = [] ;
+
+        if( Auth::guard('admin')->user()->vendor ){
+            $all_permissions = PermissionUser::where("user_id" ,Auth::guard('admin')->user()->id )->with("permission")->get() ;
+
+            foreach( $all_permissions as $permission ){
+                if( $permission->permission ){
+                    if( count( explode('-create', $permission->permission->name) ) > 1 ){
+                        $permissions[''. explode('-create', $permission->permission->name)[0] .''][] = "create" ;
+                    }else if( count( explode('-read', $permission->permission->name) ) > 1 ){
+                        $permissions[''. explode('-read', $permission->permission->name)[0] .''][] = "read" ;
+                    }else if( count( explode('-update', $permission->permission->name) ) > 1 ){
+                        $permissions[''. explode('-update', $permission->permission->name)[0] .''][] = "update" ;
+                    }else if( count( explode('-delete', $permission->permission->name) ) > 1 ){
+                        $permissions[''. explode('-delete', $permission->permission->name)[0] .''][] = "delete" ;
+                    }
+
+                }
+            }
+        }else{
+            if( $vendor->type == "product" ){
+                $permissions = AdminPermission::vendor_product();
+            }elseif( $vendor->type == "hall" ){
+                $permissions = AdminPermission::vendor_halls();
+            }elseif( $vendor->type == "product_hall" ){
+                $permissions = AdminPermission::vendor();
+            }
         }
+
+
 
 
         $categories = $this->adminCategoryServices->getActiveCategories();

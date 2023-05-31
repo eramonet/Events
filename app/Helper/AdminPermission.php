@@ -74,7 +74,6 @@ class AdminPermission
             "orders" => ['read', 'update', 'delete'],
             "taxes" => ['read', 'create', 'update', 'delete'],
             "promo-codes" => ['read', 'create', 'update', 'delete'],
-            "shippings" => ['read', 'create', 'update', 'delete'],
             "reports" => ['read'],
             "notifications" => ['read', 'create', 'delete'],
             'colors' => ['read', 'create', 'delete'],
@@ -102,12 +101,10 @@ class AdminPermission
             "reports" => ['read'],
             "notifications" => ['read', 'create', 'delete'],
             'colors' => ['read', 'create', 'delete'],
-            "shippings" => ['read', 'create', 'update', 'delete'],
             'become_vendor' => ['read', 'create', 'delete'],
             "vendor-admins" => ['read', 'create', 'update', 'delete'],
             'with-darw' => ['read'],
             'my-advertisements' => ['read'],
-
         ];
 
         return $permission;
@@ -127,7 +124,6 @@ class AdminPermission
             "promo-codes" => ['read', 'create', 'update', 'delete'],
             "reports" => ['read'],
             "notifications" => ['read', 'create', 'delete'],
-            "shippings" => ['read', 'create', 'update', 'delete'],
             'become_vendor' => ['read', 'create', 'delete'],
             "vendor-admins" => ['read', 'create', 'update', 'delete'],
             'with-darw' => ['read'],

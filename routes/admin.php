@@ -253,8 +253,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
         // regions
 
         Route::controller(RegionController::class)->prefix('regions')->name('regions.')->group(function () {
-
-
             Route::get('', 'index')->name('index');
             Route::get('/getById/{id}', 'getById');
             Route::get('/export', 'export')->name('export');
@@ -523,8 +521,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
 
 
     Route::controller(AvailableDateController::class)->prefix('availabel_date')->name('availabel_date.')->group(function () {
-
-
         Route::get('', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
@@ -533,9 +529,8 @@ Route::prefix('acp')->name('admin.')->group(function () {
         Route::put('/{id}/restore', 'restore')->name('restore');
         Route::delete('/{id}/destroy', 'destroy')->name('destroy');
     });
+
     Route::controller(OccasionController::class)->prefix('occasion')->name('occasion.')->group(function () {
-
-
         Route::get('', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');

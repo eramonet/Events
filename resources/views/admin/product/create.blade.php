@@ -145,8 +145,9 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="real_price">Real Price (AED) <span class="text-danger">*</span></label>
-                            <input step="0.01" minlength="0" min="1" value="{{ old('real_price') }}" required type="number"
-                                name="real_price" class="form-control @error('real_price') is-invalid @enderror"
+                            <input step="0.01" minlength="0" min="1" value="{{ old('real_price') }}" required
+                                type="number" name="real_price"
+                                class="form-control @error('real_price') is-invalid @enderror"
                                 value="{{ old('real_price') }}">
                         </div>
 
@@ -168,8 +169,9 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="fake_price">Fake Price (AED) <span class="text-danger">*</span></label>
-                            <input step="0.01" minlength="0" min="1" value="{{ old('fake_price') }}" required type="number"
-                                name="fake_price" class="form-control @error('fake_price') is-invalid @enderror"
+                            <input step="0.01" minlength="0" min="1" value="{{ old('fake_price') }}" required
+                                type="number" name="fake_price"
+                                class="form-control @error('fake_price') is-invalid @enderror"
                                 value="{{ old('fake_price') }}">
                         </div>
 
@@ -190,8 +192,8 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="offer_end_at">Offer Ending At <span class="text-danger">*</span></label>
-                            <input value="{{ old('offer_end_at') }}" required type="date"
-                                name="offer_end_at" class="form-control @error('offer_end_at') is-invalid @enderror"
+                            <input value="{{ old('offer_end_at') }}" required type="date" name="offer_end_at"
+                                class="form-control @error('offer_end_at') is-invalid @enderror"
                                 value="{{ old('offer_end_at') }}">
                         </div>
 
@@ -245,7 +247,8 @@
                                 class="form-select @error('city_id') is-invalid @enderror">
 
                                 @foreach ($cities as $city)
-                                    <option value="{{ $city->id }}" {{ old('city_id') == $city->id ? 'selected' : '' }}>
+                                    <option value="{{ $city->id }}"
+                                        {{ old('city_id') == $city->id ? 'selected' : '' }}>
                                         {{ $city->title_en . ' - ' . $city->title_ar }}</option>
                                 @endforeach
                             </select>

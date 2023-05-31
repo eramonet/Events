@@ -27,10 +27,6 @@ class ProductController extends Controller
     protected $productCategoryService;
     protected $texService;
 
-
-
-
-
     public function __construct(ProductService $productService, ProductCategoryService $productCategoryService, TaxService $texService,)
     {
         $this->productService = $productService;

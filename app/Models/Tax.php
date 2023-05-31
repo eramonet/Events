@@ -9,14 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tax extends Model
 {
-    use HasFactory ,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
 
-   public function admin()
-   {
-       return $this->belongsTo(Admin::class, 'admin_id');
-   }
-
-
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id');
+    }
 }

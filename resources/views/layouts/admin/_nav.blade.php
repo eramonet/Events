@@ -2,7 +2,7 @@
     $useradmin = App\Models\Admin::where('id', Auth::guard('admin')->id())->first();
     $getProducts = App\Models\Product::where('admin_id', $useradmin->id)->pluck('id');
     $getOrdersProducts = App\Models\OrderProduct::whereIn('product_id', $getProducts)->pluck('order_id');
-    $vendor = App\Models\Vendor::where('admin_id', $useradmin->id)->first();
+    $vendor = App\Models\Vendor::where('id', $useradmin->vendor_id)->first();
 @endphp
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0">
     <div class="container-fluid px-0">

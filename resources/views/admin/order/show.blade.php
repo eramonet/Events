@@ -42,7 +42,6 @@
         {{-- first section --}}
         <div class="row">
 
-            {{-- --}}
             <div class="col-md-6">
 
 
@@ -406,7 +405,6 @@
                     </div>
                 </div>
             </div>
-            {{-- --}}
 
 
             <div class="col-md-6">
@@ -493,134 +491,8 @@
                     </div>
                 </div>
             </div>
-            {{-- --}}
         </div>
         {{-- first section --}}
-
-
-
-
-
-        {{-- second Section --}}
-
-
-
-        <div class="row">
-
-            {{-- comment --}}
-            {{-- <div class="col-md-6">
-
-
-            <div class="card">
-
-
-
-                <div class="card-body">
-
-
-                    <form action="{{ route('admin.orders.updateComment', $order->id) }}" method="POST">
-
-                        @csrf
-
-                        @method('PUT')
-                        <div class="form-group  my-4">
-                            <label for="comment">Comment</label>
-                            <textarea required name="comment" id="comment" cols="30" rows="3"
-                                class="form-control">{{ $order->comment }}</textarea>
-                        </div>
-
-
-                        @error('comment')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                        @enderror
-
-
-                        <div class="form-group  my-4">
-
-                            <button type="submit" class="btn btn-primary d-block m-auto" title="Update Comment"
-                                data-bs-toggle="tooltip" data-bs-placement="top">
-
-                                Save
-                                <i class="fa-regular fa-pen-to-square icon icon-xs mx-1"></i>
-                            </button>
-                        </div>
-
-
-
-
-                    </form>
-                </div>
-            </div>
-
-        </div> --}}
-
-            {{-- comment --}}
-
-
-            {{-- Custom Address From Admin --}}
-            {{-- <div class="col-md-6">
-
-
-            <div class="card">
-
-
-
-                <div class="card-body">
-
-
-                    <form action="{{ route('admin.orders.updateCustomAddressFromAdmin', $order->id) }}" method="POST">
-
-                        @csrf
-                        @method('PUT')
-
-                        <div class="form-group  my-4">
-                            <label for="custom_address_from_admin">Custom Address From Admin</label>
-                            <textarea name="custom_address_from_admin" id="custom_address_from_admin" cols="30" rows="3"
-                                class="form-control">{{ $order->custom_address_from_admin }}</textarea>
-                        </div>
-
-
-                        @error('custom_address_from_admin')
-                        <div class="d-flex justify-content-center ">
-
-                            <div class="text-danger">
-                                <strong>{{ $message }}</strong>
-                            </div>
-                        </div>
-                        @enderror
-
-
-                        <div class="form-group  my-4">
-
-                            <button type="submit" class="btn btn-primary d-block m-auto"
-                                title="Update Custom Address From Admin" data-bs-toggle="tooltip"
-                                data-bs-placement="top">
-
-                                Save
-                                <i class="fa-regular fa-pen-to-square icon icon-xs mx-1"></i>
-                            </button>
-                        </div>
-
-
-
-
-                    </form>
-                </div>
-            </div>
-
-
-        </div> --}}
-        </div>
-
-
-        {{-- second Section --}}
-
-
 
         {{-- products --}}
 
@@ -662,7 +534,7 @@
 
                                 </th>
 
-                                @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
+                                {{-- @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin') --}}
                                     <th class="">
 
                                         <p class="h6 text-bold">Events Commission [%]</p>
@@ -674,7 +546,7 @@
                                         <p class="h6 text-bold">Events Commission [AED]</p>
 
                                     </th>
-                                @endif
+                                {{-- @endif --}}
                                 <th class=" rounded-end">
                                     <p class="h6 text-bold">Taxes</p>
                                 </th>
@@ -684,7 +556,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             <?php $total_product_price = 0;
                             $total_taxes = 0;
                             $our_comission_price = 0; ?>
@@ -710,7 +581,7 @@
                                     </td>
 
 
-                                    @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
+                                    {{-- @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin') --}}
                                         <td class="">
                                             <p class="h5 text-nowrap"> {{ number_format($product->price * $product->product_quantity) }}
                                                 AED
@@ -721,7 +592,7 @@
                                                 {{ $product->product->owner ? $product->product->owner->commission : '0' }}
                                                 %</p>
                                         </td>
-                                    @endif
+                                    {{-- @endif --}}
                                     <td class="">
                                         <p class="h5 text-nowrap">
                                             {{ $product->product->owner
@@ -736,12 +607,13 @@
 
                                     </td>
                                     <td class="">
-                                        @if ($product->order_taxes->count() > 0)
-                                            @foreach ($product->order_taxes as $taxe)
+                                        @if ($product->product->taxes->count() > 0)
+
+                                            @foreach ($product->product->taxes as $taxe)
                                                 <p class="h5 text-nowrap">
-                                                    {{ number_format($taxe->taxe_title) }} <span
-                                                        class="badge bg-secondary">{{ $taxe->taxe_percentage . '%' }}</span>
-                                                    <?php $total_taxes += $taxe->taxe_percentage; ?>
+                                                    {{ $taxe->tax->title_en }} <span
+                                                        class="badge bg-secondary">{{ $taxe->tax->percentage . '%' }}</span>
+                                                    <?php $total_taxes += $taxe->tax->percentage; ?>
                                                 </p>
                                             @endforeach
                                         @else
@@ -755,8 +627,6 @@
                                 </tr>
                                 <!-- End of Item -->
                             @endforeach
-
-
 
                             <tr>
 
@@ -797,130 +667,10 @@
 
         {{-- products --}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="modal fade" id="model-extra-fees" tabindex="-1" role="dialog" aria-labelledby="model-extra-fees"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="h6 modal-title">Add Extra Fees</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-                        <form action="{{ route('admin.orders.AddExtraFees', $order->id) }}" method="POST">
-
-                            @csrf
-
-                            <div class="form-group my-4">
-                                <label for="cost">Cost (AED)</label>
-                                <input name="cost" type="number" class="form-control" id="cost">
-                            </div>
-
-                            <div class="form-group  my-4">
-                                <label for="note">Note</label>
-                                <textarea name="note" id="note" cols="30" rows="3" class="form-control"></textarea>
-                            </div>
-
-
-                            <div class="form-group  my-4">
-
-                                <button type="submit" class="btn btn-primary d-block m-auto">
-                                    Add
-                                    <i class="fas fa-plus icon icon-xs ms-2"></i>
-                                </button>
-                            </div>
-
-
-
-
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        {{-- extra_fees --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <hr class="hr">
-
-        <div class="modal fade" id="model-special-discount" tabindex="-1" role="dialog"
-            aria-labelledby="model-special-discount" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2 class="h6 modal-title">Add Special Discounts</h2>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-
-                        <form action="{{ route('admin.orders.AddSpecialDiscount', $order->id) }}" method="POST">
-
-                            @csrf
-
-                            <div class="form-group my-4">
-                                <label for="cost">Cost (AED)</label>
-                                <input name="cost" type="number" class="form-control" id="cost">
-                            </div>
-
-                            <div class="form-group  my-4">
-                                <label for="note">Note</label>
-                                <textarea name="note" id="note" cols="30" rows="3" class="form-control"></textarea>
-                            </div>
-
-
-                            <div class="form-group  my-4">
-
-                                <button type="submit" class="btn btn-primary d-block m-auto">
-                                    Add
-                                    <i class="fas fa-plus icon icon-xs ms-2"></i>
-                                </button>
-                            </div>
-
-
-
-
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        {{-- special_discount --}}
-
 
 
         <div class="card my-5">
-
-
-
 
             <div class="card-body">
 
@@ -938,7 +688,7 @@
                                 </td>
 
                                 <td class="">
-                                    <p class="h4"> {{ number_format($order->product_total_price) }} AED</p>
+                                    <p class="h4"> {{ number_format($total_products_final) }} AED</p>
                                 </td>
 
 
@@ -952,7 +702,7 @@
                                     </td>
 
                                     <td class="">
-                                        <p class="h4"> {{ number_format($our_comission_price) }} AED</p>
+                                        <p class="h4"> {{ number_format($total_commissions) }} AED</p>
                                     </td>
 
 
@@ -966,7 +716,7 @@
                                 </td>
 
                                 <td class="">
-                                    <p class="h4"> {{ number_format($order->total_taxes_price) }} AED</p>
+                                    <p class="h4"> {{ number_format($total_taxes_value) }} AED</p>
                                 </td>
 
 
@@ -988,35 +738,31 @@
 
 
                                 </tr>
+
+                                <tr>
+
+
+                                    <td class="">
+                                        <p class="h4"> Promo Code Discount</p>
+                                    </td>
+
+                                    <td class="">
+                                        @if ($order->customer_promo_code_value && $order->customer_promo_code_type && $order->customer_promo_code_title)
+                                            <ul class="sub-total">
+                                                @if ($order->customer_promo_code_type == 'percent')
+                                                    <p class="h4"> {{ $order->customer_promo_code_value }} %</p>
+                                                @elseif ($order->customer_promo_code_type == 'amount')
+                                                    <p class="h4"> {{ $order->customer_promo_code_value }} AED</p>
+                                                @endif
+                                            </ul>
+                                        @else
+                                            <p class="h4"> {{ number_format($order->promo_discount) }} AED</p>
+                                        @endif
+                                    </td>
+
+
+                                </tr>
                             @endif
-                            <tr>
-
-
-                                <td class="">
-                                    <p class="h4"> Promo Code Discount</p>
-                                </td>
-
-                                <td class="">
-                                    @if ($order->customer_promo_code_value && $order->customer_promo_code_type && $order->customer_promo_code_title)
-                                        <ul class="sub-total">
-                                            @if ($order->customer_promo_code_type == 'percent')
-                                                <p class="h4"> {{ $order->customer_promo_code_value }} %</p>
-                                            @elseif ($order->customer_promo_code_type == 'amount')
-                                                <p class="h4"> {{ $order->customer_promo_code_value }} AED</p>
-                                            @endif
-                                        </ul>
-                                    @else
-                                        <p class="h4"> {{ number_format($order->promo_discount) }} AED</p>
-                                    @endif
-                                </td>
-
-
-                            </tr>
-
-
-
-
-
 
                         </tbody>
                     </table>
@@ -1028,47 +774,22 @@
         </div>
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
-            <?php $total_commission = 0; ?>
-            @if ($order->order_products->count() > 0)
-                @foreach ($order->order_products as $item)
-                    <?php $total_commission += $item->price * $item->product_quantity * (auth()->guard('admin')->user()->vendor ? auth()->guard('admin')->user()->vendor->commission / 100 : 1); ?>
-                @endforeach
-            @endif
             <p class="h2">Total Events Commission <span class="badge badge-lg bg-success "
-                    style="font-size: 30px">{{ number_format($total_commission) }}
+                    style="font-size: 30px">{{ number_format($total_commissions) }}
+                </span> AED </p>
+        </div>
+
+        <div class="alert my-4 text-center text-white" style="background: #1f2937">
+            <p class="h2">Shipping <span class="badge badge-lg bg-success "
+                    style="font-size: 30px">{{ number_format($shippings) }}
                 </span> AED </p>
         </div>
 
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
-            @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
-                <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
-                        style="font-size: 30px">{{ number_format($order->product_total_price + $order->total_taxes_price + $order->shipping_fees) }}
-                    </span> AED </p>
-            @else
-                <?php $total_commission = 0; ?>
-                @if ($order->order_products->count() > 0)
-                    @foreach ($order->order_products as $item)
-                        <?php $total_commission +=
-                            $item->price *
-                            $item->product_quantity *
-                            (auth()
-                                ->guard('admin')
-                                ->user()->vendor->commission /
-                                100); ?>
-                    @endforeach
-                @endif
-
-
-                <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
-                        style="font-size: 30px">{{ number_format($order->product_total_price - $total_commission + $order->total_taxes_price + $order->shipping_fees) }}
-                    </span> AED </p>
-            @endif
-
-
-
-
-
+            <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
+                style="font-size: 30px">{{ number_format($total_product_with_taxes) }}
+            </span> AED </p>
 
         </div>
 

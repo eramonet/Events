@@ -30,10 +30,6 @@ use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
 
-
-
-
-
     public function index(Request $request)
     {
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
