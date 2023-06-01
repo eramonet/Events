@@ -284,190 +284,200 @@ return [
         'en' => 'order not found',
         'ar' => 'الطلب غير موجود'
     ],
-    'cities'=>
+    'cities' =>
     [
-        'en'=> 'cities',
-        'ar'=>'مدن'
+        'en' => 'cities',
+        'ar' => 'مدن'
     ],
-    'no_data'=>
+    'no_data' =>
     [
-        'en'=> 'no data',
-        'ar'=>'لا توجد بيانات'
+        'en' => 'no data',
+        'ar' => 'لا توجد بيانات'
     ],
-    'about'=>
+    'about' =>
     [
-        'en'=>'about_us',
-        'ar'=>'عننا'
+        'en' => 'about_us',
+        'ar' => 'عننا'
     ],
-    'regions'=>
+    'regions' =>
     [
-        'en'=> 'regions',
-        'ar'=> 'مناطق'
+        'en' => 'regions',
+        'ar' => 'مناطق'
     ],
-    'city_not_found'=>
+    'city_not_found' =>
     [
-        'en'=> 'city not found',
-        'ar'=>'المدينة غير موجودة'
+        'en' => 'city not found',
+        'ar' => 'المدينة غير موجودة'
     ],
-    'faqs'=>
+    'faqs' =>
     [
-        'en'=>'faqs',
-        'ar'=>'اسئلة و اجابات'
+        'en' => 'faqs',
+        'ar' => 'اسئلة و اجابات'
     ],
-    'colors'=>
+    'colors' =>
     [
-        'en'=>'colors',
-        'ar'=>'الالوان'
+        'en' => 'colors',
+        'ar' => 'الالوان'
     ],
-    'brands'=>
+    'brands' =>
     [
-        'en'=> 'brands',
-        'ar'=>'براندات'
+        'en' => 'brands',
+        'ar' => 'براندات'
     ],
-    'main_categories'=>
+    'main_categories' =>
     [
-        'en'=> 'categories',
-        'ar'=>'الاقسام'
+        'en' => 'categories',
+        'ar' => 'الاقسام'
     ],
-    'events-categories'=>
+    'events-categories' =>
     [
-        'en'=> 'events categories',
-        'ar'=>'اقسام الاحداث'
+        'en' => 'events categories',
+        'ar' => 'اقسام الاحداث'
     ],
-    'event-halls'=>
+    'event-halls' =>
     [
-        'en'=> 'event halls',
-        'ar'=> 'احداث الصالات'
+        'en' => 'event halls',
+        'ar' => 'احداث الصالات'
     ],
-    'latest_wedings_halls'=>
+    'latest_wedings_halls' =>
     [
-        'en'=> 'latest wedings halls',
-        'ar'=>'اخر قاعات الافراح'
+        'en' => 'latest wedings halls',
+        'ar' => 'اخر قاعات الافراح'
     ],
-    'latest_birthdays_halls'=>
+    'latest_birthdays_halls' =>
     [
-        'en'=> 'latest birthdays halls',
-        'ar'=>'اخر قاعات اعياد الميلاد'
+        'en' => 'latest birthdays halls',
+        'ar' => 'اخر قاعات اعياد الميلاد'
     ],
-    'latest_engagements_halls'=>
+    'latest_engagements_halls' =>
     [
-        'en'=> 'latest engagements halls',
-        'ar'=>'اخر قاعات الخطوبات'
+        'en' => 'latest engagements halls',
+        'ar' => 'اخر قاعات الخطوبات'
     ],
-    'latest_conferences_halls'=>
+    'latest_conferences_halls' =>
     [
-        'en'=> 'latest conferences halls',
-        'ar'=>'اخر قاعات المؤتمرات'
+        'en' => 'latest conferences halls',
+        'ar' => 'اخر قاعات المؤتمرات'
     ],
-    'all_products'=>
+    'all_products' =>
     [
-        'en'=> 'all products',
-        'ar'=> 'كل المنتجات'
+        'en' => 'all products',
+        'ar' => 'كل المنتجات'
     ],
-    'fave_list'=>
+    'fave_list' =>
     [
-        'en'=> 'fave list',
-        'ar'=>'قائمة المفضلة'
+        'en' => 'fave list',
+        'ar' => 'قائمة المفضلة'
     ],
-    'fave_deleted'=>
+    'fave_deleted' =>
     [
-        'en'=> 'fave deleted',
-        'ar'=>'حذف المفضلة'
+        'en' => 'fave deleted',
+        'ar' => 'حذف المفضلة'
     ],
-    'fave_done'=>
+    'fave_done' =>
     [
-        'en'=> 'fave done',
-        'ar'=>'تم اضافة الي المفضلة'
+        'en' => 'fave done',
+        'ar' => 'تم اضافة الي المفضلة'
     ],
-    'brand_products'=>
+    'brand_products' =>
     [
-        'en'=> 'brand products',
-        'ar'=>'براندات المنتجات'
+        'en' => 'brand products',
+        'ar' => 'براندات المنتجات'
     ],
-    'category_products'=>
+    'category_products' =>
     [
-        'en'=> 'category products',
-        'ar'=>'قسم المنتجات'
+        'en' => 'category products',
+        'ar' => 'قسم المنتجات'
     ],
-    'product_details'=>
+    'product_details' =>
     [
-        'en'=> 'product_details',
-        'ar'=>'تفاصيل المنتج'
+        'en' => 'product_details',
+        'ar' => 'تفاصيل المنتج'
     ],
-    'hall_details'=>
+    'hall_details' =>
     [
-         'en'=> 'hall details',
-         'ar'=>'تفاصيل القاعة'
+        'en' => 'hall details',
+        'ar' => 'تفاصيل القاعة'
     ],
-    'package_details'=>
+    'package_details' =>
     [
-        'en'=> 'package details',
-        'ar'=>'تفاصيل الباقة'
+        'en' => 'package details',
+        'ar' => 'تفاصيل الباقة'
     ],
-    'all_queries'=>
+    'all_queries' =>
     [
-        'en'=> 'all queries',
-        'ar'=>'كل الاستفسارات'
+        'en' => 'all queries',
+        'ar' => 'كل الاستفسارات'
     ],
-    'query_sent'=>
+    'query_sent' =>
     [
-        'en'=> 'query sent',
-        'ar'=>'تم ارسال استفسارك'
+        'en' => 'query sent',
+        'ar' => 'تم ارسال استفسارك'
     ],
-    'search'=>
+    'search' =>
     [
-        'en'=> 'search',
-        'ar'=>'البحث'
+        'en' => 'search',
+        'ar' => 'البحث'
+    ],
+    'add_to_cart' =>
+    [
+        'en' => 'add to cart',
+        'ar' => 'تم اضافة الكارت'
+    ],
+    'get_cart' =>
+    [
+        'en' => 'cart',
+        'ar' => 'الكارت'
+    ],
+    'cart_exist' =>
+    [
+        'en' => 'cart exist',
+        'ar' => 'الكارت موجود من قبل'
+    ],
+    'cart_not_exist' =>
+    [
+        'en' => 'cart not exist',
+        'ar' => 'لا توجد كارت'
+    ],
+    'checkout' =>
+    [
+        'en' => 'checkout',
+        'ar' => 'الدفع',
+    ],
+    'years_small_than_17' =>
+    [
+        'en' => 'years small than 17',
+        'ar' => 'السن اقل من 17 عام'
+    ],
+    'request_sent' =>
+    [
+        'en' => 'request sent',
+        'ar' => 'تم ارسال الطلب'
+    ],
+    'brand_not_found' =>
+    [
+        'en' => 'brand not found',
+        'ar' => 'البراند غير موجود'
+    ],
+    'user_account_has_been_suspended' =>
+    [
+        'en' => 'user account has been suspended',
+        'ar' => 'تم ايقاف '
+    ],
+    'filter' =>
+    [
+        'en' => 'filter',
+        'ar' => 'فلتر',
+    ],
+    'dates' =>
+    [
+        'en' => 'dates',
+        'ar' => 'التواريخ'
     ],
     'add_to_cart'=>
     [
         'en'=> 'add to cart',
-        'ar'=>'تم اضافة الكارت'
-    ],
-    'get_cart'=>
-    [
-        'en'=> 'cart',
-        'ar'=>'الكارت'
-    ],
-    'cart_exist'=>
-    [
-        'en'=> 'cart exist',
-        'ar'=>'الكارت موجود من قبل'
-    ],
-    'cart_not_exist'=>
-    [
-        'en'=> 'cart not exist',
-        'ar'=>'لا توجد كارت'
-    ],
-    'checkout'=>
-    [
-        'en'=> 'checkout',
-        'ar' => 'الدفع',
-    ],
-    'years_small_than_17'=>
-    [
-        'en'=> 'years small than 17',
-        'ar'=>'السن اقل من 17 عام'
-    ],
-    'request_sent'=>
-    [
-        'en'=> 'request sent',
-        'ar'=>'تم ارسال الطلب'
-    ],
-    'brand_not_found'=>
-    [
-        'en'=> 'brand not found',
-        'ar'=>'البراند غير موجود'
-    ],
-    'user_account_has_been_suspended'=>
-    [
-        'en'=> 'user account has been suspended',
-        'ar'=>'تم ايقاف '
-    ],
-    'filter'=>
-    [
-        'en'=> 'filter',
-        'ar' => 'فلتر',
+        'ar'=>'تم الاضافة للكارت'
     ]
 
 ];

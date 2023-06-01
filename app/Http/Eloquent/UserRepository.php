@@ -9,8 +9,10 @@ use App\Http\Resources\HallResource;
 use App\Http\Resources\PackageResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Ad;
+use App\Models\Available_date;
 use App\Models\BookingDetail;
 use App\Models\Brand;
+use App\Models\Cart;
 use App\Models\CartHall;
 use App\Models\CartHallOption;
 use App\Models\CategoryHall;
@@ -29,7 +31,11 @@ use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
 use App\Models\ProductColor;
+use App\Models\ProductTax;
+use App\Models\PromoCode;
 use App\Models\Rate;
+use App\Models\Shipping;
+use App\Models\Tax;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Wishlist;
@@ -666,7 +672,7 @@ class UserRepository implements UserRepositoryInterface
                 $i++;
             }
             return $allproducts;
-        }elseif($brand != null && $color != null){
+        } elseif ($brand != null && $color != null) {
             $colors = ProductColor::where('color_id', $color)->pluck('product_id');
             $products = Product::whereIn('id', $colors)
                 ->where('admin_id', $brand)
@@ -688,7 +694,7 @@ class UserRepository implements UserRepositoryInterface
                 $i++;
             }
             return $allproducts;
-        }elseif($price_from != null && $price_to != null &&$color != null){
+        } elseif ($price_from != null && $price_to != null && $color != null) {
             $colors = ProductColor::where('color_id', $color)->pluck('product_id');
             $products = Product::whereIn('id', $colors)
                 ->whereBetween('real_price', [$price_from, $price_to])
@@ -710,7 +716,7 @@ class UserRepository implements UserRepositoryInterface
                 $i++;
             }
             return $allproducts;
-        }else{
+        } else {
             $colors = ProductColor::where('color_id', $color)->pluck('product_id');
             $products = Product::whereIn('id', $colors)
                 ->whereBetween('real_price', [$price_from, $price_to])
@@ -739,11 +745,11 @@ class UserRepository implements UserRepositoryInterface
     public function rateBooking($request)
     {
         Rate::create([
-            'user_id'=>$request->user_id,
-            'rate'=>$request->rate,
-            'review'=>$request->review,
-            'transaction_type'=>"booking",
-            'transaction_id'=>$request->transaction_id,
+            'user_id' => $request->user_id,
+            'rate' => $request->rate,
+            'review' => $request->review,
+            'transaction_type' => "booking",
+            'transaction_id' => $request->transaction_id,
         ]);
     }
 
@@ -758,4 +764,124 @@ class UserRepository implements UserRepositoryInterface
             'transaction_id' => $request->transaction_id,
         ]);
     }
+
+    public function checkDate($request)
+    {
+        $dates = Available_date::where('hall_id', $request->hall_id)
+            ->where('available_date', $request->date)->get();
+        return $dates;
+    }
+
+    public function orderProductCart($request)
+    {
+        $item = Cart::where('user_id', $request->user_id)
+            ->where('product_id', $request->product_id)->first();
+        if (isset($item)) {
+            $item->update(['quantity' => $item->quantity + 1]);
+        } else {
+            Cart::create(
+                [
+                    'quantity' => $request->quantity,
+                    'user_id' => $request->user_id,
+                    'product_id' => $request->product_id
+                ]
+            );
+        }
+    }
+
+    public function getProductsCart($user, $lang)
+    {
+        $carts = Cart::where('user_id', $user->id)->get();
+        $allcarts = array();
+        $i = 0;
+        foreach ($carts as $cart) {
+            $allcarts[$i]['id'] = $cart->id;
+            $allcarts[$i]['product_id'] = $cart->product_id;
+            $allcarts[$i]['product_name'] =  $lang == 'en' ? Product::where('id', $cart->product_id)->first()->title_en : Product::where('id', $cart->product_id)->first()->title_ar;
+            $allcarts[$i]['quantity'] = $cart->quantity;
+            $allcarts[$i]['real_price'] = Product::where('id', $cart->product_id)->first()->real_price;
+            $allcarts[$i]['fake_price'] = Product::where('id', $cart->product_id)->first()->fake_price;
+            $allcarts[$i]['image'] = Product::where('id', $cart->product_id)->first()->primary_image_url;
+
+            $i++;
+        }
+        return $allcarts;
+    }
+
+    public function checkoutProduct($request)
+    {
+        global $productAfterCommissionAndPromocode;
+        $code = PromoCode::where('title', $request->promo_code)->first();
+
+        $order = Order::create([
+            'city_id' => $request->city_id,
+            'region_id' => $request->region_id,
+            'customer_name' => $request->customer_name,
+            'customer_email' => $request->customer_email,
+            'customer_address' => $request->customer_address,
+            'customer_phone' => $request->customer_phone,
+            'order_from' => $request->order_from,
+            'order_number' =>  Order::latest()->first() ? str_pad(Order::latest()->first()->id + 1, 9, '0', STR_PAD_LEFT) : str_pad(1, 9, '0', STR_PAD_LEFT),
+            'customer_promo_code_title'=> $code!=null?$code->text_en:"",
+            'customer_promo_code_value' => $code != null ? $code->value : "",
+            'customer_promo_code_type' => $code != null ? $code->type : "",
+            'order_from'=>$request->order_from,
+            'payment_type'=> 'visa',
+            'status'=> 'pending'
+        ]);
+
+        $products = $request->product_id;
+        $quantities = $request->quantity;
+        for ($i = 0; $i < count($products); $i++) {
+            $productRealPrice=Product::where('id', $products[$i])->first();
+            $productQuantity= $quantities[$i];
+            $getvendor=Product::where('id', $products[$i])->first();
+            $commision=Vendor::where('id', $getvendor->admin_id)->first();
+            $productTaxes = ProductTax::where('product_id', $products[$i])->pluck('tax_id');
+            $taxes = Tax::whereIn('id', $productTaxes)->sum('percentage');
+            $productPrice= $productRealPrice->real_price* $productQuantity;
+            if(isset($commision)){
+            $commissionProductAfter= $productPrice* $commision->commision / 100;
+            }else{
+                $commissionProductAfter = $productPrice;
+            }
+
+            $shipping=Shipping::where('city_id',$request->city_id)->first();
+            if(isset($promoCode)){
+                if($promoCode->type== 'percent'){
+                    $productAfterCommissionAndPromocode=
+                    $commissionProductAfter* $promoCode->value/100;
+
+                }else{
+                    $productAfterCommissionAndPromocode =
+                    $commissionProductAfter - $promoCode->value;
+                }
+            }
+            $productAfterTaxes = $productAfterCommissionAndPromocode
+                + ($productAfterCommissionAndPromocode * $taxes / 100);
+            if (isset($shipping)) {
+                $productAfterShipping = $productAfterTaxes + $shipping->cost;
+            } else {
+                $productAfterShipping = $productAfterTaxes;
+            }
+              $v= Vendor::where('id', $getvendor->admin_id)->first();
+            OrderProduct::create(
+                [
+                    'product_id'=>$products[$i],
+                    'vendor_id'=> $v->id,
+                    'order_number'=>$order->order_number,
+                    'product_title'=>Product::where('id',$products[$i])->first()->title_en,
+                    'product_quantity'=> $quantities[$i],
+                    'order_id'=>$order->id,
+                    'price'=> $productAfterShipping,
+                    'commission'=> $commissionProductAfter,
+                    'product_after_commission_and_promocode'=>
+                    $productAfterCommissionAndPromocode,
+                    'product_after_taxes'=>$productAfterTaxes,
+                ]
+            );
+             $cart=Cart::where('product_id',$products[$i])->where('user_id',$request->user_id)->first();
+            $cart->delete();
+        }
+   }
 }

@@ -9,6 +9,7 @@ use App\Models\ProductProductWith;
 use App\Models\ProductTax;
 use App\Models\Tax;
 use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -68,7 +69,7 @@ class ProductResource extends JsonResource
         return [
             'id'=>$this->id,
             'name' => $lang == 'en' ? $this->title_en : $this->title_ar,
-            'is_favourite' => $user != null ? $this->fave($this->id) : "0",
+            'is_favourite' => Wishlist::where('product_id', $this->id)->where('user_id', isset($request->user()->id))->first() != null ? "1" : "0",
             'category' => $lang == 'en' ? $this->category->title_en : $this->category->title_ar,
             'availability' => $this->status,
             'model_number' => $this->model_number,

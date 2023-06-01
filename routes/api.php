@@ -79,6 +79,11 @@ Route::controller(UserController::class)->group(function () {
             Route::post('checkout-hall', 'checkoutHall');
             Route::post('rate-booking', 'rateBooking');
             Route::post('rate-order', 'rateOrder');
+            Route::post('add-products-cart', 'orderProductCart');
+            Route::get('get-products-cart', 'getProductsCart');
+            Route::get('package-details/{package_id}', 'getPackage');
+            Route::post('checkout-products', 'checkoutProduct');
+
         });
     } else {
         Route::get('home', 'home');
@@ -96,5 +101,7 @@ Route::controller(UserController::class)->group(function () {
         Route::get('hall-details/{hall_id}', 'getHall');
         Route::get('package-details/{package_id}', 'getPackage');
         Route::post('filter', 'filter');
+        Route::post('check-date', 'checkDate');
+
     }
 });

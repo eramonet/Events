@@ -78,6 +78,7 @@ class HallDetailsResource extends JsonResource
             'lat' => $this->latitude,
             'lng' => $this->longitude,
             'rate' => $this->rate,
+            'extra_guests' => $this->guests_capacity,
             'about' => $lang == 'en' ? $this->description_en : $this->description_ar,
             'packages' => $this->packages($this->id, $lang),
             'decorations' => $this->decorations($this->id, $lang),
