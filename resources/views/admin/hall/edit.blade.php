@@ -109,50 +109,6 @@
                     {{-- title_en --}}
 
 
-                    {{-- email --}}
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="email">Email <span class="text-danger">*</span></label>
-                            <input required type="email" name="email"
-                                class="form-control @error('email') is-invalid @enderror" value="{{ $hall->email }}">
-                        </div>
-
-
-                        @error('email')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- email --}}
-
-
-                    {{-- phone --}}
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="phone">Phone <span class="text-danger">*</span></label>
-                            <input required type="text" name="phone"
-                                class="form-control @error('phone') is-invalid @enderror" value="{{ $hall->phone }}">
-                        </div>
-
-
-                        @error('phone')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- phone --}}
-
-
 
                     {{-- guests_capacity --}}
                     <div class="col-md-6">
@@ -204,39 +160,10 @@
 
                     {{-- status --}}
 
-
-                    {{-- vendor_id --}}
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="vendor_id">Vendor <span class="text-danger">*</span></label>
-                            <select required name="vendor_id" id="vendor_id"
-                                class="form-select @error('vendor_id') is-invalid @enderror">
-
-                                @foreach ($vendors as $vendor)
-                                    <option value="{{ $vendor->id }}"
-                                        {{ $hall->vendor_id == $vendor->id ? 'selected' : '' }}>
-                                        {{ $vendor->title_en . ' - ' . $vendor->title_ar }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-
-                        @error('vendor_id')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- vendor_id --}}
-                    {{ $hall->categories->pluck('id') }}
                     {{-- categories --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
-                            <label for="categories">Categories [Occasions] <span class="text-danger">*</span></label>
+                            <label for="categories">Occasions <span class="text-danger">*</span></label>
                             <select multiple required name="categories[]" id="categories"
                                 class="form-select @error('categories') is-invalid @enderror">
 
@@ -262,6 +189,105 @@
                     </div>
 
                     {{-- categories --}}
+
+                    {{-- Taxes --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="taxes">Taxes <span class="text-danger"></span></label>
+                            <select multiple name="taxes[]" id="taxes"
+                                class="form-select @error('taxes') is-invalid @enderror">
+
+                                @foreach ($taxes as $taxes)
+                                    <option value="{{ $taxes->id }}"
+                                        {{ collect(old('taxes'))->contains($taxes->id) ? 'selected' : '' }}>
+                                        {{ $taxes->title_en . ' - ' . $taxes->title_ar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        @error('taxes')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+                    {{-- Taxes --}}
+
+
+
+
+
+                    {{-- real_price --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="real_price">Real Price<span class="text-danger">*</span></label>
+                            <input required type="number" step="0.1" name="real_price"
+                                class="form-control @error('real_price') is-invalid @enderror"
+                                value="{{ $hall->real_price }}">
+                        </div>
+
+
+                        @error('real_price')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- real_price --}}
+
+
+                    {{-- fake_price --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="fake_price">Fake Price<span class="text-danger">*</span></label>
+                            <input required type="number" step="0.1" name="fake_price"
+                                class="form-control @error('fake_price') is-invalid @enderror"
+                                value="{{ $hall->fake_price }}">
+                        </div>
+
+
+                        @error('fake_price')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- fake_price --}}
+
+
+                    {{-- offer_end_at --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="offer_end_at">Offet End At<span class="text-danger">*</span></label>
+                            <input required type="date" name="offer_end_at"
+                                class="form-control @error('offer_end_at') is-invalid @enderror"
+                                value="{{ $hall->offer_end_at }}">
+                        </div>
+
+
+                        @error('offer_end_at')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- offer_end_at --}}
 
 
 
@@ -373,41 +399,8 @@
 
                 <div class="row">
 
-
-
-
-
-                    {{-- country_id --}}
-                    <div class="col-md-6">
-                        <div class="form-group mb-4">
-                            <label for="country_id">Country <span class="text-danger">*</span></label>
-                            <select required name="country_id" id="country_id"
-                                class="form-select @error('country_id') is-invalid @enderror">
-
-                                @foreach ($countries as $country)
-                                    <option value="{{ $country->id }}"
-                                        {{ $hall->country_id == $country->id ? 'selected' : '' }}>{{ $country->title_en }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-
-                        @error('country_id')
-                            <div class="d-flex justify-content-center ">
-
-                                <div class="text-danger">
-                                    <strong>{{ $message }}</strong>
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
-
-                    {{-- country_id --}}
-
-
                     {{-- city_id --}}
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="form-group mb-4">
                             <label for="city_id">City <span class="text-danger">*</span></label>
                             <select required name="city_id" id="city_id"
@@ -910,6 +903,10 @@
 
 
         $('#categories').select2({
+            width: "100%"
+        });
+
+        $('#taxes').select2({
             width: "100%"
         });
 

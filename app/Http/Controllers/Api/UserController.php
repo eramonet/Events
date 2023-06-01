@@ -147,6 +147,7 @@ class UserController extends Controller
     {
         $lang = getLang();
         $result = $this->userObject->getHall($lang, $hall_id);
+
         return response(res($lang, success(), 'hall_details', $result), 200);
     }
 

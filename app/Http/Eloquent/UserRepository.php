@@ -797,11 +797,11 @@ class UserRepository implements UserRepositoryInterface
         foreach ($carts as $cart) {
             $allcarts[$i]['id'] = $cart->id;
             $allcarts[$i]['product_id'] = $cart->product_id;
-            $allcarts[$i]['product_name'] =  $lang == 'en' ? Product::where('id', $cart->product_id)->first()->title_en : Product::where('id', $cart->product_id)->first()->title_ar;
+            $allcarts[$i]['product_name'] =  $lang == 'en' ? Product::withTrashed()->where('id', $cart->product_id)->first()->title_en : Product::withTrashed()->where('id', $cart->product_id)->first()->title_ar;
             $allcarts[$i]['quantity'] = $cart->quantity;
-            $allcarts[$i]['real_price'] = Product::where('id', $cart->product_id)->first()->real_price;
-            $allcarts[$i]['fake_price'] = Product::where('id', $cart->product_id)->first()->fake_price;
-            $allcarts[$i]['image'] = Product::where('id', $cart->product_id)->first()->primary_image_url;
+            $allcarts[$i]['real_price'] = Product::withTrashed()->where('id', $cart->product_id)->first()->real_price;
+            $allcarts[$i]['fake_price'] = Product::withTrashed()->where('id', $cart->product_id)->first()->fake_price;
+            $allcarts[$i]['image'] = Product::withTrashed()->where('id', $cart->product_id)->first()->primary_image_url;
 
             $i++;
         }

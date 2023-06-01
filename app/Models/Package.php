@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Package extends Model
 {
 
-    use HasFactory ,SoftDeletes ,Sluggable;
+    use HasFactory, SoftDeletes, Sluggable;
     protected $guarded = [];
 
     public function sluggable(): array
@@ -23,23 +23,24 @@ class Package extends Model
             'slug_en' => [
                 'source' => 'title_en',
                 'separator' => '-',
-            ],
+            ]
         ];
     }
 
-    protected $appends =['image_url','price_after_taxes' ];
+    protected $appends = ['image_url', 'price_after_taxes'];
 
 
-    public function getPriceAfterTaxesAttribute(){
+    public function getPriceAfterTaxesAttribute()
+    {
 
         $price = $this->real_price;
 
-        $taxes_sum =0;
+        $taxes_sum = 0;
 
-        foreach($this->taxes as $tax){
+        foreach ($this->taxes as $tax) {
 
 
-            $percentage = $tax->percentage /100;
+            $percentage = $tax->percentage / 100;
 
             $value = $percentage * $price;
 
@@ -50,10 +51,11 @@ class Package extends Model
         return $price;
     }
 
-    protected function getImageUrlAttribute(){
+    protected function getImageUrlAttribute()
+    {
         $path = asset('uploads/packages_images');
 
-        return  is_null($this->image) ? $path.'/default.png':$path .'/'.$this->image;
+        return  is_null($this->image) ? $path . '/default.png' : $path . '/' . $this->image;
     }
 
     public function admin()
@@ -64,7 +66,7 @@ class Package extends Model
 
     public function vendor()
     {
-        return $this->belongsTo(Vendor::class, 'vendor_id');
+        return $this->belongsTo(Vendor::class, 'admin_id');
     }
 
     public function hall()
@@ -77,7 +79,7 @@ class Package extends Model
         return $this->belongsTo(HallCategory::class, 'category_id');
     }
 
-     public function options()
+    public function options()
     {
         return $this->belongsToMany(PackageOption::class, 'package_option', 'package_id', 'option_id');
     }
@@ -86,7 +88,8 @@ class Package extends Model
     {
         return $this->belongsToMany(Tax::class, 'package_tax', 'package_id', 'tax_id');
     }
-    public function bookings(){
+    public function bookings()
+    {
         return $this->hasMany(Hall_booking::class);
     }
 }

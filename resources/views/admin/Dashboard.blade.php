@@ -1882,25 +1882,6 @@
     // currentMonthOrders
     let currentMonthOrdersCTX = document.getElementById("ordersChart");
 
-    const currentMonthOrdersData = {
-        labels: [
-              @foreach ($allordersChart as $allorder)
-                '{{ $allorder->date }}',
-            @endforeach
-          ],
-        datasets: [{
-            label: 'Orders',
-            data: [
-                  @foreach ($allordersChart as $allorder)
-                    {{ $allorder->count }},
-                @endforeach
-                 ],
-
-            pointStyle: 'circle',
-            pointRadius: 10,
-            pointHoverRadius: 15
-        }]
-    };
     const currentMonthOrdersConfig = {
         type: 'bar',
         data: currentMonthOrdersData,

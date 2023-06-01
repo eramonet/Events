@@ -269,9 +269,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
         // regions
 
 
-
-
-
         // halls
 
         Route::controller(HallController::class)->prefix('halls')->name('halls.')->group(function () {
@@ -306,6 +303,7 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            Route::get('/{id}/show', 'show')->name('show');
         });
         // packages-options-categories
 
@@ -324,6 +322,7 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            Route::get('/{id}/show', 'show')->name('show');
         });
         // packages-options
 
@@ -331,8 +330,6 @@ Route::prefix('acp')->name('admin.')->group(function () {
         // packages
 
         Route::controller(PackageController::class)->prefix('packages')->name('packages.')->group(function () {
-
-
             Route::get('', 'index')->name('index');
             Route::get('/export', 'export')->name('export');
             Route::get('/create', 'create')->name('create');
@@ -341,6 +338,7 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+            Route::get('/{id}/show', 'show')->name('show');
         });
         // packages
 

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('package_option_categories', function (Blueprint $table) {
             $table->id();
+            $table->integer('hall_id');
             $table->string('title_ar')->unique();
             $table->string('title_en')->unique();
             $table->string('slug_ar')->unique();

@@ -12,19 +12,16 @@
     $promocode = $current_login ? App\Models\PromoCode::where('admin_id', $current_login->id)->count() : App\Models\PromoCode::count();
 
     $all_categories = $current_login
-
         ? \App\Models\ProductCategory::main()
-                ->where('admin_id', $current_login->id)
-                ->count()
+            ->where('admin_id', $current_login->id)
+            ->count()
+        : //      +
 
-            //      +
-
-            // \App\Models\ProductCategory::sub()
-            //     ->where('admin_id', $current_login->id)
-            //     ->count()
-        : \App\Models\ProductCategory::main()->count()
-        // + \App\Models\ProductCategory::sub()->count()
-        ;
+        // \App\Models\ProductCategory::sub()
+        //     ->where('admin_id', $current_login->id)
+        //     ->count()
+        \App\Models\ProductCategory::main()->count();
+    // + \App\Models\ProductCategory::sub()->count()
 
     $main_categories = $current_login
         ? \App\Models\ProductCategory::main()
@@ -127,9 +124,9 @@
 
     $canceled = $current_login ? $canceled_counter : App\Models\Order::canceled()->count();
 
-    $colors = \App\Models\Color::count() ;
+    $colors = \App\Models\Color::count();
 
-    $tax = $current_login ? App\Models\Tax::where('admin_id', $current_login->id)->count() : App\Models\Tax::count() ;
+    $tax = $current_login ? App\Models\Tax::where('admin_id', $current_login->id)->count() : App\Models\Tax::count();
 
 @endphp
 <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
@@ -230,18 +227,18 @@
             @endif
 
             @if ($useradmin->hasRole('super-admin'))
-                    <li class="nav-item {{ Route::is('admin.contact-messages.*') ? 'active' : '' }}">
-                        <a href="{{ route('admin.contact-messages.index') }}" class="nav-link ">
-                            <span class="sidebar-icon">
-                                <i class="fa-solid fa-list icon-xs me-2"></i>
-                            </span>
-                            <span class="sidebar-text">Contact Messages</span>
-                            <span
-                                style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                {{ App\Models\ContactMessage::count() }}
-                            </span>
-                        </a>
-                    </li>
+                <li class="nav-item {{ Route::is('admin.contact-messages.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.contact-messages.index') }}" class="nav-link ">
+                        <span class="sidebar-icon">
+                            <i class="fa-solid fa-list icon-xs me-2"></i>
+                        </span>
+                        <span class="sidebar-text">Contact Messages</span>
+                        <span
+                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                            {{ App\Models\ContactMessage::count() }}
+                        </span>
+                    </a>
+                </li>
             @endif
 
 
@@ -270,7 +267,8 @@
                         <div class="multi-level collapse " role="list" id="with_draw" aria-expanded="true">
                             <ul class="flex-column nav">
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.with-draw-request.send_to_vendor') }}" class="nav-link ">
+                                    <a href="{{ route('admin.with-draw-request.send_to_vendor') }}"
+                                        class="nav-link ">
                                         <!--<span class="sidebar-icon">-->
                                         <!--    <i class="fas fa-spinner icon icon-xs me-2 text-info"></i>-->
                                         <!--</span>-->
@@ -989,13 +987,6 @@
                         <div class="multi-level collapse {{ Route::is('admin.halls.') ? 'show' : '' }}"
                             role="list" id="halls" aria-expanded="true">
                             <ul class="flex-column nav">
-
-
-
-
-
-                                {{-- halls --}}
-
                                 @if (Auth::guard('admin')->user()->hasPermission('halls-read'))
                                     <li class="nav-item {{ Route::is('admin.halls.*') ? 'active' : '' }}">
                                         <a href="{{ route('admin.halls.index') }}" class="nav-link ">
@@ -1010,224 +1001,50 @@
                                         </a>
                                     </li>
                                 @endif
-                                {{-- halls --}}
 
-
-
-
-                            </ul>
-                        </div>
-                    </li>
-
-
-
-                @endif
-            @endif
-
-            @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
-
-                @if (Auth::guard('admin')->user()->hasPermission('hall_request-read'))
-                    <li class="nav-item ">
-                        <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
-                            data-bs-toggle="collapse" data-bs-target="#hall_reqests"
-                            aria-expanded="{{ Route::is('admin.products.*') ? 'true' : 'false' }}">
-                            <span>
-                                <span class="sidebar-icon">
-                                    <i class="fa-sharp fa-solid fa-bag-shopping icon-xs me-2"></i>
-                                </span>
-                                <span class="sidebar-text">Hall Requests </span>
-                                <span
-                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                    {{ \App\Models\Hall::count() }}
-                                </span>
-                            </span>
-                            <span class="link-arrow">
-                                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </span>
-                        </span>
-
-                        <div class="multi-level collapse" role="list" id="hall_reqests" aria-expanded="true">
-                            <ul class="flex-column nav">
                                 <li class="nav-item">
-
-                                    <a href="{{ route('admin.hall_request.hall_request', 'new') }}"
-                                        class="nav-link ">
+                                    <a href="{{ route('admin.packages.index') }}" class="nav-link ">
                                         <span class="sidebar-icon">
                                             <i class="fa-regular fa-circle icon icon-xs me-2"></i>
                                         </span>
-                                        <span class="sidebar-text">New</span>
+                                        <span class="sidebar-text">Halls Packages </span>
                                         <span
                                             style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-
-                                            {{ \App\Models\Hall::Where('accept', 'new')->count() }}
+                                            {{ \App\Models\Package::count() }}
                                         </span>
                                     </a>
                                 </li>
-                                <li class="nav-item ">
-                                    <a href="{{ route('admin.hall_request.hall_request', 'accepted') }}"
-                                        class="nav-link ">
-                                        <span class="sidebar-icon">
-                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                        </span>
-                                        <span class="sidebar-text">Accepted</span>
-                                        <span
-                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\Hall::Where('accept', 'accepted')->count() }}
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a href="{{ route('admin.hall_request.hall_request', 'rejected') }}"
-                                        class="nav-link ">
-                                        <span class="sidebar-icon">
-                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                        </span>
-                                        <span class="sidebar-text">Rejected</span>
-                                        <span
-                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\Hall::Where('accept', 'rejected')->count() }}
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                @endif
 
-            @endif
+                                @if (Auth::guard('admin')->user()->hasPermission('packages-options-categories-read'))
+                                    <li
+                                        class="nav-item {{ Route::is('admin.packages-options-categories.*') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.packages-options-categories.index') }}"
+                                            class="nav-link ">
+                                            <span class="sidebar-icon">
+                                                <i class="fa-regular fa-circle icon icon-xs me-2"></i>
+                                            </span>
+                                            <span class="sidebar-text"> Extra Decorations</span>
+                                            <span
+                                                style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                                                {{ \App\Models\PackageOptionCategory::count() }}
+                                            </span>
 
+                                        </a>
+                                    </li>
+                                @endif
 
+                                @if (Auth::guard('admin')->user()->hasPermission('packages-options-read'))
+                                    <li class="nav-item {{ Route::is('admin.packages-options.*') ? 'active' : '' }}">
+                                        <a href="{{ route('admin.packages-options.index') }}" class="nav-link ">
+                                            <span class="sidebar-icon">
+                                                <i class="fa-regular fa-circle icon icon-xs me-2"></i>
+                                            </span>
+                                            <span class="sidebar-text"> Options </span>
+                                        </a>
+                                    </li>
+                                @endif
 
-            @if (Auth::guard('admin')->user()->hasPermission('packages-read'))
-                <li class="nav-item ">
-                    <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" data-bs-target="#halls-packages-options"
-                        aria-expanded="{{ Route::is('admin.packages-options.') || Route::is('admin.packages-options-categories.') ? 'true' : 'false' }}">
-                        <span>
-                            <span class="sidebar-icon">
-                                <i class="fas fa-stream  icon-xs me-2"></i>
-                            </span>
-                            <span class="sidebar-text">Hall Packages Options</span>
-                            <span
-                                style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                {{ \App\Models\PackageOption::count() }}
-                            </span>
-
-                        </span>
-                        <span class="link-arrow">
-                            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                    </span>
-
-                    <div class="multi-level collapse {{ Route::is('admin.packages-options.') || Route::is('admin.packages-options-categories.') ? 'show' : '' }}"
-                        role="list" id="halls-packages-options" aria-expanded="true">
-                        <ul class="flex-column nav">
-
-
-
-
-
-                            {{-- packages-options-categories --}}
-
-                            @if (Auth::guard('admin')->user()->hasPermission('packages-options-categories-read'))
-                                <li
-                                    class="nav-item {{ Route::is('admin.packages-options-categories.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.packages-options-categories.index') }}"
-                                        class="nav-link ">
-                                        <span class="sidebar-icon">
-                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                        </span>
-                                        <span class="sidebar-text"> Options Categories</span>
-                                        <span
-                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\PackageOptionCategory::count() }}
-                                        </span>
-
-                                    </a>
-                                </li>
-                            @endif
-                            {{-- packages-options-categories --}}
-
-                            {{-- packages-options --}}
-
-                            @if (Auth::guard('admin')->user()->hasPermission('packages-options-read'))
-                                <li class="nav-item {{ Route::is('admin.packages-options.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.packages-options.index') }}" class="nav-link ">
-                                        <span class="sidebar-icon">
-                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                        </span>
-                                        <span class="sidebar-text"> All Options </span>
-                                        <span
-                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                            {{ \App\Models\PackageOption::count() }}
-                                        </span>
-                                    </a>
-                                </li>
-                            @endif
-                            {{-- packages-options --}}
-
-
-
-                        </ul>
-                    </div>
-                </li>
-            @endif
-
-
-            @if (Auth::guard('admin')->user()->hasPermission('packages-read'))
-                <li class="nav-item ">
-                    <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
-                        data-bs-toggle="collapse" data-bs-target="#Package" aria-expanded="false">
-                        <span>
-                            <span class="sidebar-icon">
-                                <i class="fa-solid fa-box icon-xs me-2"></i>
-                            </span>
-                            <span class="sidebar-text">Halls Packages</span>
-                            <span
-                                style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                {{ \App\Models\Package::count() }}
-                            </span>
-
-                        </span>
-                        <span class="link-arrow">
-                            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </span>
-                    </span>
-
-                    <div class="multi-level collapse " role="list" id="Package" aria-expanded="true">
-                        <ul class="flex-column nav">
-
-
-
-                            <li class="nav-item">
-                                <a href="{{ route('admin.packages.index') }}" class="nav-link ">
-                                    <span class="sidebar-icon">
-                                        <i class="fa-regular fa-circle icon icon-xs me-2"></i>
-                                    </span>
-                                    <span class="sidebar-text">All Packages </span>
-                                    <span
-                                        style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
-                                        {{ \App\Models\Package::count() }}
-                                    </span>
-                                </a>
-                            </li>
-
-                            @if (Auth::guard('admin')->user()->hasPermission('packages-available-dates-and-times-read'))
+                                @if (Auth::guard('admin')->user()->hasPermission('packages-available-dates-and-times-read'))
                                 <li class="nav-item">
                                     <a href="{{ route('admin.availabel_date.index') }}" class="nav-link ">
                                         <span class="sidebar-icon">
@@ -1243,10 +1060,13 @@
                                 </li>
                             @endif
 
+                            </ul>
+                        </div>
+                    </li>
 
-                        </ul>
-                    </div>
-                </li>
+
+
+                @endif
             @endif
 
 
@@ -1327,6 +1147,83 @@
                         </ul>
                     </div>
                 </li>
+            @endif
+
+            @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
+
+                @if (Auth::guard('admin')->user()->hasPermission('hall_request-read'))
+                    <li class="nav-item ">
+                        <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                            data-bs-toggle="collapse" data-bs-target="#hall_reqests"
+                            aria-expanded="{{ Route::is('admin.products.*') ? 'true' : 'false' }}">
+                            <span>
+                                <span class="sidebar-icon">
+                                    <i class="fa-sharp fa-solid fa-bag-shopping icon-xs me-2"></i>
+                                </span>
+                                <span class="sidebar-text">Hall Requests </span>
+                                <span
+                                    style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                                    {{ \App\Models\Hall::count() }}
+                                </span>
+                            </span>
+                            <span class="link-arrow">
+                                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </span>
+                        </span>
+
+                        <div class="multi-level collapse" role="list" id="hall_reqests" aria-expanded="true">
+                            <ul class="flex-column nav">
+                                <li class="nav-item">
+
+                                    <a href="{{ route('admin.hall_request.hall_request', 'new') }}"
+                                        class="nav-link ">
+                                        <span class="sidebar-icon">
+                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
+                                        </span>
+                                        <span class="sidebar-text">New</span>
+                                        <span
+                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+
+                                            {{ \App\Models\Hall::Where('accept', 'new')->count() }}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{{ route('admin.hall_request.hall_request', 'accepted') }}"
+                                        class="nav-link ">
+                                        <span class="sidebar-icon">
+                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
+                                        </span>
+                                        <span class="sidebar-text">Accepted</span>
+                                        <span
+                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                                            {{ \App\Models\Hall::Where('accept', 'accepted')->count() }}
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a href="{{ route('admin.hall_request.hall_request', 'rejected') }}"
+                                        class="nav-link ">
+                                        <span class="sidebar-icon">
+                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
+                                        </span>
+                                        <span class="sidebar-text">Rejected</span>
+                                        <span
+                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                                            {{ \App\Models\Hall::Where('accept', 'rejected')->count() }}
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                @endif
+
             @endif
 
 
@@ -2085,8 +1982,7 @@
 
                             @if (Auth::guard('admin')->user()->hasPermission('settings-read'))
                                 <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
-                                    <a href="{{ route('admin.front-settings.shop_by_brands') }}"
-                                        class="nav-link ">
+                                    <a href="{{ route('admin.front-settings.shop_by_brands') }}" class="nav-link ">
                                         <span class="sidebar-icon">
                                             <i class="fa-regular fa-circle icon icon-xs me-2"></i>
                                         </span>

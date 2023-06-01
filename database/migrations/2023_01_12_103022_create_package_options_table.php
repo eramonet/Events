@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title_en')->unique();
             $table->string('slug_ar')->unique();
             $table->string('slug_en')->unique();
+            $table->double('price');
             $table->string('image')->nullable();
             $table->enum('status',[1,0])->default(1)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();

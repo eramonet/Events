@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title_ar')->unique();
             $table->string('title_en')->unique();
+            $table->text('photographer');
             $table->integer('extra_guest_price')->nullable();
             $table->integer('number_of_tables')->nullable();
             $table->integer('number_of_guests')->nullable();
@@ -50,12 +51,8 @@ return new class extends Migration
             $table->enum('status',[1,0])->default(1)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
             $table->foreign('admin_id')->references('id')->on('admins')->cascadeOnUpdate()->nullOnDelete();
-            $table->unsignedBigInteger('vendor_id')->nullable();
-            $table->foreign('vendor_id')->references('id')->on('vendors')->cascadeOnUpdate()->nullOnDelete();
             $table->unsignedBigInteger('hall_id')->nullable();
             $table->foreign('hall_id')->references('id')->on('halls')->cascadeOnUpdate()->nullOnDelete();
-            $table->unsignedBigInteger('category_id')->nullable();
-            $table->foreign('category_id')->references('id')->on('hall_categories')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
 

@@ -224,8 +224,10 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+                    <th class="border-gray-200">Image</th>
                     <th class="border-gray-200">Title In Arabic</th>
                     <th class="border-gray-200">Title In English</th>
+                    <th class="border-gray-200">Price</th>
                     <th class="border-gray-200">Created At</th>
                     <th class="border-gray-200">Status</th>
                     @if (Auth::guard('admin')->user()->hasRole('vendor-admin'))
@@ -241,9 +243,12 @@
                     <tr>
                         <td>{{ $hall->id }}</td>
 
+                        <td><img src="{{ $hall->primary_image_url }}" width="50px"></td>
+
                         <td>{{ $hall->title_ar }}</td>
                         <td>{{ $hall->title_en }}</td>
 
+                        <td>{{ number_format($hall->real_price) }} AED</td>
 
                         <td>
                             @if ($hall->created_at)
@@ -288,58 +293,44 @@
 
 
                         <td>
-                            <div class="btn-group">
-                                <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="icon icon-sm">
-                                        <span class="fas fa-ellipsis-h icon-dark"></span>
-                                    </span>
-                                    <span class="visually-hidden">Toggle Dropdown</span>
-                                </button>
-                                <div class="dropdown-menu py-0">
-                                    <button data-bs-toggle="modal" data-bs-target="#modal-{{ $hall->id }}"
-                                        class="dropdown-item rounded-top"><span class="fas fa-eye me-2"></span>View
-                                        Details</button>
+                            <a href="{{ route('admin.halls.show' , $hall->id) }}" class="btn btn-info"><span class="fas fa-eye"></span></a>
 
-                                    {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-update')) --}}
+                            {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-update')) --}}
 
-                                    <a class="dropdown-item" href="{{ route('admin.halls.edit', $hall->id) }}"><span
-                                            class="fas fa-edit me-2"></span>Edit</a>
+                            <a class="btn btn-primary" href="{{ route('admin.halls.edit', $hall->id) }}"><span
+                                    class="fas fa-edit"></span></a>
 
-                                    {{-- @endif --}}
+                            {{-- @endif --}}
 
 
-                                    @if ($hall->deleted_at)
-                                        {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-update')) --}}
-                                        <form action="{{ route('admin.halls.restore', $hall->id) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" class="dropdown-item text-success rounded-bottom">
-                                                <span class="fa-solid fa-trash-can-arrow-up me-2"></span>Restore
-                                            </button>
-                                        </form>
+                            @if ($hall->deleted_at)
+                                {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-update')) --}}
+                                <form style="display: contents" action="{{ route('admin.halls.restore', $hall->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-success">
+                                        <span class="fa-solid fa-trash-can-arrow-up"></span>
+                                    </button>
+                                </form>
 
-                                        {{-- @endif --}}
-                                    @else
-                                        {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-delete')) --}}
-                                        <form class="delete-btn" action="{{ route('admin.halls.destroy', $hall->id) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="dropdown-item text-danger rounded-bottom">
-                                                <span class="fas fa-trash-alt me-2"></span>Delete
-                                            </button>
-                                        </form>
+                                {{-- @endif --}}
+                            @else
+                                {{-- @if (Auth::guard('admin')->user()->hasPermission('halls-delete')) --}}
+                                <form style="display: contents" class="delete-btn" action="{{ route('admin.halls.destroy', $hall->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">
+                                        <span class="fas fa-trash-alt"></span>
+                                    </button>
+                                </form>
 
-                                        {{-- @endif --}}
-                                    @endif
+                                {{-- @endif --}}
+                            @endif
 
 
 
 
-
-                                </div>
-                            </div>
 
                         </td>
 
