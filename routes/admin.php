@@ -98,6 +98,8 @@ Route::prefix('acp')->name('admin.')->group(function () {
             Route::put('/{id}/update', 'update')->name('update');
             Route::put('/{id}/restore', 'restore')->name('restore');
             Route::delete('/{id}/destroy', 'destroy')->name('destroy');
+
+            Route::get('get-permission/{vendor}' , 'get_permission')->name('get_permission');
         });
         // vendor-admins
 
