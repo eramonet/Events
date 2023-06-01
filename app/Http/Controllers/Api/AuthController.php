@@ -7,6 +7,7 @@ use App\Http\Interfaces\AuthRepositoryInterface;
 use App\Http\Resources\UserResource;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\Region;
 use App\Models\User;
 use App\Models\Verification;
 use Carbon\Carbon;
@@ -153,6 +154,10 @@ class AuthController extends Controller
         if($years<17){
             return response()->json(res($lang, failed(), 'years_small_than_17', []), 404);
         }
+        $region  = Region::where('city_id', $request->city_id)->first();
+        if (!isset($region)) {
+            return response()->json(res($lang, failed(), 'city_not_found'), 404);
+        }
         $city=City::where('id',$request->city_id)->first();
         //$data = $request->all();
         $data = $request->only(
@@ -238,7 +243,7 @@ class AuthController extends Controller
         if ($flag == 'code_sent') {
             $getcode = User::where('email', $request->email)->first();
             $code = Verification::where('user_id', $getcode->id)->first()->code;
-            return response(res($lang, success(), 'code_sent', []), 200);
+            return response(res($lang, success(), 'code_sent', ["code=>$code"]), 200);
         } else {
             return response(res($lang, failed(),'user_not_found', []), 404);
         }

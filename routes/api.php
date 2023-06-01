@@ -83,7 +83,10 @@ Route::controller(UserController::class)->group(function () {
             Route::get('get-products-cart', 'getProductsCart');
             Route::get('package-details/{package_id}', 'getPackage');
             Route::post('checkout-products', 'checkoutProduct');
-
+            Route::get('get-orders', 'myOrders');
+            Route::get('brand-products/{brand_id}', 'getBrandProducts');
+            Route::get('order-details/{order_id}', 'orderDetails');
+            Route::post('cancel-order', 'cancelOrder');
         });
     } else {
         Route::get('home', 'home');

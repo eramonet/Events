@@ -56,4 +56,7 @@ interface UserRepositoryInterface
 
     public function checkoutProduct($request);
 
+    public function myOrders($user, $lang);
+
+    public function orderDetails($user,$order_id,$lang);
 }
