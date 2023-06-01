@@ -23,8 +23,8 @@ class HallDetailsResource extends JsonResource
      */
     public function packages($id, $lang)
     {
-        $getPackages = HallPackage::where('hall_id', $id)->pluck('package_id');
-        $packages = Package::whereIn('id', $getPackages)->get();
+        // $getPackages = Package::where('hall_id', $id)->pluck('package_id');
+        $packages = Package::where('hall_id', $id)->get();
         $allpackages = array();
         $i = 0;
         foreach ($packages as $package) {
@@ -41,9 +41,8 @@ class HallDetailsResource extends JsonResource
 
     public function decorations($id, $lang)
     {
-        $getcats = CategoryHall::where('hall_id', $id)->pluck('category_id');
-        $cats = PackageOption::whereIn('category_id', $getcats)->pluck('category_id');
-        $decorations = PackageOptionCategory::whereIn('id', $cats)->get();
+        $decorations = PackageOptionCategory::where('hall_id', $id)->get();
+
         $alldecorations = array();
         $i = 0;
         foreach ($decorations as $decoration) {
@@ -52,11 +51,11 @@ class HallDetailsResource extends JsonResource
             $alldecorations[$i]['image'] = $decoration->image_url;
             if ($lang == 'en') {
                 $getOptions = PackageOption::where('category_id', $decoration->id)
-                    ->select('id', 'title_en as title', 'image as image_url', 'quantity', 'limitation', 'price')
+                    ->select('id', 'title_en as title', 'image as image_url', 'limitation', 'price')
                     ->get();
             } else {
                 $getOptions = PackageOption::where('category_id', $decoration->id)
-                    ->select('id', 'title_ar as title', 'image as image_url', 'quantity', 'limitation', 'price')
+                    ->select('id', 'title_ar as title', 'image as image_url', 'limitation', 'price')
                     ->get();
             }
             $alldecorations[$i]['options'] = $getOptions;

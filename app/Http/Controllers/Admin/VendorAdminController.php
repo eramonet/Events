@@ -245,6 +245,22 @@ class VendorAdminController extends Controller
         return redirect()->back();
     }
 
+    public function get_permission($id)
+    {
+        $permissions = [] ;
+        if( Vendor::find($id) ){
+            if( Vendor::find($id)->type == "hall" ){
+                $permissions = AdminPermission::vendor_halls();
+            }else if( Vendor::find($id)->type == "product" ){
+                $permissions = AdminPermission::vendor_product();
+            }else if( Vendor::find($id)->type == "product_hall" ){
+                $permissions = AdminPermission::vendor();
+            }
+        }
+
+        return $permissions ;
+    }
+
 
     public function restore(Request $request, $id)
     {

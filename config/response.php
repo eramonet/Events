@@ -478,6 +478,26 @@ return [
     [
         'en'=> 'add to cart',
         'ar'=>'تم الاضافة للكارت'
+    ],
+    'my_orders'=>
+    [
+        'en'=> 'my orders',
+        'ar'=>'طلباتي'
+    ],
+    'order_details'=>
+    [
+        'en'=> 'order details',
+        'ar'=>'تفاصيل الطلب'
+    ],
+    'order_not_found'=>
+    [
+        'en'=> 'not available',
+        'ar'=>'غير متاح'
+    ],
+    'done'=>
+    [
+        'en'=> 'done',
+        'ar'=>'تم'
     ]
 
 ];

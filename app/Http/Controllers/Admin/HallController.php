@@ -12,9 +12,15 @@ use Illuminate\Validation\Rule;
 use App\Services\CountryService;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Available_date;
 use App\Models\CategoryHall;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\Hall;
 use App\Models\Occasion;
+use App\Models\Package;
+use App\Models\PackageOptionCategory;
+use App\Models\Tax;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Services\HallCategoryService;
 use Illuminate\Support\Facades\Auth;
@@ -63,17 +69,15 @@ class HallController extends Controller
 
     public function create(Request $request)
     {
-
-
-        $countries = $this->countryService->getActiveCountries();
+        $countries = Country::first();
         $cities = $this->cityService->getActiveCities();
-        $firstCountryCities = $countries->count() > 0 ? $countries->first()->cities : $countries;
+        $firstCountryCities = $countries->count() > 0 ? $countries->cities : $countries;
         $vendors = $this->vendorService->getActiveVendors();
-        $hallCategories = Occasion::latest()->get();
+        $hallCategories = Occasion::forHall()->forBoth()->latest()->get();
 
+        $taxes = Tax::latest()->get() ;
 
-
-        return \view('admin.hall.create', \compact('countries', 'cities', 'firstCountryCities', 'vendors', 'hallCategories'));
+        return \view('admin.hall.create', \compact('cities', 'firstCountryCities', 'vendors', 'hallCategories' , 'taxes'));
     }
 
 
@@ -89,8 +93,6 @@ class HallController extends Controller
     public function store(Request $request){
 
         $request->validate([
-            'email' => ['required', 'email', 'unique:halls'],
-            'phone' => ['required', 'string', 'unique:halls'],
             'title_ar' => ['required', 'string', 'min:2', 'unique:halls'],
             'title_en' => ['required', 'string', 'min:2', 'unique:halls'],
             'summary_ar' => ['required', 'string', 'min:2'],
@@ -104,7 +106,10 @@ class HallController extends Controller
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:10240'],
             'guests_capacity' => ['required', 'integer'],
-            'country_id' => ['required', 'exists:countries,id'],
+            'city_id' => ['required', 'exists:cities,id'],
+            'real_price' => ['required'],
+            'fake_price' => ['required'],
+            'offer_end_at' => ['required'],
             'city_id' => ['required', 'exists:cities,id'],
             'latitude' => ['nullable', 'string', 'min:2'],
             'longitude' => ['nullable', 'string', 'min:2'],
@@ -120,7 +125,7 @@ class HallController extends Controller
 
             if (Auth::guard('admin')->user()->vendor->halls_count > Auth::guard('admin')->user()->vendor->halls->count()) {
 
-                return $created = $this->hallService->store($request);
+                $created = $this->hallService->store($request);
 
                 if ($created) {
                     $request->session()->flash('success', 'Hall Added SuccessFully');
@@ -156,24 +161,30 @@ class HallController extends Controller
             return redirect()->back();
         }
 
-        $countries = $this->countryService->getActiveCountries();
-        $cities = $this->cityService->getActiveCities();
         $firstCountryCities = $this->cityService->cityByCountryId($hall->country_id);
         $vendors = $this->vendorService->getActiveVendors();
-        $hallCategories = Occasion::latest()->get();
+        $hallCategories = Occasion::forHall()->forBoth()->latest()->get();
+
+        $taxes = Tax::latest()->get() ;
 
 
         $hall["categories"] = CategoryHall::where("hall_id" , $hall->id)->latest()->get();
 
 
-        return \view('admin.hall.edit', \compact('hall', 'countries', 'cities', 'firstCountryCities', 'vendors', 'hallCategories'));
+        return \view('admin.hall.edit', \compact('hall', 'firstCountryCities', 'vendors', 'hallCategories' , 'taxes'));
     }
 
     public function show(Request $request, $id)
     {
 
         $hall = $this->hallService->getById($id);
-        
+
+        $hall["packages"] = Package::where("hall_id" , $id)->get() ;
+
+        $hall["extra_decorations"] = PackageOptionCategory::where("hall_id" , $hall->id)->get()  ;
+
+        $hall["available_dates"] = Available_date::where("hall_id" , $hall->id)->get()  ;
+
         if (!$hall) {
             $request->session()->flash('failed', 'Hall Not Found');
             return redirect()->back();
@@ -193,8 +204,6 @@ class HallController extends Controller
         }
 
         $request->validate([
-            'email' => ['required', 'email',  Rule::unique('halls')->ignore($hall->id)],
-            'phone' => ['required', 'string', Rule::unique('halls')->ignore($hall->id)],
             'title_ar' => ['required', 'string', 'min:2',  Rule::unique('halls', 'title_ar')->ignore($hall->id)],
             'title_en' => ['required', 'string', 'min:2', Rule::unique('halls', 'title_en')->ignore($hall->id)],
             'summary_ar' => ['required', 'string', 'min:2'],
@@ -208,15 +217,15 @@ class HallController extends Controller
             'images' => ['nullable', 'array'],
             'images.*' => ['nullable', 'image', 'max:10240'],
             'guests_capacity' => ['required', 'integer'],
-            'country_id' => ['required', 'exists:countries,id'],
             'city_id' => ['required', 'exists:cities,id'],
-            'vendor_id' => ['required', 'exists:vendors,id'],
+            'real_price' => ['required'],
+            'fake_price' => ['required'],
+            'offer_end_at' => ['required'],
             'latitude' => ['nullable', 'string', 'min:2'],
             'longitude' => ['nullable', 'string', 'min:2'],
             'address_ar' => ['nullable', 'string', 'min:2'],
             'address_en' => ['nullable', 'string', 'min:2'],
             'categories.*' => ['nullable'],
-
         ]);
 
          $updated = $this->hallService->update($request, $hall);

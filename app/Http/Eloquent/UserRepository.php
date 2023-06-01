@@ -24,6 +24,7 @@ use App\Models\HallCategory;
 use App\Models\Notification;
 use App\Models\Occasion;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\OrderProduct;
 use App\Models\Package;
 use App\Models\PackageOption;
@@ -46,8 +47,7 @@ class UserRepository implements UserRepositoryInterface
 {
     public function home($lang)
     {
-        $categories = HallCategory::where('id', '!=', 1)
-            ->take(4)->orderBy('id', 'asc')->get();
+        $categories = HallCategory::take(4)->orderBy('id', 'asc')->get();
         $allcats = array();
         $i = 0;
         foreach ($categories as $category) {
@@ -146,7 +146,7 @@ class UserRepository implements UserRepositoryInterface
             $i++;
         }
 
-        $brands =  Brand::get();
+        $brands =  Vendor::get();
         $allbrands = array();
         $i = 0;
         foreach ($brands as $brand) {
@@ -797,11 +797,11 @@ class UserRepository implements UserRepositoryInterface
         foreach ($carts as $cart) {
             $allcarts[$i]['id'] = $cart->id;
             $allcarts[$i]['product_id'] = $cart->product_id;
-            $allcarts[$i]['product_name'] =  $lang == 'en' ? Product::where('id', $cart->product_id)->first()->title_en : Product::where('id', $cart->product_id)->first()->title_ar;
+            $allcarts[$i]['product_name'] =  $lang == 'en' ? Product::withTrashed()->where('id', $cart->product_id)->first()->title_en : Product::withTrashed()->where('id', $cart->product_id)->first()->title_ar;
             $allcarts[$i]['quantity'] = $cart->quantity;
-            $allcarts[$i]['real_price'] = Product::where('id', $cart->product_id)->first()->real_price;
-            $allcarts[$i]['fake_price'] = Product::where('id', $cart->product_id)->first()->fake_price;
-            $allcarts[$i]['image'] = Product::where('id', $cart->product_id)->first()->primary_image_url;
+            $allcarts[$i]['real_price'] = Product::withTrashed()->where('id', $cart->product_id)->first()->real_price;
+            $allcarts[$i]['fake_price'] = Product::withTrashed()->where('id', $cart->product_id)->first()->fake_price;
+            $allcarts[$i]['image'] = Product::withTrashed()->where('id', $cart->product_id)->first()->primary_image_url;
 
             $i++;
         }
@@ -822,39 +822,38 @@ class UserRepository implements UserRepositoryInterface
             'customer_phone' => $request->customer_phone,
             'order_from' => $request->order_from,
             'order_number' =>  Order::latest()->first() ? str_pad(Order::latest()->first()->id + 1, 9, '0', STR_PAD_LEFT) : str_pad(1, 9, '0', STR_PAD_LEFT),
-            'customer_promo_code_title'=> $code!=null?$code->text_en:"",
+            'customer_promo_code_title' => $code != null ? $code->text_en : "",
             'customer_promo_code_value' => $code != null ? $code->value : "",
             'customer_promo_code_type' => $code != null ? $code->type : "",
-            'order_from'=>$request->order_from,
-            'payment_type'=> 'visa',
-            'status'=> 'pending'
+            'order_from' => $request->order_from,
+            'payment_type' => 'visa',
+            'status' => 'pending'
         ]);
 
         $products = $request->product_id;
         $quantities = $request->quantity;
         for ($i = 0; $i < count($products); $i++) {
-            $productRealPrice=Product::where('id', $products[$i])->first();
-            $productQuantity= $quantities[$i];
-            $getvendor=Product::where('id', $products[$i])->first();
-            $commision=Vendor::where('id', $getvendor->admin_id)->first();
+            $productRealPrice = Product::where('id', $products[$i])->first();
+            $productQuantity = $quantities[$i];
+            $getvendor = Product::where('id', $products[$i])->first();
+            $commision = Vendor::where('id', $getvendor->admin_id)->first();
             $productTaxes = ProductTax::where('product_id', $products[$i])->pluck('tax_id');
             $taxes = Tax::whereIn('id', $productTaxes)->sum('percentage');
-            $productPrice= $productRealPrice->real_price* $productQuantity;
-            if(isset($commision)){
-            $commissionProductAfter= $productPrice* $commision->commision / 100;
-            }else{
+            $productPrice = $productRealPrice->real_price * $productQuantity;
+            if (isset($commision)) {
+                $commissionProductAfter = $productPrice * $commision->commision / 100;
+            } else {
                 $commissionProductAfter = $productPrice;
             }
 
-            $shipping=Shipping::where('city_id',$request->city_id)->first();
-            if(isset($promoCode)){
-                if($promoCode->type== 'percent'){
-                    $productAfterCommissionAndPromocode=
-                    $commissionProductAfter* $promoCode->value/100;
-
-                }else{
+            $shipping = Shipping::where('city_id', $request->city_id)->first();
+            if (isset($promoCode)) {
+                if ($promoCode->type == 'percent') {
                     $productAfterCommissionAndPromocode =
-                    $commissionProductAfter - $promoCode->value;
+                        $commissionProductAfter * $promoCode->value / 100;
+                } else {
+                    $productAfterCommissionAndPromocode =
+                        $commissionProductAfter - $promoCode->value;
                 }
             }
             $productAfterTaxes = $productAfterCommissionAndPromocode
@@ -864,24 +863,115 @@ class UserRepository implements UserRepositoryInterface
             } else {
                 $productAfterShipping = $productAfterTaxes;
             }
-              $v= Vendor::where('id', $getvendor->admin_id)->first();
+            $v = Vendor::where('id', $getvendor->admin_id)->first();
             OrderProduct::create(
                 [
-                    'product_id'=>$products[$i],
-                    'vendor_id'=> $v->id,
-                    'order_number'=>$order->order_number,
-                    'product_title'=>Product::where('id',$products[$i])->first()->title_en,
-                    'product_quantity'=> $quantities[$i],
-                    'order_id'=>$order->id,
-                    'price'=> $productAfterShipping,
-                    'commission'=> $commissionProductAfter,
-                    'product_after_commission_and_promocode'=>
+                    'product_id' => $products[$i],
+                    'vendor_id' => $v->id,
+                    'order_number' => $order->order_number,
+                    'product_title' => Product::where('id', $products[$i])->first()->title_en,
+                    'product_quantity' => $quantities[$i],
+                    'order_id' => $order->id,
+                    'price' => $productAfterShipping,
+                    'commission' => $commissionProductAfter,
+                    'product_after_commission_and_promocode' =>
                     $productAfterCommissionAndPromocode,
-                    'product_after_taxes'=>$productAfterTaxes,
+                    'product_after_taxes' => $productAfterTaxes,
                 ]
             );
-             $cart=Cart::where('product_id',$products[$i])->where('user_id',$request->user_id)->first();
+            $cart = Cart::where('product_id', $products[$i])->where('user_id', $request->user_id)->first();
             $cart->delete();
         }
+    }
+
+    public function myOrders($user, $lang)
+    {
+        $orders = Order::where('customer_email', $user->email)->get();
+        $allorders = array();
+        $i = 0;
+        foreach ($orders as $order) {
+            $allorders[$i]['id'] = $order->id;
+            $allorders[$i]['order_number'] = $order->order_number;
+            $allorders[$i]['order_date'] = $order->created_at;
+            $allorders[$i]['order_status'] = $order->status;
+            $getOrdersTotal = OrderProduct::where('order_id', $order->id)->sum('price');
+            $allorders[$i]['order_total'] = $getOrdersTotal;
+            $i++;
+        }
+        return $allorders;
+    }
+
+    public function orderDetails($user, $order_id, $lang)
+    {
+        $getorder = Order::where('id', $order_id)->get();
+        $details = array();
+        $i = 0;
+        foreach ($getorder as $order) {
+            $details[$i]['id'] = $order->id;
+            $details[$i]['order_number'] = $order->order_number;
+            $details[$i]['order_date'] = $order->created_at;
+            $details[$i]['order_status'] = $order->status;
+
+            $getOrderPromoCodeTotal = Order::where('id', $order->id)->sum('customer_promo_code_value');
+            $details[$i]['promo_code'] = $getOrderPromoCodeTotal;
+
+            $getOrderTotal = OrderProduct::where('order_id', $order->id)->sum('price');
+            $details[$i]['order_total'] = $getOrderTotal;
+
+            $extra = OrderProduct::where('order_id', $order->id)->sum('product_after_commission_and_promocode');
+            $details[$i]['extra_fees'] = $extra;
+
+
+            $discount = PromoCode::where('value',$order->customer_promo_code_title)->first();
+            if(isset($discount)){
+            $details[$i]['discount'] = $discount->value;
+            }else{
+                $details[$i]['discount'] = 0;
+            }
+
+            $getOrderShippingTotal = OrderProduct::where('order_id', $order->id)->sum('shipping');
+            $details[$i]['shipping_total'] = $getOrderShippingTotal;
+
+            $getOrderTaxesTotal = OrderProduct::where('order_id', $order->id)->sum('product_after_taxes');
+            $details[$i]['taxes_total'] = $getOrderTaxesTotal;
+
+            $details[$i]['pay_type'] = $order->payment_type;
+
+            $getOrderProducts = OrderProduct::where('order_id', $order->id)->get();
+            $res_prods_item = [];
+            $res_prods_list = [];
+            foreach ($getOrderProducts as $prod) {
+                $res_prods_item['order_details_id'] = $prod->id;
+                $res_prods_item['product_id'] = $prod->product_id;
+                $res_prods_item['product_name']
+                    = $lang == 'en' ? Product::withTrashed()->where('id', $prod->product_id)
+                    ->first()->title_en :
+                    Product::withTrashed()->where('id', $prod->product_id)
+                    ->first()->title_ar;
+                $res_prods_item['category_name']
+                    = $lang == 'en' ? $prod->product->category->title_en :
+                    $prod->product->category->title_ar;
+
+                $res_prods_item['product_available']
+                = $prod->product->status == '1' ? "1" :"0";
+
+                $res_prods_item['product_model_number']
+                = $prod->product->model_number;
+
+                $res_prods_item['quantity']
+                = $prod->product_quantity;
+
+                $res_prods_item['price']
+                = $prod->price;
+
+                $res_prods_list[] = $res_prods_item;
+            }
+            $details[$i]['products'] = $res_prods_list;
+            $i++;
+        }
+        return $details;
+
    }
+
+
 }

@@ -78,13 +78,7 @@ class DashboardController extends Controller
                 DB::SELECT("select id, count(*) as count, date(created_at) as date from orders WHERE date(created_at) >= DATE(NOW())
                 - INTERVAL $dateDiff DAY GROUP BY date(created_at)");
 
-            $allordersChart =
-
-                DB::SELECT("select id, count(*) as count, date(created_at) as date from orders GROUP BY date(created_at)");
-
-                $orderSum=Order::whereDate('created_at', '>=', $today)
-                ->whereDate('created_at', '<=', $firstday)
-                ->sum('product_total_price');
+            $allordersChart =1;
 
 
 
@@ -135,7 +129,7 @@ class DashboardController extends Controller
                 'total_order_budget_all_times',
                 'total_commission_budget_all_times',
                 'ordersChart',
-                'orderSum',
+                // 'orderSum',
                 'allordersChart'
             ));
 

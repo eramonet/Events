@@ -23,8 +23,6 @@ class HallsCategoryController extends Controller
         //   $this->middleware(['permission:halls-categories-delete'])->only(['destroy']);
     }
 
-
-
     public function index( Request $request){
 
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();

@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Hall;
 use App\Helper\UploadHelper;
 use App\Models\CategoryHall;
+use App\Models\Country;
+use App\Models\HallTaxe;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -146,11 +148,7 @@ class HallService
 
     public function store(Request $request)
     {
-
-
         $data = $request->only([
-            'email',
-            'phone',
             'title_ar',
             'title_en',
             'summary_ar',
@@ -161,21 +159,25 @@ class HallService
             'keywords_en',
             'status',
             'guests_capacity',
-            'country_id',
             'city_id',
+            'real_price',
+            'fake_price',
+            'offer_end_at',
             'latitude',
             'longitude',
             'address_ar',
             'address_en',
 
         ]);
+        $data["country_id"] = Country::first()->id ;
         $data['admin_id'] = Auth::guard('admin')->id();
-        $data['vendor_id'] = Auth::guard('admin')->user()->vendor ? Auth::guard('admin')->user()->vendor->id : null;
+        if( Auth::guard('admin')->user()->vendor){
+            $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
+        }
 
         $hall = $this->hall::create($data);
 
         if ($request->input('categories')) {
-            return $request->input('categories') ;
             foreach( $request->input('categories') as $category_occasion ){
                 CategoryHall::create([
                     "category_id" => $category_occasion ,
@@ -183,8 +185,6 @@ class HallService
                 ]);
             }
         }
-
-
 
 
 
@@ -205,6 +205,15 @@ class HallService
         }
         $hall->save();
 
+        if ($request->taxes) {
+            foreach( $request->taxes as $tax ){
+                HallTaxe::create([
+                    'hall_id' => $hall->id ,
+                    'tax_id' => $tax
+                ]);
+            }
+        }
+
         return true;
     }
 
@@ -224,9 +233,10 @@ class HallService
             'keywords_en',
             'status',
             'guests_capacity',
-            'country_id',
             'city_id',
-            'vendor_id',
+            'real_price',
+            'fake_price',
+            'offer_end_at',
             'latitude',
             'longitude',
             'address_ar',
@@ -243,9 +253,9 @@ class HallService
                     $cat_hall->delete();
                 }
             }
-            foreach( $request->input('categories') as $category_occasion ){
+            foreach ($request->input('categories') as $category_occasion) {
                 CategoryHall::create([
-                    "category_id" => $category_occasion ,
+                    "category_id" => $category_occasion,
                     "hall_id" => $hall->id
                 ]);
             }
@@ -279,6 +289,24 @@ class HallService
             }
         }
         $hall->save();
+
+
+        if ($request->taxes) {
+
+            $this_hall_taxes = HallTaxe::where("hall_id" , $hall->id)->get();
+            if( count($this_hall_taxes) > 0 ){
+                foreach( $this_hall_taxes as $this_hall_taxes ){
+                    $this_hall_taxes->delete();
+                }
+            }
+
+            foreach( $request->taxes as $tax ){
+                HallTaxe::create([
+                    'hall_id' => $hall->id ,
+                    'tax_id' => $tax
+                ]);
+            }
+        }
 
 
         return $hall ? true : false;

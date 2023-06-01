@@ -17,8 +17,8 @@ class BrandResource extends JsonResource
         $lang = getLang();
         return [
             'id' => $this->id,
-            'name' => $lang == 'en' ? $this->name_en : $this->name_ar,
-            'logo'=>$this->logo
+            'name' => $lang == 'en' ? $this->title_en : $this->title_ar,
+            'logo'=>$this->image_url
         ];
     }
 }

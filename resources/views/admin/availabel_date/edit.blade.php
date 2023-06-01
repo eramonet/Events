@@ -184,7 +184,7 @@
 
             </div>
         </div>
-        
+
 
 
 
@@ -210,7 +210,7 @@
 
 
         <button type="submit" class="btn btn-primary d-block m-auto">
-            edit
+            Show
             <i class="fas fa-plus icon icon-xs ms-2"></i>
         </button>
     </form>

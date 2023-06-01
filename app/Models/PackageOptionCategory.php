@@ -41,8 +41,16 @@ class PackageOptionCategory extends Model
         return $this->belongsTo(Admin::class, 'admin_id');
     }
 
+    public function vendor()
+    {
+        return $this->belongsTo(Vendor::class, 'admin_id');
+    }
 
 
+    public function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
+    }
 
     public function options()
     {

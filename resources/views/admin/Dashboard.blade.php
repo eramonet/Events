@@ -1631,231 +1631,226 @@
 @endsection
 
 
-
-
 @section('scripts')
-    <!-- ChartJS -->
-    {{-- <script src={{ asset('dashboard/js/plugin/Chart.min.js') }}></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        // currentMonthIncomFromProducts
-        let currentMonthIncomFromProductsCTX = document.getElementById("productsIncome");
+<!-- ChartJS -->
+{{-- <script src={{ asset('dashboard/js/plugin/Chart.min.js') }}></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-        const currentMonthIncomFromProductsData = {
-            labels: [
+<script>
+    // currentMonthIncomFromProducts
+    let currentMonthIncomFromProductsCTX = document.getElementById("productsIncome");
+
+
+    const currentMonthIncomFromProductsData = {
+        labels: [
+            @foreach ($ordersChart as $ocount)
+                '{{ $ocount->date }}',
+            @endforeach
+        ],
+        datasets: [{
+            label: 'Count',
+            data: [
                 @foreach ($ordersChart as $ocount)
-                    '{{ $ocount->date }}',
+                    {{ $ocount->count }},
                 @endforeach
             ],
-            datasets: [{
-                label: 'Count',
-                data: [
-                    @foreach ($ordersChart as $ocount)
-                        {{ $ocount->count }},
-                    @endforeach
-                ],
 
-                //   pointStyle: 'star',
-                //   pointRadius: 10,
-                //   pointHoverRadius: 15
-            }]
-        };
+            //   pointStyle: 'star',
+            //   pointRadius: 10,
+            //   pointHoverRadius: 15
+        }]
+    };
 
-        const currentMonthIncomFromProductsConfig = {
-            type: 'line',
-            data: currentMonthIncomFromProductsData,
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: (currentMonthIncomFromProductsCTX) =>
-                            'Current Month Total Orders Chart',
-                    }
+    const currentMonthIncomFromProductsConfig = {
+        type: 'line',
+        data: currentMonthIncomFromProductsData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: (currentMonthIncomFromProductsCTX) =>
+                        'Current Month Total Orders Chart',
                 }
             }
-        };
+        }
+    };
 
-        new Chart(currentMonthIncomFromProductsCTX, currentMonthIncomFromProductsConfig);
+    new Chart(currentMonthIncomFromProductsCTX, currentMonthIncomFromProductsConfig);
 
-        // currentMonthIncomFromProducts
-    </script>
-
-    <script>
-        // currentMonthIncomFromBookings
-        let currentMonthIncomFromBookingsCTX = document.getElementById("bookinksIncome");
+    // currentMonthIncomFromProducts
 
 
+    // currentMonthIncomFromBookings
+    let currentMonthIncomFromBookingsCTX = document.getElementById("bookinksIncome");
 
-        const currentMonthIncomFromBookingsData = {
-            labels: ['1 Jan', '2 Jan', '3 Jan', '4 Jan', '5 Jan', '6 Jan', '7 Jan', '8 Jan', '9 Jan', '10 Jan',
-                '11 Jan', '12 Jan', '13 Jan', '14 Jan', '15 Jan', '16 Jan', '17 Jan', '18 Jan', '19 Jan', '20 Jan',
-                '21 Jan', '22 Jan', '23 Jan', '24 Jan', '25 Jan', '26 Jan', '27 Jan', '28 Jan', '29 Jan', '30 Jan'
+
+
+    const currentMonthIncomFromBookingsData = {
+        labels: ['1 Jan', '2 Jan', '3 Jan', '4 Jan', '5 Jan', '6 Jan', '7 Jan', '8 Jan', '9 Jan', '10 Jan',
+            '11 Jan', '12 Jan', '13 Jan', '14 Jan', '15 Jan', '16 Jan', '17 Jan', '18 Jan', '19 Jan', '20 Jan',
+            '21 Jan', '22 Jan', '23 Jan', '24 Jan', '25 Jan', '26 Jan', '27 Jan', '28 Jan', '29 Jan', '30 Jan'
+        ],
+        datasets: [{
+            label: 'AED',
+            data: ['30000', '50000', '80000', '20000', '20000', '10000', '20000', '18000', '11000', '29000',
+                '11000', '23000', '10000', '90000', '29000', '35000', '3000', '30000', '50000', '80000',
+                '20000', '20000', '10000', '20000', '18000', '11000', '29000', '11000', '23000',
+                '10000', '90000', '29000', '35000', '3000'
             ],
-            datasets: [{
-                label: 'AED',
-                data: ['30000', '50000', '80000', '20000', '20000', '10000', '20000', '18000', '11000', '29000',
-                    '11000', '23000', '10000', '90000', '29000', '35000', '3000', '30000', '50000', '80000',
-                    '20000', '20000', '10000', '20000', '18000', '11000', '29000', '11000', '23000',
-                    '10000', '90000', '29000', '35000', '3000'
-                ],
 
-                //   pointStyle: 'circle',
-                //   pointRadius: 10,
-                //   pointHoverRadius: 15,
+            //   pointStyle: 'circle',
+            //   pointRadius: 10,
+            //   pointHoverRadius: 15,
 
-                backgroundColor: [
-                    '#0d6efd',
-                    '#0dcaf0',
-                    '#2ecc71',
-                    '#dc3545',
-                ]
-            }]
-        };
-
-        const currentMonthIncomFromBookingsConfig = {
-            type: 'line',
-            data: currentMonthIncomFromBookingsData,
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: (currentMonthIncomFromBookingsCTX) =>
-                            'Current Month Total Income From Bookings Is 1,110,500,00  AED',
-                    }
+            backgroundColor: [
+                '#0d6efd',
+                '#0dcaf0',
+                '#2ecc71',
+                '#dc3545',
+            ]
+        }]
+    };
+    const currentMonthIncomFromBookingsConfig = {
+        type: 'line',
+        data: currentMonthIncomFromBookingsData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: (currentMonthIncomFromBookingsCTX) =>
+                        'Current Month Total Income From Bookings Is 1,110,500,00  AED',
                 }
             }
-        };
+        }
+    };
 
-        new Chart(currentMonthIncomFromBookingsCTX, currentMonthIncomFromBookingsConfig);
+    new Chart(currentMonthIncomFromBookingsCTX, currentMonthIncomFromBookingsConfig);
 
-        // currentMonthIncomFromProducts
-    </script>
+    // currentMonthIncomFromProducts
 
-    <script>
-        // currentMonthOrders
-        let currentMonthOrdersCTX = document.getElementById("ordersChart");
 
-        const currentMonthOrdersData = {
-            labels: [
+
+
+    // currentMonthOrders
+    let currentMonthOrdersCTX = document.getElementById("ordersChart");
+
+    const currentMonthOrdersData = {
+        labels: [
+            @foreach ($allordersChart as $allorder)
+                '{{ $allorder->date }}',
+            @endforeach
+        ],
+        datasets: [{
+            label: 'Orders',
+            data: [
                 @foreach ($allordersChart as $allorder)
-                    '{{ $allorder->date }}',
+                    {{ $allorder->count }},
                 @endforeach
             ],
-            datasets: [{
-                label: 'Orders',
-                data: [
-                    @foreach ($allordersChart as $allorder)
-                        {{ $allorder->count }},
-                    @endforeach
-                ],
 
-                pointStyle: 'circle',
-                pointRadius: 10,
-                pointHoverRadius: 15
-            }]
-        };
-        const currentMonthOrdersConfig = {
-            type: 'bar',
-            data: currentMonthOrdersData,
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
+            pointStyle: 'circle',
+            pointRadius: 10,
+            pointHoverRadius: 15
+        }]
+    };
+    const currentMonthOrdersConfig = {
+        type: 'bar',
+        data: currentMonthOrdersData,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
 
 
-                        display: true,
-                        text: (ctx) =>
-                            'Total Orders Is @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')){{ App\Models\Order::count() }} @else {{ App\Models\Order::whereIn('id', $getOrdersProducts)->count() }} @endif',
-                    }
+                    display: true,
+                    text: (ctx) =>
+                        'Total Orders Is @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')){{ App\Models\Order::count() }} @else {{ App\Models\Order::whereIn('id', $getOrdersProducts)->count() }} @endif',
                 }
             }
-        };
+        }
+    };
 
-        new Chart(currentMonthOrdersCTX, currentMonthOrdersConfig);
+    new Chart(currentMonthOrdersCTX, currentMonthOrdersConfig);
 
-        // currentMonthOrders
-    </script>
+    // currentMonthOrders
+    // product chart
 
-    <script>
-        // product chart
+    let ctx3 = document.getElementById("productsChart");
 
-        let ctx3 = document.getElementById("productsChart");
+    const data3 = {
+        labels: ['In Stock', 'Out Of Stock', ],
+        datasets: [{
+            label: 'Products',
+            data: [{{ $productsInStock }}, {{ $productsOutStock }}],
 
-        const data3 = {
-            labels: ['In Stock', 'Out Of Stock', ],
-            datasets: [{
-                label: 'Products',
-                data: [{{ $productsInStock }}, {{ $productsOutStock }}],
-
-                pointStyle: 'circle',
-                pointRadius: 10,
-                pointHoverRadius: 15
-            }]
-        };
-        const config3 = {
-            type: 'pie',
-            data: data3,
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: (ctx) => 'Total Products Is {{ $products }} Product ',
-                    }
+            pointStyle: 'circle',
+            pointRadius: 10,
+            pointHoverRadius: 15
+        }]
+    };
+    const config3 = {
+        type: 'pie',
+        data: data3,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: (ctx) => 'Total Products Is {{ $products }} Product ',
                 }
             }
+        }
 
-        };
-        new Chart(ctx3, config3);
-        // product chart
-    </script>
+    };
+    new Chart(ctx3, config3);
+    // product chart
+
+    // ordersStatusChart
 
 
+    let ctx4 = document.getElementById("ordersStatusChart");
 
-    <script>
-        let ctx4 = document.getElementById("ordersStatusChart");
+    const data4 = {
+        labels: ['pending', 'Inprogress', 'Delivered', 'Cancelled'],
+        datasets: [{
+            label: 'Order',
+            data: [{{ $newOrdersCount }}, {{ $inprogressOrdersCount }}, {{ $deliveredOrdersCount }},
+                {{ $cancelledOrdersCount }}
+            ],
 
-        const data4 = {
-            labels: ['pending', 'Inprogress', 'Delivered', 'Cancelled'],
-            datasets: [{
-                label: 'Order',
-                data: [{{ $newOrdersCount }}, {{ $inprogressOrdersCount }}, {{ $deliveredOrdersCount }},
-                    {{ $cancelledOrdersCount }}
-                ],
+            pointStyle: 'circle',
+            pointRadius: 10,
+            pointHoverRadius: 15,
+            backgroundColor: [
+                '#0d6efd',
+                '#0dcaf0',
+                '#2ecc71',
+                '#dc3545',
+            ]
 
-                pointStyle: 'circle',
-                pointRadius: 10,
-                pointHoverRadius: 15,
-                backgroundColor: [
-                    '#0d6efd',
-                    '#0dcaf0',
-                    '#2ecc71',
-                    '#dc3545',
-                ]
+        }]
+    };
+    const config4 = {
+        type: 'pie',
+        data: data4,
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: (ctx) =>
+                        'Total Orders Is @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')){{ App\Models\Order::count() }} @else {{ App\Models\Order::whereIn('id', $getOrdersProducts)->count() }} @endif Order ',
+                },
 
-            }]
-        };
-        const config4 = {
-            type: 'pie',
-            data: data4,
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: (ctx) =>
-                            'Total Orders Is @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')){{ App\Models\Order::count() }} @else {{ App\Models\Order::whereIn('id', $getOrdersProducts)->count() }} @endif Order ',
-                    },
-
-                }
             }
+        }
 
-        };
-        new Chart(ctx4, config4);
-        // ordersStatusChart
-    </script>
+    };
+    new Chart(ctx4, config4);
+
+    // ordersStatusChart
+</script>
 @endsection

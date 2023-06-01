@@ -15,8 +15,6 @@ return new class extends Migration
     {
         Schema::create('halls', function (Blueprint $table) {
             $table->id();
-            $table->string('email')->unique()->nullable();
-            $table->string('phone')->unique()->nullable();
             $table->string('title_ar')->unique();
             $table->string('title_en')->unique();
             $table->bigInteger('guests_capacity')->nullable();
@@ -29,6 +27,9 @@ return new class extends Migration
             $table->text('description_en')->nullable();
             $table->text('keywords_ar')->nullable();
             $table->text('keywords_en')->nullable();
+            $table->double('real_price');
+            $table->double('fake_price');
+            $table->date('offer_end_at');
             $table->string('primary_image')->nullable();
             $table->enum('status',[1,0])->default(1)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();

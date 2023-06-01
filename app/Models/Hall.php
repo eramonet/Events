@@ -47,6 +47,11 @@ class Hall extends Model
         return $this->hasMany(CategoryHall::class, 'hall_id');
     }
 
+    public function packages()
+    {
+        return $this->hasMany(Package::class, 'id' , 'hall_id');
+    }
+
     public function vendor()
     {
         return $this->belongsTo(Vendor::class, 'vendor_id');

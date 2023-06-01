@@ -19,7 +19,7 @@ class AvailableDateController extends Controller
     {
         $dates=Available_date::paginate(10);
 
-       
+
 
         return view('admin.availabel_date.index',[
             'dates' => $dates,
@@ -47,23 +47,23 @@ class AvailableDateController extends Controller
     public function store(Request $request)
     {
 
-       
+
         $request->validate([
             'status'=>['required', 'string', Rule::in(['active', 'inactive'])],
 
             'hall_id'=> ['required', 'exists:halls,id'],
 
             'available_date' => ['required'],
-            
+
             'time_from' => ['required'],
             'time_to' => ['required'],
         ]);
 
-        
+
         Available_date::create($request->all());
         $request->session()->flash('success', 'Category crated SuccessFully');
         return redirect('acp/availabel_date');
-        
+
     }
 
     public function edit($id)
@@ -109,10 +109,10 @@ class AvailableDateController extends Controller
     public function destroy($id)
     {
        $date= Available_date::findOrFail($id);;
-      
-       
 
-      
+
+
+
         if(!$date ){
             session()->flash('failed', 'Unvaliabel Date Not Found');
             return redirect('acp/availabel_date');
