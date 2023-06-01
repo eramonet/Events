@@ -255,7 +255,6 @@
                                                             <th class="border-gray-200">Date</th>
                                                             <th class="border-gray-200">From</th>
                                                             <th class="border-gray-200">To</th>
-                                                            <th class="border-gray-200">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -267,11 +266,6 @@
                                                                 <td>{{ $package->available_date }}</td>
                                                                 <td>{{ $package->time_from }}</td>
                                                                 <td>{{ $package->time_to }}</td>
-                                                                <td>
-                                                                    <a href="{{ route('admin.halls.show', $package->id) }}"
-                                                                        class="btn btn-info"><span
-                                                                            class="fas fa-eye"></span></a>
-                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                         <!-- Item -->
