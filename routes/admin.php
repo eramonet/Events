@@ -768,11 +768,14 @@ Route::prefix('acp')->name('admin.')->group(function () {
         Route::post('edit-contact-us-footer/{id}', 'edit_contact_us_footer')->name('edit_contact_us_footer');
     });
 
+
     Route::controller(AdvertisementController::class)->prefix('advertisements')->name('advertisements.')->group(function () {
         Route::get('outer-clients' , "outer_clients")->name("outer_clients");
         Route::post('add-outer-clients' , "add_outer_clients")->name("add_outer_clients");
         Route::post('edit-outer-clients/{id}' , "edit_outer_clients")->name("edit_outer_clients");
         Route::get('delete-outer-clients/{id}' , "delete_outer_clients")->name("delete_outer_clients");
+
+
 
         Route::get('advertisements' , "advertisements")->name("advertisements");
         Route::get('add-advertisements-page' , "add_advertisements_page")->name("add_advertisements_page");

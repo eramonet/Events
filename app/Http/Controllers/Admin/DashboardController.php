@@ -15,6 +15,7 @@ use App\Models\HallCategory;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderProduct;
+use App\Models\Advertisement;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\PromoCode;
@@ -42,7 +43,7 @@ class DashboardController extends Controller
                         $q->where('name', '!=', 'vendor-admin');
                     }
                 )->count();
-            $adsCount = Ad::count();
+            $adsCount = Advertisement::count();
             $vendors = Admin::whereHas(
                 'roles',
                 function ($q) {
@@ -137,19 +138,24 @@ class DashboardController extends Controller
                 'orderSum',
                 'allordersChart'
             ));
+
         } else {
+
             $getVendorProducts = Product::where('admin_id', $useradmin->id)->pluck('id');
             $vendor = Vendor::where('id', $useradmin->vendor_id)->first();
             $vendors = Vendor::where('country_id', $vendor->country_id)->where('city_id', $vendor->city_id)->where('region_id', $vendor->region_id)->where('id', '!=', $vendor->id)->count();
             $adsCount = Ad::where('admin_id', $useradmin->id)->count();
-            $hallCategories = HallCategory::where('admin_id', $useradmin->id)->count();
+            $hallCategories = HallCategory::where('admin_id', $useradmin->vendor->id)->count();
             $halls = Hall::where('vendor_id', $vendor->id)->count();
-            $taxes = Tax::where('admin_id', $useradmin->id)->count();
-            $shippings = Shipping::where('admin_id', $useradmin->id)->sum('cost');
-            $products = Product::where('admin_id', $useradmin->id)->count();
-            $productsInStock = Product::where('admin_id', $useradmin->id)->where('stock', '>', 0)->count();
-            $productsOutStock = Product::where('admin_id', $useradmin->id)->where('stock', '<=', 0)->count();
-            $promoCodes = PromoCode::where('admin_id', $useradmin->id)->count();
+
+            $taxes = Tax::where('admin_id', $useradmin->vendor->id)->count();
+
+            $shippings = Shipping::where('admin_id', $useradmin->vendor->id)->sum('cost');
+            $products = Product::where('admin_id', $useradmin->vendor->id)->count();
+            $productCategories = ProductCategory::where('admin_id', $useradmin->vendor->id)->count();
+            $productsInStock = Product::where('admin_id', $useradmin->vendor->id)->where('stock', '>', 0)->count();
+            $productsOutStock = Product::where('admin_id', $useradmin->vendor->id)->where('stock', '<=', 0)->count();
+            $promoCodes = PromoCode::where('admin_id', $useradmin->vendor->id)->count();
             $getProductsIds = OrderDetail::whereIn('product_id', $getVendorProducts)->pluck('order_id');
 
 
@@ -282,6 +288,7 @@ class DashboardController extends Controller
                 'ordersChart',
                 'orderSum',
                 'allordersChart' ,
+                'productCategories',
             ));
         }
     }

@@ -41,6 +41,7 @@ class ProductCategoryController extends Controller
             return \view('admin.productCategory.index', \compact('categories', 'type'));
 
         } else {
+
             $categories = $this->productCategoryService->getAllAdmin($request, $useradmin);
             $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
@@ -128,7 +129,7 @@ class ProductCategoryController extends Controller
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
 
             $mainCategories = $this->productCategoryService->getActiveMainCategories();
-            
+
             return \view('admin.productCategory.edit', \compact('category', 'mainCategories'));
         } else {
             $mainCategories = $this->productCategoryService->getActiveMainCategoriesAdmin($useradmin);

@@ -28,8 +28,10 @@ class ProductCategoryService {
         $order = isset($request->order) && $request->order == 'ASC' ? 'ASC' : 'DESC';
 
         $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
+
         $countries = $this->category::withCount(['sub_catagories', 'products', 'products_from_main'])->with(['admin', 'parent'])
         ->where(function ($query) use ($request) {
+
             return $query->when($request->search, function ($q) use ($request) {
                 return $q->where('title_ar', 'like', '%' . $request->search . '%')
                     ->orWhere('title_en', 'like', '%' . $request->search . '%');
@@ -88,7 +90,7 @@ class ProductCategoryService {
 
         $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
         $countries = $this->category::withCount(['sub_catagories', 'products', 'products_from_main'])->with(['admin', 'parent'])
-        ->where('admin_id', $useradmin->id)
+        ->where('admin_id', $useradmin->vendor->id)
             ->where(function ($query) use ($request) {
                 return $query->when($request->search, function ($q) use ($request) {
                     return $q->where('title_ar', 'like', '%' . $request->search . '%')
@@ -184,8 +186,6 @@ class ProductCategoryService {
     public function update(Request $request, ProductCategory $category)
     {
 
-
-
         $data = $request->only([
             'title_ar',
             'title_en',
@@ -206,9 +206,9 @@ class ProductCategoryService {
             'extras_ar',
             'extras_en',
             'image',
-
-
         ]);
+
+        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id();
 
         $category->update($data);
 

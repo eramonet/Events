@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -242,6 +241,7 @@
 
 <!-- main JS -->
 <script src="{{ asset('layouts/admin/js/main.js') }}" type="module"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
 
 @yield('scripts')
 
@@ -252,6 +252,3 @@
 </body>
 
 </html>
-
-
-

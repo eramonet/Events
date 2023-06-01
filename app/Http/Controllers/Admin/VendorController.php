@@ -44,6 +44,15 @@ class VendorController extends Controller
         }
 
         return \view('admin.vendor.index', \compact('vendors'));
+
+    }
+    public function company(){
+        $vendors = Vendor::where('account', 'company')->paginate(10);
+        return \view('admin.vendor.index', \compact('vendors'));
+    }
+    public function individual(){
+        $vendors = Vendor::where('account', 'individual')->paginate(10);
+        return \view('admin.vendor.index', \compact('vendors'));
     }
 
     public function create(Request $request)
