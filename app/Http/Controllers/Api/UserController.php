@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Interfaces\UserRepositoryInterface;
 use App\Models\CartHall;
 use App\Models\Order;
+use App\Models\Region;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
@@ -436,7 +437,7 @@ class UserController extends Controller
                 'product_id.*' => 'required',
                 'quantity' => 'required|array',
                 'quantity.*' => 'required',
-                'promo_code'=>'nullable',
+                'promo_code' => 'nullable',
 
             ]
         );
@@ -447,6 +448,7 @@ class UserController extends Controller
         if ($user == 'false') {
             return response()->json(res($lang, expired(), 'user_not_found', []), 404);
         }
+
         $request['user_id'] = $user->id;
         $request['city_id'] = $request->city_id;
         $request['region_id'] = $request->region_id;
@@ -461,5 +463,58 @@ class UserController extends Controller
 
         $this->userObject->checkoutProduct($request);
         return response(res($lang, success(), 'checkout', []), 200);
+    }
+
+    public function myOrders(Request $request)
+    {
+        $lang = getLang();
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $result = $this->userObject->myOrders($user, $lang);
+        return response(res($lang, success(), 'my_orders', $result), 200);
+    }
+
+    public function orderDetails(Request $request, $order_id)
+    {
+        $lang = getLang();
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $result = $this->userObject->orderDetails($user, $order_id, $lang);
+        return response(res($lang, success(), 'order_details', $result), 200);
+    }
+
+    public function cancelOrder(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'order_id' => 'required|exists:orders,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $order = Order::where('customer_email', $user->email)
+            ->where('id', $request->order_id)
+            ->where('status', 'pending')
+            ->first();
+        if (isset($order)) {
+            $order->status = "cancelled";
+            $order->save();
+            return response(res($lang, success(), 'done', []), 200);
+        } else {
+            return response()->json(res($lang, failed(), 'order_not_found', []), 404);
+        }
     }
 }

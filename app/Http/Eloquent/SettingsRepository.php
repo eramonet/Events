@@ -25,6 +25,7 @@ use App\Models\ProductCategory;
 use App\Models\ProductColor;
 use App\Models\Region;
 use App\Models\Term;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\Request;
 
 class SettingsRepository implements SettingsRepositoryInterface
@@ -62,16 +63,17 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function getColors($lang)
     {
-        $getProducts = OrderProduct::pluck('product_id');
-        $usedColors = ProductColor::whereIn('product_id', $getProducts)
+
+        $usedColors = ProductColor::groupBy('color_id')
             ->pluck('color_id');
         $colors = Color::whereIn('id', $usedColors)->get();
         return ColorResource::collection($colors);
+
     }
 
     public function getBrands($lang)
     {
-        $brand = Brand::get();
+        $brand = Vendor::get();
         return BrandResource::collection($brand);
     }
 
