@@ -8,19 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class OrderProduct extends Model
 {
     use HasFactory;
+
     public $fillable = [
-        "product_id" ,
-        "vendor_id" ,
-        "order_number" ,
-        "product_title" ,
-        "price" ,
-        "product_quantity" ,
-        "status"
+        "product_id",
+        "vendor_id",
+        "order_number",
+        "product_title",
+        "price",
+        "product_quantity",
+        'commission',
+        'taxes',
+        'status'
     ];
 
     /////////////////////////////////////////////// Relationship //////////////////////////////////
-    public function order_taxes(){
-        return $this->hasMany(OrderTaxes::class , "product_name" , "product_title");
+    public function order_taxes()
+    {
+        return $this->hasMany(OrderTaxes::class, "product_name", "product_title");
     }
 
     public function product()
@@ -30,7 +34,6 @@ class OrderProduct extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class , "order_number" , "order_number") ;
+        return $this->belongsTo(Order::class, "order_number", "order_number");
     }
-
 }

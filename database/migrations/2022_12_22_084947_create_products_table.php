@@ -44,13 +44,8 @@ return new class extends Migration
             $table->enum('accept',['accepted','rejected','new'])->default('new');
             $table->enum('in_stock',[1,0])->default(1)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
-            $table->foreign('admin_id')->references('id')->on('admins')->cascadeOnUpdate()->nullOnDelete();
             $table->unsignedBigInteger('category_id')->nullable();
-
-            $table->foreign('vendor_id')->references('id')->on('vendors')->cascadeOnUpdate()->nullOnDelete();
             $table->unsignedBigInteger('vendor_id')->nullable();
-
-            $table->foreign('category_id')->references('id')->on('product_categories')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });

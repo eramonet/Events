@@ -9,6 +9,7 @@ use App\Http\Resources\HallResource;
 use App\Http\Resources\PackageResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Ad;
+use App\Models\Admin;
 use App\Models\Available_date;
 use App\Models\BookingDetail;
 use App\Models\Brand;
@@ -26,6 +27,7 @@ use App\Models\Occasion;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderProduct;
+use App\Models\OrderTaxes;
 use App\Models\Package;
 use App\Models\PackageOption;
 use App\Models\Product;
@@ -40,6 +42,7 @@ use App\Models\Tax;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Wishlist;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
@@ -808,9 +811,44 @@ class UserRepository implements UserRepositoryInterface
         return $allcarts;
     }
 
+    // check promodcode function
+    public function check_promo_code($promo_code)
+    {
+        $user = auth()->user();
+        if ($promo_code) {
+            // check exist
+            $exist = PromoCode::where("title", $promo_code)->first();
+            if (!$exist || $exist->expiration_date < Carbon::now() || $exist->maximum_times_of_use <= 0) {
+                return "invalid";
+            }
+
+            // check dedicated to this promocode
+            if ($exist->dedicated_to == "male" || $exist->dedicated_to == "females") {
+                if ($user->gender != $exist->dedicated_to) {
+                    return "invalid";
+                }
+            }
+
+            if ($exist->dedicated_to == "spacial_user") {
+                if ($exist->user_id != $user->id) {
+                    return "invalid";
+                }
+            }
+
+            // increment promocode 1 for this usage
+            $exist->update([
+                "maximum_times_of_use" => $exist->maximum_times_of_use - 1
+            ]);
+
+
+            return [$exist->value, $exist->type];
+        }
+    }
     public function checkoutProduct($request)
     {
         global $productAfterCommissionAndPromocode;
+        $user = auth()->user();
+
         $code = PromoCode::where('title', $request->promo_code)->first();
 
         $order = Order::create([
@@ -830,58 +868,90 @@ class UserRepository implements UserRepositoryInterface
             'status' => 'pending'
         ]);
 
-        $products = $request->product_id;
-        $quantities = $request->quantity;
-        for ($i = 0; $i < count($products); $i++) {
-            $productRealPrice = Product::where('id', $products[$i])->first();
-            $productQuantity = $quantities[$i];
-            $getvendor = Product::where('id', $products[$i])->first();
-            $commision = Vendor::where('id', $getvendor->admin_id)->first();
-            $productTaxes = ProductTax::where('product_id', $products[$i])->pluck('tax_id');
-            $taxes = Tax::whereIn('id', $productTaxes)->sum('percentage');
-            $productPrice = $productRealPrice->real_price * $productQuantity;
-            if (isset($commision)) {
-                $commissionProductAfter = $productPrice * $commision->commision / 100;
+        $promo_code_value = 0;
+
+        // getting cart
+        $cart = Cart::where("user_id", $user->id)->get();
+
+        foreach ($cart as $item) {
+
+            $product_quantity_price = $item->product->real_price * $item->quantity;
+
+            // set product owner
+            $product_owner_id = "";
+
+            if ($item->product->owner) {
+                $product_owner_id = $item->product->owner->id;
             } else {
-                $commissionProductAfter = $productPrice;
+                $product_owner_id = Admin::where("id", $item->product->admin_id)->first();
             }
 
-            $shipping = Shipping::where('city_id', $request->city_id)->first();
-            if (isset($promoCode)) {
-                if ($promoCode->type == 'percent') {
-                    $productAfterCommissionAndPromocode =
-                        $commissionProductAfter * $promoCode->value / 100;
-                } else {
-                    $productAfterCommissionAndPromocode =
-                        $commissionProductAfter - $promoCode->value;
+            // calculate commission
+            $commission = 0;
+
+            if ($item->product->owner) {
+                $commission = $item->product->owner->commission;
+            } else {
+                $commission = 0;
+            }
+
+
+            // calculate total taxes
+            $total_taxes = 0;
+            if (count($item->product->taxes) > 0) {
+                foreach ($item->product->taxes as $taxe) {
+                    $total_taxes += ($taxe->tax->percentage / 100);
+
+                    // set taxes for this order related by product id 
+                    OrderTaxes::create([
+                        "order_number" => $order->order_number,
+                        "product_name" => $item->product->title_en,
+                        "taxe_title" => $taxe->tax->title_en,
+                        "taxe_percentage" => $taxe->tax->percentage
+                    ]);
                 }
             }
-            $productAfterTaxes = $productAfterCommissionAndPromocode
-                + ($productAfterCommissionAndPromocode * $taxes / 100);
-            if (isset($shipping)) {
-                $productAfterShipping = $productAfterTaxes + $shipping->cost;
-            } else {
-                $productAfterShipping = $productAfterTaxes;
+
+            // check promocode 
+
+
+            $promocode_status = $this->check_promo_code($request->code);
+            if ($promocode_status == "invalid") {
+                return response()->json(["msg" => "invalid promocode"], 404);
             }
-            $v = Vendor::where('id', $getvendor->admin_id)->first();
-            OrderProduct::create(
-                [
-                    'product_id' => $products[$i],
-                    'vendor_id' => $v->id,
-                    'order_number' => $order->order_number,
-                    'product_title' => Product::where('id', $products[$i])->first()->title_en,
-                    'product_quantity' => $quantities[$i],
-                    'order_id' => $order->id,
-                    'price' => $productAfterShipping,
-                    'commission' => $commissionProductAfter,
-                    'product_after_commission_and_promocode' =>
-                    $productAfterCommissionAndPromocode,
-                    'product_after_taxes' => $productAfterTaxes,
-                ]
-            );
-            $cart = Cart::where('product_id', $products[$i])->where('user_id', $request->user_id)->first();
-            $cart->delete();
+            $promo_code_value = $promocode_status;
+
+
+            OrderProduct::create([
+                "product_id" => $item->product->id,
+                "vendor_id" => $product_owner_id,
+                "order_number" => $order->order_number,
+                "product_title" => $item->product->title_en,
+                "price" => $item->product->real_price,
+                "product_quantity" => $item->quantity,
+                'commission' => $commission,
+                'taxes' => $total_taxes,
+            ]);
+
+
+
+            $total_taxes = 0;
         }
+
+        if ($promo_code_value != 0) {
+            $order->update([
+                "customer_promo_code_title" => PromoCode::where("title", $request->code)->first()->title,
+                "customer_promo_code_value" => PromoCode::where("title", $request->code)->first()->value,
+                "customer_promo_code_type" => PromoCode::where("title", $request->code)->first()->type,
+            ]);
+
+            
+        }
+
+
+
+
+        return $order;
     }
 
     public function myOrders($user, $lang)
@@ -922,10 +992,10 @@ class UserRepository implements UserRepositoryInterface
             $details[$i]['extra_fees'] = $extra;
 
 
-            $discount = PromoCode::where('value',$order->customer_promo_code_title)->first();
-            if(isset($discount)){
-            $details[$i]['discount'] = $discount->value;
-            }else{
+            $discount = PromoCode::where('value', $order->customer_promo_code_title)->first();
+            if (isset($discount)) {
+                $details[$i]['discount'] = $discount->value;
+            } else {
                 $details[$i]['discount'] = 0;
             }
 
@@ -953,16 +1023,16 @@ class UserRepository implements UserRepositoryInterface
                     $prod->product->category->title_ar;
 
                 $res_prods_item['product_available']
-                = $prod->product->status == '1' ? "1" :"0";
+                    = $prod->product->status == '1' ? "1" : "0";
 
                 $res_prods_item['product_model_number']
-                = $prod->product->model_number;
+                    = $prod->product->model_number;
 
                 $res_prods_item['quantity']
-                = $prod->product_quantity;
+                    = $prod->product_quantity;
 
                 $res_prods_item['price']
-                = $prod->price;
+                    = $prod->price;
 
                 $res_prods_list[] = $res_prods_item;
             }
@@ -970,8 +1040,5 @@ class UserRepository implements UserRepositoryInterface
             $i++;
         }
         return $details;
-
-   }
-
-
+    }
 }

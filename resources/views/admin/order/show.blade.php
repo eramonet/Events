@@ -541,14 +541,13 @@
 
                                     </th>
 
-                                    <th class="">
-
-                                        <p class="h6 text-bold">Events Commission [AED]</p>
-
-                                    </th>
                                 {{-- @endif --}}
                                 <th class=" rounded-end">
                                     <p class="h6 text-bold">Taxes</p>
+                                </th>
+
+                                <th class=" rounded-end">
+                                    <p class="h6 text-bold">Status</p>
                                 </th>
 
 
@@ -577,7 +576,7 @@
                                     </td>
 
                                     <td class="">
-                                        <p class="h5 text-nowrap"> {{ $product->product_quantity }}</p>
+                                        <p class="h5 text-nowrap"> {{ number_format($product->product_quantity) }}</p>
                                     </td>
 
 
@@ -593,19 +592,7 @@
                                                 %</p>
                                         </td>
                                     {{-- @endif --}}
-                                    <td class="">
-                                        <p class="h5 text-nowrap">
-                                            {{ $product->product->owner
-                                                ? number_format($product->price * $product->product_quantity * ($product->product->owner->commission / 100))
-                                                : 0 }}
-                                            AED</p>
-                                        @if ($product->product->owner)
-                                            <?php $our_comission_price += $product->price * $product->product_quantity * ($product->product->owner->commission / 100); ?>
-                                        @else
-                                            <?php $our_comission_price += 0; ?>
-                                        @endif
-
-                                    </td>
+                                    
                                     <td class="">
                                         @if ($product->product->taxes->count() > 0)
 
@@ -620,6 +607,10 @@
                                             <h5>----</h5>
                                         @endif
 
+                                    </td>
+
+                                    <td class="">
+                                        <p class="h5 text-nowrap"> {{ $product->status }} </p>
                                     </td>
 
 
@@ -688,43 +679,13 @@
                                 </td>
 
                                 <td class="">
-                                    <p class="h4"> {{ number_format($total_products_final) }} AED</p>
-                                </td>
-
-
-                            </tr>
-                            @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
-                                <tr>
-
-
-                                    <td class="">
-                                        <p class="h4"> Total Commision Price</p>
-                                    </td>
-
-                                    <td class="">
-                                        <p class="h4"> {{ number_format($total_commissions) }} AED</p>
-                                    </td>
-
-
-                                </tr>
-                            @endif
-                            <tr>
-
-
-                                <td class="">
-                                    <p class="h4"> Total Products Taxes</p>
-                                </td>
-
-                                <td class="">
-                                    <p class="h4"> {{ number_format($total_taxes_value) }} AED</p>
+                                    <p class="h4"> {{ number_format($order->total_products_price) }} AED</p>
                                 </td>
 
 
                             </tr>
 
-
-
-                            @if ($order->promo_discount)
+                            @if ($order->customer_promo_code_title)
                                 <tr>
 
 
@@ -733,7 +694,7 @@
                                     </td>
 
                                     <td class="">
-                                        <p class="h4"> {{ $order->customer_promo_code_titel }} </p>
+                                        <p class="h4"> {{ $order->customer_promo_code_title }} </p>
                                     </td>
 
 
@@ -764,6 +725,38 @@
                                 </tr>
                             @endif
 
+                            
+                            {{-- @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin') --}}
+                                <tr>
+
+
+                                    <td class="">
+                                        <p class="h4"> Total Events Commision Price</p>
+                                    </td>
+
+                                    <td class="">
+                                        <p class="h4"> {{ number_format($order->total_comissions) }} AED</p>
+                                    </td>
+
+
+                                </tr>
+                            {{-- @endif --}}
+
+
+                            <tr>
+
+
+                                <td class="">
+                                    <p class="h4"> Total Products Taxes</p>
+                                </td>
+
+                                <td class="">
+                                    <p class="h4"> {{ number_format($order->total_product_taxes) }} AED</p>
+                                </td>
+
+
+                            </tr>
+
                         </tbody>
                     </table>
 
@@ -775,20 +768,20 @@
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
             <p class="h2">Total Events Commission <span class="badge badge-lg bg-success "
-                    style="font-size: 30px">{{ number_format($total_commissions) }}
+                    style="font-size: 30px">{{ number_format($order->total_comissions) }}
                 </span> AED </p>
         </div>
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
             <p class="h2">Shipping <span class="badge badge-lg bg-success "
-                    style="font-size: 30px">{{ number_format($shippings) }}
+                    style="font-size: 30px">{{ number_format($order->shipping) }}
                 </span> AED </p>
         </div>
 
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
             <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
-                style="font-size: 30px">{{ number_format($total_product_with_taxes) }}
+                style="font-size: 30px">{{ number_format($total_orders_price) }}
             </span> AED </p>
 
         </div>

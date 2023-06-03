@@ -319,6 +319,7 @@
                 @endif
             @endif
             @if ($useradmin->hasRole('vendor-admin'))
+                @if (Auth::guard('admin')->user()->hasPermission('with-darw-read'))
                 <li class="nav-item ">
                     <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
                         data-bs-toggle="collapse" data-bs-target="#with_draw_vendor" aria-expanded="false">
@@ -399,6 +400,7 @@
                         </ul>
                     </div>
                 </li>
+                @endif
             @endif
 
             {{-- promo-codes --}}

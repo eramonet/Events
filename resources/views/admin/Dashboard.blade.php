@@ -1,7 +1,7 @@
 @php
     $useradmin = App\Models\Admin::where('id', Auth::guard('admin')->id())->first();
     $getProducts = App\Models\Product::where('admin_id', $useradmin->id)->pluck('id');
-    $getOrdersProducts = App\Models\OrderProduct::whereIn('product_id', $getProducts)->pluck('order_id');
+    $getOrdersProducts = App\Models\OrderProduct::whereIn('product_id', $getProducts)->pluck('order_number');
     $vendor = App\Models\Vendor::where('id', $useradmin->vendor_id)->first();
 
 @endphp
@@ -560,7 +560,7 @@
                             class="card card-body px-1 py-3 mx-4 p bg-primary   rounded my-3 order-statistics  position-relative">
 
                             <h1 style="color: #fff; font-size: 25px;">
-                                {{ explode('.', number_format($total_order_budget - $total_commission_budget, 2))[1] == 00 ? number_format($total_order_budget - $total_commission_budget) : number_format($total_order_budget - $total_commission_budget, 2) }}
+                                {{ number_format($total_vendor_credit) }}
                                 AED</h1>
 
 
@@ -1397,7 +1397,7 @@
                                                     <p class="text-nowrap">{{ $order->id }}</p>
                                                 </td>
                                                 <td> <span class="badge bg-success text-nowrap"
-                                                        style="font-size: 16px">{{ number_format($order->product_total_price + $order->total_taxes_price) }}
+                                                        style="font-size: 16px">{{ 11 }}
                                                         AED</span></td>
 
                                                 <td> <span class="badge bg-info text-nowrap"
@@ -1737,25 +1737,6 @@
     // currentMonthOrders
     let currentMonthOrdersCTX = document.getElementById("ordersChart");
 
-    const currentMonthOrdersData = {
-        labels: [
-            @foreach ($allordersChart as $allorder)
-                '{{ $allorder->date }}',
-            @endforeach
-        ],
-        datasets: [{
-            label: 'Orders',
-            data: [
-                @foreach ($allordersChart as $allorder)
-                    {{ $allorder->count }},
-                @endforeach
-            ],
-
-            pointStyle: 'circle',
-            pointRadius: 10,
-            pointHoverRadius: 15
-        }]
-    };
     const currentMonthOrdersConfig = {
         type: 'bar',
         data: currentMonthOrdersData,

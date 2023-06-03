@@ -26,9 +26,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->enum('status',[1,0])->default(1)->nullable();
             $table->unsignedBigInteger('admin_id')->nullable();
-            $table->foreign('admin_id')->references('id')->on('admins')->cascadeOnUpdate()->nullOnDelete();
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('product_categories')->cascadeOnUpdate()->nullOnDelete();
             $table->timestamps();
             $table->softDeletes();
 

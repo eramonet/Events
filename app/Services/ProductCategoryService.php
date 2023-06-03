@@ -166,10 +166,11 @@ class ProductCategoryService {
 
         ]);
 
-        $current_login = Auth::guard('admin')->user();
-
-        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id();
-
+        $data['admin_id'] = Auth::guard('admin')->id();
+        if( Auth::guard('admin')->user()->vendor){
+            $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
+        }
+        
         $this->category::create($data);
 
         // if ($request->hasFile('image')) {

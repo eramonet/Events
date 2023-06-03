@@ -50,7 +50,7 @@
                                         <li class="list-group-item">Real Price : {{ $product->real_price . ' AED' }} </li>
                                         <li class="list-group-item">Fake Price : {{ $product->fake_price . ' AED' }} </li>
 
-                                        <li class="list-group-item">Offet Ended At : {{ $product->stock }} Item </li>
+                                        <li class="list-group-item">Offet Ended At : {{ $product->offer_end_at }} </li>
 
                                         <li class="list-group-item">Stock : {{ $product->stock }} Item </li>
 
@@ -62,6 +62,16 @@
                                                 <a>
                                                     <span class="badge bg-primary">
                                                         {{ ucfirst($tax->tax->title_en) . ' ' . $tax->tax->percentage . '%' }}
+                                                    </span>
+                                                </a>
+                                            @endforeach
+                                        </li>
+
+                                        <li class="list-group-item">Colors :
+                                            @foreach ($product->colors as $colors)
+                                                <a>
+                                                    <span class="badge bg-primary">
+                                                        {{ ucfirst($colors->title_en) }}
                                                     </span>
                                                 </a>
                                             @endforeach

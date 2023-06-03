@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductCategoryExport;
 use App\Models\Admin;
 use App\Models\ProductCategory;
+use App\Models\Vendor;
 use App\Services\ProductCategoryService;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,12 +38,14 @@ class ProductCategoryController extends Controller
             $categories = $this->productCategoryService->getAll($request);
             $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
-            // return $categories;
+            
             return \view('admin.productCategory.index', \compact('categories', 'type'));
 
         } else {
 
-            $categories = $this->productCategoryService->getAllAdmin($request, $useradmin);
+            $vendor = Vendor::where("id" , $useradmin->vendor_id)->first() ;
+            $categories = ProductCategory::where("admin_id" , $vendor->id)->paginate(10);
+
             $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
 
@@ -85,7 +88,10 @@ class ProductCategoryController extends Controller
     {
 
         $data=$request->all();
-        $data['admin_id'] = Auth::id();
+        $data['admin_id'] = Auth::guard('admin')->id();
+        if( Auth::guard('admin')->user()->vendor){
+            $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
+        }
         $data['parent_id'] = null;
 
         $request->validate([

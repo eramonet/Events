@@ -79,7 +79,12 @@ class Vendor extends Model
 
     public function with_draws()
     {
-        return $this->hasMany(WithDraw::class , "vendor_name" , "email") ;
+        return $this->hasMany(WithDraw::class , "vendor_name" , "title_en") ;
+    }
+
+    public function promo_codes()
+    {
+        return $this->hasMany(PromoCode::class , "admin_id" , "id") ;
     }
 
 }

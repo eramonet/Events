@@ -240,7 +240,7 @@
                             `);
                             for (x = 0; x < data[1].my_orders.length; x++) {
                                 $('#choose_client_orders').append(`
-                                        <option value="0000${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+                                        <option value="${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
                                 `);
                             }
                         }

@@ -45,8 +45,6 @@ class Order extends Model
         "payment_type",
         "status",
         'order_number',
-        'product_total_price',
-        'total_taxes_price',
         'country_id',
         'city_id',
         'region_id'

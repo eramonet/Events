@@ -21,7 +21,7 @@ return new class extends Migration
             $table->double("budget");
             $table->enum("type" , ["from_admin" , "from_vendor"])->default("from_admin");
             $table->enum("status" , ["accepted" , "rejected" , "pending"])->default("pending");
-            $table->text("notes");
+            $table->text("notes")->nullable();
             $table->timestamps();
         });
     }

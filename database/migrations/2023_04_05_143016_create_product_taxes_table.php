@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tax_id')->nullable();
             // $table->foreign('tax_id')->references('id')->on('taxes')->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->timestamp() ;
+            $table->timestamps() ;
             // $table->foreign('product_id')->references('id')->on('products')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }

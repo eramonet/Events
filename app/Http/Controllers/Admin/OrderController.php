@@ -11,9 +11,11 @@ use App\Services\OrderService;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\OrderProduct;
+use App\Models\OrderTaxes;
 use App\Models\Shipping;
 use App\Models\Vendor;
 use App\Models\WithDraw;
+use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -105,180 +107,146 @@ class OrderController extends Controller
         return $order;
     }
 
+    public function calculate_order_price($orders)
+    {
+        $total_orders_price = 0;
+        $product_price_iteration = 0;
+        $promocode = 0;
+        $total_tax = 0;
+
+        $order_products_count = 0;
+        $total_outer_orders_price = 0;
+
+        $arr = [];
+
+
+
+        foreach ($orders as $order) {
+
+            $order_products_count = count($order->order_products);
+
+            // loop through order_products
+            foreach ($order->order_products as $order_product) {
+                $product_price_iteration = $order_product->price * $order_product->product_quantity;
+
+
+
+
+                if ($order->customer_promo_code_type) {
+                    if ($order->customer_promo_code_type == "percent") {
+                        $product_price_iteration = $product_price_iteration * (($order->customer_promo_code_value / $order_products_count) / 100);
+                    } elseif ($order->customer_promo_code_type == "amount") {
+
+                        $product_price_iteration = $product_price_iteration - ($order->customer_promo_code_value / $order_products_count);
+                    }
+                }
+
+
+
+
+                $product_price_iteration = $product_price_iteration - ($product_price_iteration * ($order_product->commission / 100));
+
+                // calculate taxes 
+                if ($order_product->order_taxes->count() > 0) {
+
+                    foreach ($order_product->order_taxes as $order_tax) {
+                        if ($order_tax->order_number == $order->order_number) {
+                            $total_tax += $order_tax->taxe_percentage;
+                        }
+                    }
+                    $product_price_iteration = $product_price_iteration + ($product_price_iteration * ($total_tax / 100));
+                }
+
+
+
+                $total_orders_price += $product_price_iteration;
+
+
+
+
+
+
+                $total_tax = 0;
+            }
+
+            // check shipping 
+            $shipping = Shipping::where("city_id", $order->city_id)->first();
+
+            if ($shipping) {
+                $product_price_iteration = $product_price_iteration + $shipping->cost;
+            }
+
+            $total_orders_price += $shipping->cost;
+
+            $total_outer_orders_price += $total_orders_price;
+
+
+            $order["total_order_price"] = $total_orders_price;
+
+            $total_orders_price = 0;
+        }
+
+        return [$orders, $total_outer_orders_price];
+    }
+
     public function newOrders(Request $request)
     {
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::pending();
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
 
-            foreach ($orders as $order) {
-                $total_products_final = 0;
-                $total_commissions = 0;
-                $total_taxes = 0;
-                $total_taxes_value = 0;
-                $arr = [];
+            // return $this->calculate_order_price($orders);
 
-                $total_product_with_taxes = 0;
+            $orders = $this->calculate_order_price($orders)[0];
 
-                foreach ($orders as $order) {
-                    if (count($order->order_products) > 0) {
-                        foreach ($order->order_products as $item) {
-                            $total_products_final += ($item->product->real_price * $item->product_quantity);
-                            $total_commissions += $item->product->owner ? (($item->product->owner->commission / 100) * $total_products_final) : 0;
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
 
-                            if ($item->product->taxes->count() > 0) {
-                                foreach ($item->product->taxes as $tax) {
-                                    $total_taxes += $tax->tax->percentage;
-                                    $total_taxes_value +=
-                                        (
-                                            (
-                                                ($item->product->real_price * $item->product_quantity) -
-                                                ($item->product->owner ? (($item->product->owner->commission / 100)
-                                                    *
-                                                    $item->product->real_price * $item->product_quantity
-                                                ) : 0
-                                                )
-                                            )
-                                        ) * ($tax->tax->percentage / 100);
-                                }
-                            }
-
-                            $total_product_with_taxes +=
-                                (
-                                    (
-                                        ($item->product->real_price * $item->product_quantity) -
-                                        ($item->product->owner ? (($item->product->owner->commission / 100)
-                                            *
-                                            $item->product->real_price * $item->product_quantity
-                                        ) : 0
-                                        )
-                                    )
-                                )
-                                +
-                                (
-                                    ($item->product->real_price * $item->product_quantity) -
-                                    ($item->product->owner ? (($item->product->owner->commission / 100) * $item->product->real_price * $item->product_quantity) : 0)
-                                ) * ($total_taxes / 100);
-
-                            $total_taxes = 0;
-                        }
-                    }
-
-
-
-                    $shippings = Shipping::where("city_id", $order->city_id)->first() ? Shipping::where("city_id", $order->city_id)->first()->cost : "0";
-
-                    $total_product_with_taxes += $shippings;
-                }
-            }
-
-            $order["total_price_for_this"] = $total_product_with_taxes ;
-            
-            return \view('admin.order.index', compact('orders', 'total_product_with_taxes'));
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         } else {
             $vendor = Vendor::where("id", $useradmin->vendor_id)->first();
 
             $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
-            $orders = Order::whereIn('order_number', $getOrders)->pending();
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-
-            $total_products_final = 0;
-            $total_commissions = 0;
-            $total_taxes = 0;
-            $total_taxes_value = 0;
-            $arr = [];
-
-            $total_product_with_taxes = 0;
-
-            foreach ($orders as $order) {
-                if (count($order->order_products) > 0) {
-                    foreach ($order->order_products as $item) {
-                        if ($item->vendor_id == $vendor->id) {
-                            $total_products_final += ($item->product->real_price * $item->product_quantity);
-                            $total_commissions += $item->product->owner ? (($item->product->owner->commission / 100) * $total_products_final) : 0;
-
-                            if ($item->product->taxes->count() > 0) {
-                                foreach ($item->product->taxes as $tax) {
-                                    $total_taxes += $tax->tax->percentage;
-                                    $total_taxes_value +=
-                                        (
-                                            (
-                                                ($item->product->real_price * $item->product_quantity) -
-                                                ($item->product->owner ? (($item->product->owner->commission / 100)
-                                                    *
-                                                    $item->product->real_price * $item->product_quantity
-                                                ) : 0
-                                                )
-                                            )
-                                        ) * ($tax->tax->percentage / 100);
-                                }
-                            }
-
-                            $total_product_with_taxes +=
-                                (
-                                    (
-                                        ($item->product->real_price * $item->product_quantity) -
-                                        ($item->product->owner ? (($item->product->owner->commission / 100)
-                                            *
-                                            $item->product->real_price * $item->product_quantity
-                                        ) : 0
-                                        )
-                                    )
-                                )
-                                +
-                                (
-                                    ($item->product->real_price * $item->product_quantity) -
-                                    ($item->product->owner ? (($item->product->owner->commission / 100) * $item->product->real_price * $item->product_quantity) : 0)
-                                ) * ($total_taxes / 100);
-
-                            $total_taxes = 0;
-                        }
-                    }
-                }
 
 
+            $orders = Order::whereIn('order_number', $getOrders)->with(["order_products" => function ($query) use ($vendor) {
+                $query->where('vendor_id', $vendor->id);
+            }])->pending();
 
-                $shippings = Shipping::where("city_id", $order->city_id)->first() ? Shipping::where("city_id", $order->city_id)->first()->cost : "0";
+            $orders = $this->calculate_order_price($orders)[0];
 
-                $total_product_with_taxes += $shippings;
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
 
-                $order["total_price_for_this"] = $total_product_with_taxes ;
-            }
-
-            return \view('admin.order.index', compact('orders', 'total_product_with_taxes'));
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         }
     }
 
 
     public function inprogressOrders(Request $request)
     {
-        $type = 'inprogress';
-        $order_by = 'inprogress_at';
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::inProgress();
-            // return $orders;
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-            return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
+
+            $orders = $this->calculate_order_price($orders)[0];
+
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
+
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         } else {
             $vendor = Vendor::where("id", $useradmin->vendor_id)->first();
+
             $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
-            $orders = Order::whereIn('order_number', $getOrders)->inProgress();
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-            return \view('admin.order.index', compact('orders', 'total_order_price'));
+
+
+            $orders = Order::whereIn('order_number', $getOrders)->with(["order_products" => function ($query) use ($vendor) {
+                $query->where('vendor_id', $vendor->id);
+            }])->inProgress();
+
+            $orders = $this->calculate_order_price($orders)[0];
+
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
+
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         }
     }
 
@@ -289,21 +257,27 @@ class OrderController extends Controller
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::delivered();
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-            return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
+
+            $orders = $this->calculate_order_price($orders)[0];
+
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
+
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         } else {
             $vendor = Vendor::where("id", $useradmin->vendor_id)->first();
-            $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
-            $orders = Order::whereIn('order_number', $getOrders)->delivered();
 
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-            return \view('admin.order.index', compact('orders', 'total_order_price'));
+            $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
+
+
+            $orders = Order::whereIn('order_number', $getOrders)->with(["order_products" => function ($query) use ($vendor) {
+                $query->where('vendor_id', $vendor->id);
+            }])->delivered();
+
+            $orders = $this->calculate_order_price($orders)[0];
+
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
+
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         }
     }
 
@@ -317,19 +291,26 @@ class OrderController extends Controller
         $useradmin = Admin::where('id', Auth::guard('admin')->id())->first();
         if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin')) {
             $orders = Order::canceled();
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-            return \view('admin.order.index', \compact('orders', 'type', 'total_order_price'));
+            $orders = $this->calculate_order_price($orders)[0];
+
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
+
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         } else {
-            $getOrders = OrderProduct::where('vendor_id', $useradmin->vendor->id)->pluck('order_number');
-            $orders = Order::whereIn('order_number', $getOrders)->canceled();
-            $total_order_price = 0;
-            foreach ($orders as $order) {
-                $total_order_price += $order->product_total_price + $order->total_taxes_price;
-            }
-            return \view('admin.order.index', compact('orders', 'total_order_price'));
+            $vendor = Vendor::where("id", $useradmin->vendor_id)->first();
+
+            $getOrders = OrderProduct::where('vendor_id', $vendor->id)->pluck('order_number');
+
+
+            $orders = Order::whereIn('order_number', $getOrders)->with(["order_products" => function ($query) use ($vendor) {
+                $query->where('vendor_id', $vendor->id);
+            }])->canceled();
+
+            $orders = $this->calculate_order_price($orders)[0];
+
+            $total_outer_orders_price = $this->calculate_order_price($orders)[1];
+
+            return \view('admin.order.index', compact('orders', 'total_outer_orders_price'));
         }
     }
 
@@ -341,7 +322,83 @@ class OrderController extends Controller
         return Excel::download(new OrderExport($type), Carbon::now() . '-' . $type . '-orders.xlsx');
     }
 
+    public function calculate_specific_order_price($order)
+    {
+        $total_orders_price = 0;
+        $product_price_iteration = 0;
+        $promocode = 0;
+        $total_tax = 0;
 
+        $total_products_price = 0;
+        $total_comissions = 0;
+        $total_product_taxes = 0;
+        $shipping = 0;
+
+        $arr = [];
+
+        $order_products_count = count($order->order_products);
+
+        // loop through order_products
+        foreach ($order->order_products as $order_product) {
+
+            $product_price_iteration = $order_product->price * $order_product->product_quantity;
+
+
+
+            $total_products_price += $order_product->price * $order_product->product_quantity;
+
+            if ($order->customer_promo_code_type) {
+                if ($order->customer_promo_code_type == "percent") {
+                    $product_price_iteration = $product_price_iteration * (($order->customer_promo_code_value / $order_products_count) / 100);
+                } elseif ($order->customer_promo_code_type == "amount") {
+
+                    $product_price_iteration = $product_price_iteration - ($order->customer_promo_code_value / $order_products_count);
+                }
+            }
+
+            $total_comissions = $product_price_iteration * ($order_product->commission / 100);
+
+
+
+            $product_price_iteration = $product_price_iteration - ($product_price_iteration * ($order_product->commission / 100));
+            // $arr[] = ''.$product_price_iteration .' * ' . (($order_product->commission / 100)).' = ' . $total_comissions ;
+
+            // calculate taxes 
+            if ($order_product->order_taxes->count() > 0) {
+                foreach ($order_product->order_taxes as $order_tax) {
+                    if ($order_tax->order_number == $order->order_number) {
+                        $total_tax += $order_tax->taxe_percentage;
+                    }
+                }
+
+                $total_product_taxes += $product_price_iteration + ($product_price_iteration * ($total_tax / 100));
+
+                $product_price_iteration = $product_price_iteration + ($product_price_iteration * ($total_tax / 100));
+            }
+
+            $total_orders_price += $product_price_iteration;
+
+
+            $total_tax = 0;
+        }
+
+        // check shipping
+        $shipping = Shipping::where("city_id", $order->city_id)->first();
+
+        if ($shipping) {
+            $product_price_iteration = $product_price_iteration + $shipping->cost;
+            $total_orders_price += $shipping->cost;
+        }
+
+        // return $arr ;
+
+        $order["total_products_price"] = $total_products_price;
+        $order["total_comissions"] = $total_comissions;
+        $order["total_product_taxes"] = $total_product_taxes;
+        $order["shipping"] = $shipping->cost;
+
+        return [$order, $total_orders_price];
+    }
 
     public function show(Request $request, $id)
     {
@@ -350,7 +407,8 @@ class OrderController extends Controller
 
         $order = [];
 
-        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
+        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") { // vendor
+
             $order = Order::latest()->with(["order_products" => function ($order_products) {
                 $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
             }])->where("order_number", $id)->first();
@@ -358,83 +416,12 @@ class OrderController extends Controller
             $order = Order::latest()->with("order_products")->where("order_number", $id)->first();
         }
 
+        // return $this->calculate_specific_order_price($order) ;
 
-        $checkorder = [];
+        $order = $this->calculate_specific_order_price($order)[0];
 
-        if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
-            $checkorder = Order::latest()->with(["order_products" => function ($order_products) {
-                $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
-            }])->where("order_number", $id)->first();
-        } else {
-            $checkorder = Order::latest()->with(["order_products" => function ($order_products) {
-                $order_products->where("vendor_id", auth()->guard('admin')->user()->id);
-            }])->where("order_number", $id)->first();
-        }
+        $total_orders_price = $this->calculate_specific_order_price($order)[1];
 
-        $order["final_status"] = $checkorder->order_products[0]->status;
-
-
-        if (!$order) {
-            $request->session()->flash('failed', 'Order Not Found');
-            return redirect()->back();
-        }
-
-        $total_products_final = 0;
-        $total_commissions = 0;
-        $total_taxes = 0;
-        $total_taxes_value = 0;
-        $arr = [];
-
-        $total_product_with_taxes = 0;
-
-        if (count($order->order_products) > 0) {
-            foreach ($order->order_products as $item) {
-                $total_products_final += ($item->product->real_price * $item->product_quantity);
-                $total_commissions += $item->product->owner ? (($item->product->owner->commission / 100) * $total_products_final) : 0;
-
-                if ($item->product->taxes->count() > 0) {
-                    foreach ($item->product->taxes as $tax) {
-                        $total_taxes += $tax->tax->percentage;
-                        $total_taxes_value +=
-                            (
-                                (
-                                    ($item->product->real_price * $item->product_quantity) -
-                                    ($item->product->owner ? (($item->product->owner->commission / 100)
-                                        *
-                                        $item->product->real_price * $item->product_quantity
-                                    ) : 0
-                                    )
-                                )
-                            ) * ($tax->tax->percentage / 100);
-                    }
-                }
-
-                $total_product_with_taxes +=
-                    (
-                        (
-                            ($item->product->real_price * $item->product_quantity) -
-                            ($item->product->owner ? (($item->product->owner->commission / 100)
-                                *
-                                $item->product->real_price * $item->product_quantity
-                            ) : 0
-                            )
-                        )
-                    )
-                    +
-                    (
-                        ($item->product->real_price * $item->product_quantity) -
-                        ($item->product->owner ? (($item->product->owner->commission / 100) * $item->product->real_price * $item->product_quantity) : 0)
-                    ) * ($total_taxes / 100);
-
-                $total_taxes = 0;
-            }
-        }
-
-
-
-        $shippings = Shipping::where("city_id", $order->city_id)->first() ? Shipping::where("city_id", $order->city_id)->first()->cost : "0";
-
-        $total_product_with_taxes += $shippings;
 
         $order->load([
             'products',
@@ -444,7 +431,8 @@ class OrderController extends Controller
             'delivered_admin',
             'cancelled_admin'
         ]);
-        return \view('admin.order.show', \compact('order', 'total_products_final', 'total_commissions', 'total_product_with_taxes', 'shippings', 'total_taxes_value'));
+
+        return \view('admin.order.show', \compact('order', 'total_orders_price'));
     }
 
 
@@ -499,6 +487,13 @@ class OrderController extends Controller
 
     public function deliveredAction(Request $request, $id)
     {
+
+        $product_price = 0;
+        $event_commission = 0;
+        $final_price = 0;
+        $final_event_commission = 0;
+        $all_price_without_any_thing = 0;
+
         if (auth()->guard('admin')->user()->getRoles()[0] == "vendor-admin") {
             $order = Order::latest()->with(["order_products" => function ($order_products) {
                 $order_products->where("vendor_id", auth()->guard('admin')->user()->vendor->id);
@@ -509,10 +504,65 @@ class OrderController extends Controller
             }])->where("order_number", $id)->first();
         }
 
+
         if (!$order) {
             $request->session()->flash('failed', 'Order Not Found');
             return redirect()->back();
         }
+        $order_products_count = count($order->order_products);
+        // calculate
+        if ($order->order_products->count() > 0) {
+            foreach ($order->order_products as $order_product) {
+
+                // total product price with quantity
+                $product_price = $order_product->price * $order_product->product_quantity;
+
+                $all_price_without_any_thing += $product_price;
+
+                // minus promo code from it 
+                if ($order->customer_promo_code_type) {
+                    if ($order->customer_promo_code_type == "percent") {
+                        $product_price = $product_price * (($order->customer_promo_code_value / $order_products_count) / 100);
+                    } elseif ($order->customer_promo_code_type == "amount") {
+
+                        $product_price = $product_price - ($order->customer_promo_code_value / $order_products_count);
+                    }
+                }
+
+                // check commission if have
+
+                if (auth()->guard('admin')->user()->vendor) {
+                    $event_commission = auth()->guard('admin')->user()->vendor->commission;
+                } else {
+                    $event_commission = 0;
+                }
+
+                $final_event_commission += ($product_price * ($event_commission / 100));
+
+                $product_price = $product_price - ($product_price * ($event_commission / 100));
+
+                $final_price += $product_price;
+            }
+
+            // check shipping
+            $shipping = Shipping::where("city_id", $order->city_id)->first();
+
+            if ($shipping) {
+                $final_price = $final_price + $shipping->cost;
+                $all_price_without_any_thing += $shipping->cost ;
+            }
+        }
+
+        $with_draw = WithDraw::create([
+            "vendor_name" => auth()->guard('admin')->user()->vendor ? auth()->guard('admin')->user()->vendor->title_en : "Events" ,
+            "vendor_phone" => auth()->guard('admin')->user()->vendor ? auth()->guard('admin')->user()->vendor->phone : null,
+            "money_type" => "Product Order",
+            "order_number" => $order->order_number,
+            "action_id" => $order->id,
+            "total" => $all_price_without_any_thing,
+            "have" => $final_price,
+            "our_commission" => $final_event_commission
+        ]);
 
         if ($order->order_products->count() > 0) {
             foreach ($order->order_products as $order_product) {
@@ -531,65 +581,22 @@ class OrderController extends Controller
         }
 
         // count all order products
-        $order_counter =  OrderProduct::where("order_number", $id)->count();
+        $order_counter =  OrderProduct::where("order_number", $id)->count(); // all order_products
 
         $inprogress_counter = OrderProduct::where([
             ["order_number", $id],
             ["status", "delivered"]
-        ])->count();
+        ])->count(); // delivered order_products
+
 
         if ($inprogress_counter == $order_counter) {
             $updated = $order->update([
                 "status" => "delivered"
             ]);
-
-
-            $order = [];
-
-            if (auth()->guard('admin')->user()->vendor) {
-                $order = Order::latest()->with(["order_products" => function ($order_products) {
-                    $order_products->where("vendor_id",  auth()->guard('admin')->user()->vendor->id);
-                }])->where("order_number", $id)->first();
-            } else {
-                $order = Order::latest()->with(["order_products" => function ($order_products) {
-                    $order_products->where("vendor_id", "!=",  auth()->guard('admin')->user()->id);
-                }])->where("order_number", $id)->first();
-            }
-
-            $our_commission = 0;
-            $final_price = 0;
-
-            foreach ($order->order_products as $order_product) {
-
-                $total_taxes = 0;
-
-                if ($order_product->product->taxes->count() > 0) {
-                    foreach ($order_product->product->taxes as $taxe) {
-                        $total_taxes += $order_product->price * ($taxe->tax->percentage / 100);
-                    }
-                }
-
-                $our_commission += $order_product->price * $order_product->product_quantity * ($order_product->product->admin->commission / 100);
-
-                $final_price += ($order_product->price  + ($total_taxes)) * $order_product->product_quantity;
-
-
-                $total_taxes = 0;
-            }
-
-            WithDraw::create([
-                "vendor_name" => $order_product->product->owner->email,
-                "vendor_phone" => $order_product->product->owner->phone,
-                "money_type" => "Product Order",
-                "order_number" => $order->order_number,
-                "action_id" => $order->id,
-                "total" => $final_price,
-                "have" => $final_price - $our_commission,
-                "our_commission" => $our_commission
-            ]);
         }
 
-        $total_vendor_budget = 0;
+
+
 
 
         $request->session()->flash('success', 'Order delivered SuccessFully');

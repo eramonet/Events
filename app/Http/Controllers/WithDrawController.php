@@ -131,14 +131,16 @@ class WithDrawController extends Controller
                 // getting this vendor
                 $vendor = Vendor::where("email", $vendor_email)->first();
 
+
                 // getting with draw requests
                 $withdraw_requests = WithDraw::where([
                     ["money_type", "Product Order"],
-                    ["vendor_name", $vendor->email],
-                    ["action_id", explode('0000', $order_number)[1]]
+                    ["vendor_name", $vendor->title_en],
+                    ["action_id", $order_number]
                 ])->with(["with_draw_requests" => function($with_draw_requests){
                     $with_draw_requests->fromAdmin()->accepted();
                 }])->first();
+
 
                 if (count($withdraw_requests->with_draw_requests) > 0) {
                     foreach ($withdraw_requests->with_draw_requests as $with_draw_request) {
@@ -245,10 +247,11 @@ class WithDrawController extends Controller
 
             return redirect()->back();
         } else if ($request->key_for_filter == "order") {
+
             $with_draw = WithDraw::where([
-                ["vendor_name", $vendor->email],
+                ["vendor_name", $vendor->title_en],
                 ["money_type", "Product Order"],
-                ["action_id", explode('0000', $request->client_order)[1]]
+                ["action_id", $request->client_order]
             ])->first();
 
             $total_sent = 0;
@@ -539,9 +542,10 @@ class WithDrawController extends Controller
 
         $vendor["admin"] = Vendor::where("id", $vendor->vendor_id)->first();
 
+
         $our_total_money = WithDraw::with(["with_draw_requests" => function ($requests) {
             $requests->fromAdmin()->accepted();
-        }])->where("vendor_name", $vendor->admin->email)->get(); // have
+        }])->where("vendor_name", $vendor->admin->title_en)->get(); // have
 
         $vendor_have_money = 0;
         $total_sent_money = 0;
@@ -625,8 +629,9 @@ class WithDrawController extends Controller
 
             return redirect()->back();
         } else if ($request->selected_key == "order") {
+
             $with_draw = WithDraw::where([
-                ["vendor_name", $vendor->admin->email],
+                ["vendor_name", $vendor->admin->title_en],
                 ["money_type", "Product Order"],
                 ["action_id", $request->selected_order]
             ])->first();
@@ -784,7 +789,7 @@ class WithDrawController extends Controller
             // getting with draw requests
             $withdraw_requests = WithDraw::where([
                 ["money_type", "Product Order"],
-                ["vendor_name", $vendor->email],
+                ["vendor_name", $vendor->title_en],
                 ["action_id", $order]
             ])->with([ "with_draw_requests" => function($with_draw_request){
                 $with_draw_request->fromAdmin()->accepted();
@@ -798,24 +803,9 @@ class WithDrawController extends Controller
                 }
             }
 
+            
 
-            // getting this order
-            $this_order = Order::find($order);
-
-
-            // getting order details
-            $order = OrderProduct::where([
-                ["order_number", $this_order->order_number],
-                ["vendor_id", $vendor->id]
-            ])->get();
-
-            if (count($order) > 0) {
-                foreach ($order as $item) {
-                    $total_product_price += $item->price * $item->product_quantity;
-                }
-            }
-
-            return [($total_product_price * ($vendor->commission / 100)) - $total_sent];
+            return [$withdraw_requests->have - $total_sent];
         } else if ($key == "hall") {
 
             $total_sent = 0;

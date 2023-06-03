@@ -23,9 +23,6 @@ return new class extends Migration
             $table->text("customer_promo_code_title")->nullable();
             $table->text("customer_promo_code_value")->nullable();
             $table->text("customer_promo_code_type")->nullable();
-            $table->text("product_total_price");
-            $table->text("total_taxes_price");
-            $table->text("shipping_fees");
             $table->text("order_from");
             $table->text("cancelled_from")->nullable();
             $table->text("payment_type");

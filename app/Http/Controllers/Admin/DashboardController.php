@@ -204,7 +204,7 @@ class DashboardController extends Controller
             $prodcats = ProductCategory::where('admin_id', $useradmin->id)->count();
 
             // if vendor should appear this
-            $total_this_vendor_budget = WithDraw::where("vendor_name", $useradmin->vendor->email)->sum('have');
+            $total_this_vendor_budget = WithDraw::where("vendor_name", $useradmin->vendor->title_en)->sum('total');
 
             $our_store_budget = WithDrawRequest::where("vendor_id" , $useradmin->vendor->id)->fromAdmin()->sum("budget") ;
             $our_store_budget_this_month = WithDrawRequest::where("vendor_id" , $useradmin->vendor->id)->fromAdmin()->whereMonth('created_at', '=', Carbon::now()->month)->sum("budget") ;
@@ -251,9 +251,7 @@ class DashboardController extends Controller
 
 
 
-            $orderSum = Order::whereIn('id', $getProductsIds)->whereDate('created_at', '>=', $today)
-                ->whereDate('created_at', '<=', $firstday)
-                ->sum('product_total_price');
+            $orderSum = 1;
 
 
 

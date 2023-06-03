@@ -217,7 +217,7 @@
                     <tr>
                         <td>{{ $shipping->id }}</td>
 
-                        <td>{{ $shipping->admin ? $shipping->admin->title_en : "Events"  }}</td>
+                        <td>{{ $shipping->vendor ? $shipping->admin->title_en : "Events"  }}</td>
 
                         <td>{{ $shipping->text_en }}</td>
 

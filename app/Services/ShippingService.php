@@ -74,9 +74,13 @@ class ShippingService
             'status'
 
         ]);
-        $current_login = Auth::guard('admin')->user() ;
-        $data['admin_id'] = Auth::guard('admin')->user()->vendor ? Vendor::where("id" , $current_login->vendor_id)->first()->id : Auth::guard('admin')->id() ;
+        $vendor = "";
 
+        if (Auth::guard('admin')->user()->vendor) { // vendor
+            $vendor = Vendor::where("id", Auth::guard('admin')->user()->vendor_id)->first()->id;
+        } else {
+            $vendor = Auth::guard('admin')->id();
+        }
 
         $this->shipping::create($data);
 

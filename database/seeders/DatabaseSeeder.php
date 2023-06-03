@@ -39,12 +39,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call(AdminSeeder::class);
         $this->call(UserSeeder::class);
-           $this->call(SizeSeeder::class);
 
-        // \App\Models\Hall_booking::factory(40)->create();
-
-         \App\Models\Color::factory(100)->create();
          \App\Models\Become_vendor::factory(200)->create();
+
 
     }
 }

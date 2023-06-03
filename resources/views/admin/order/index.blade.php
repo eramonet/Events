@@ -67,7 +67,7 @@
                         </td>
                         <td>
                             <p class="text-nowrap">
-                                {{ number_format($order->total_price_for_this) . ' AED' }}</p>
+                                {{ number_format($order->total_order_price) . ' AED' }}</p>
                         </td>
 
                         <td> <span class="badge bg-info text-nowrap"
@@ -226,7 +226,7 @@
 
 
             <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
-                    style="font-size: 30px">{{ number_format($total_product_with_taxes) }}
+                    style="font-size: 30px">{{ number_format($total_outer_orders_price) }}
                 </span> AED </p>
 
 

@@ -1192,5 +1192,8 @@
         $('#occasion_id').select2({
             width: "100%"
         });
+        $('#color_id').select2({
+            width: "100%"
+        });
     </script>
 @endsection
