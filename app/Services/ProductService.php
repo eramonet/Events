@@ -193,6 +193,8 @@ class ProductService
             'extras_ar',
             'extras_en',
             'offer_end_at' ,
+            'model_number',
+            'limitation',
         ]);
 
         $request->all() ;
@@ -278,7 +280,9 @@ class ProductService
             'summary_en',
             'extras_ar',
             'extras_en' ,
-            'offer_end_at'
+            'offer_end_at',
+            'model_number',
+            'limitation',
         ]);
 
         $data["accept"] = Auth::guard('admin')->user()->vendor ? "new" : "accepted" ;

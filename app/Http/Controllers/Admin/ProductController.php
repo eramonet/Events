@@ -145,6 +145,7 @@ class ProductController extends Controller
             'details_ar' => ['required', 'string', 'min:2'],
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['required', 'exists:occasions,id'],
+            'limitation' => ['required', 'string', 'min:1'],
 
         ]);
 
@@ -260,6 +261,7 @@ class ProductController extends Controller
             'details_en' => ['required', 'string', 'min:2'],
             'occasion_id.*' => ['nullable', 'exists:occasions,id'],
             'offer_end_at' => ['required','after_or_equal:today'],
+            'limitation' => ['required', 'string', 'min:1'],
 
         ]);
 

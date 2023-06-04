@@ -550,7 +550,42 @@
                     </div>
 
                     {{-- details_en --}}
+                    <div class="col-md-12">
+                        <div class="form-group mb-4">
+                            <label for="model_number">Model Number <span class="text-danger">*</span></label>
+                            <input required type="text" name="model_number"
+                                class="form-control @error('model_number') is-invalid @enderror" value="{{$product->model_number }}">
+                        </div>
 
+
+                        @error('model_number')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="form-group mb-4">
+                            <label for="limitation">Limitation <span class="text-danger">*</span></label>
+                            <input required type="number" name="limitation"
+                                class="form-control @error('limitation') is-invalid @enderror" value="{{$product->limitation }}">
+                        </div>
+
+
+                        @error('limitation')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
 
 
                 </div>
