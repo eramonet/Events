@@ -63,7 +63,7 @@ class UserRepository implements UserRepositoryInterface
         $getWeddingHalls = CategoryHall::where('category_id', 6)->pluck('hall_id');
         $weddingsHalls = Hall::whereIn('id', $getWeddingHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->take(2)
             ->latest()->get();
         $allweddingshalls = array();
@@ -79,7 +79,7 @@ class UserRepository implements UserRepositoryInterface
         $getbirthdaysHalls = CategoryHall::where('category_id', 2)->pluck('hall_id');
         $birthdaysHalls = Hall::whereIn('id', $getbirthdaysHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->take(2)
             ->latest()->get();
         $allbirthdayshalls = array();
@@ -93,7 +93,7 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $latestProducts = Product::where('status',1)
-        ->where('accepted',1)->where('stock', '>', '0')
+        ->where('accept','accepted')->where('stock', '>', '0')
             ->take(4)
             ->latest()->get();
         $allproducts = array();
@@ -177,7 +177,7 @@ class UserRepository implements UserRepositoryInterface
         $getEngagementsHalls = CategoryHall::where('category_id', 3)->pluck('hall_id');
         $engagementsHalls = Hall::whereIn('id', $getEngagementsHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->take(2)
             ->latest()->get();
         $allEngagementshalls = array();
@@ -193,7 +193,7 @@ class UserRepository implements UserRepositoryInterface
         $getconferencesHalls = CategoryHall::where('category_id', 4)->pluck('hall_id');
         $conferencesHalls = Hall::whereIn('id', $getconferencesHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->take(2)
             ->latest()->get();
         $allconferenceshalls = array();
@@ -233,7 +233,7 @@ class UserRepository implements UserRepositoryInterface
         $categoryHalls = CategoryHall::where('category_id', $category_id)->pluck('hall_id');
         $halls = Hall::whereIn('id', $categoryHalls)  
         ->where('status',1)
-        ->where('accepted',1)->get();
+        ->where('accept','accepted')->get();
         return HallResource::collection($halls);
     }
 
@@ -242,7 +242,7 @@ class UserRepository implements UserRepositoryInterface
         $getWeddingHalls = CategoryHall::where('category_id', 6)->pluck('hall_id');
         $weddingsHalls = Hall::whereIn('id', $getWeddingHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->latest()->get();
         return HallResource::collection($weddingsHalls);
     }
@@ -252,7 +252,7 @@ class UserRepository implements UserRepositoryInterface
         $getBirthdaysHalls = CategoryHall::where('category_id', 2)->pluck('hall_id');
         $birthdaysHalls = Hall::whereIn('id', $getBirthdaysHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->latest()->get();
         return HallResource::collection($birthdaysHalls);
     }
@@ -262,7 +262,7 @@ class UserRepository implements UserRepositoryInterface
         $getEngagementsHalls = CategoryHall::where('category_id', 3)->pluck('hall_id');
         $engagementsHalls = Hall::whereIn('id', $getEngagementsHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->latest()->get();
         return HallResource::collection($engagementsHalls);
     }
@@ -272,7 +272,7 @@ class UserRepository implements UserRepositoryInterface
         $getConferencesHalls = CategoryHall::where('category_id', 4)->pluck('hall_id');
         $conferencesHalls = Hall::whereIn('id', $getConferencesHalls)
         ->where('status',1)
-        ->where('accepted',1)
+        ->where('accept','accepted')
             ->latest()->get();
         return HallResource::collection($conferencesHalls);
     }
