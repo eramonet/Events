@@ -498,6 +498,21 @@ return [
     [
         'en'=> 'done',
         'ar'=>'تم'
+    ],
+    'email_not_found'=>
+    [
+        'en'=>'email not found',
+        'ar'=>'البريد الالكتروني غير موجود'
+    ],
+    'product_out_stock'=>
+    [
+        'en'=>'product out stock',
+        'ar'=>'المنتج خارج المخزن'
+    ],
+    'quantity_not_equal_limitation'=>
+    [
+        'en'=>'quantity not equal limitation',
+        'ar'=>'الكمية لا تساوي الحد المطلوب'
     ]
 
 ];

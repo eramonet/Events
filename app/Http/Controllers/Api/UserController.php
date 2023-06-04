@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Interfaces\UserRepositoryInterface;
 use App\Models\CartHall;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Vendor;
@@ -400,6 +401,13 @@ class UserController extends Controller
         $user = User::where('id', $request->user()->id)->first();
         if ($user == 'false') {
             return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $product=Product::where('id',$request->product_id)->first();
+        if($product->stock<="0"){
+            return response()->json(res($lang, failed(), 'product_out_stock', []), 404);
+        }
+        if($request->quantity!=$product->limitation){
+            return response()->json(res($lang, failed(), 'quantity_not_equal_limitation', []), 404);
         }
         $request['user_id'] = $user->id;
         $request['quantity'] = $request->quantity;
