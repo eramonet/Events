@@ -1041,4 +1041,57 @@ class UserRepository implements UserRepositoryInterface
         }
         return $details;
     }
+
+    public function rateUs($request)
+    {
+        Rate::create([
+            'user_id' => $request->user_id,
+            'rate' => $request->rate,
+            'review' => $request->review,
+            'transaction_type' => "rate us",
+        ]);
+    }
+
+    public function deleteHallCart($request)
+    {
+        CartHall::where('id', $request->cart_id)
+            ->where('user_id', $request->user_id)
+            ->where('package_id', $request->package_id)
+            ->where('hall_id', $request->hall_id)->delete();
+    }
+
+    public function updateHallCart($request)
+    {
+        $cart = CartHall::where([
+            'id' => $request->cart_id,
+            'user_id' => $request->user_id
+        ])->update(['package_id', $request->package_id]);
+
+        $options = $request->option_id;
+        $quantities = $request->quantity;
+        if (isset($options)) {
+            CartHallOption::where('cart_hall_id', $request->cart_id)->delete();
+            for ($i = 0; $i < sizeof($options); $i++) {
+                CartHallOption::create([
+                    'cart_hall_id' => $cart->id,
+                    'option_id' => $options[$i],
+                    'quantity' => $quantities[$i],
+                ]);
+            }
+        }
+    }
+
+    public function deleteProductsCart($request)
+    {
+        Cart::where('id',$request->cart_id)
+        ->where('user_id',$request->user_id)
+        ->delete();
+    }
+
+    public function updateProductsCart($request)
+    {
+        Cart::where('id',$request->cart_id)
+        ->where('user_id',$request->user_id)
+        ->update(['quantity'=>$request->quantity]);
+    }
 }

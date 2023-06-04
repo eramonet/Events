@@ -517,4 +517,171 @@ class UserController extends Controller
             return response()->json(res($lang, failed(), 'order_not_found', []), 404);
         }
     }
+    public function rateUs(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'rate' => 'required',
+                'review' => 'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['rate'] = $request->rate;
+        $request['review'] = $request->review;
+        $this->userObject->rateUs($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
+    }
+
+    public function inviteFriend(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'email' => [
+                    'required', 'email','regex:/^\w+[-\.\w]*@(?!(?:myemail)\.com$)\w+[-\.\w]*?\.\w{2,4}$/'
+                ],
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        try{
+        $data = array('email' => $request->email,'name'=>$user->name);
+            Mail::send('email.invite', $data, function ($message) use ($request) {
+                $message->to($request->email)->subject('Invitation');
+                $message->from('events@gmail.com', 'Events App');
+            });
+            return response()->json(res($lang, success(), 'done', []), 200);
+
+        }catch(Exception $e){
+            return response()->json(res($lang, failed(), 'email_not_found', []), 404);
+        }
+    }
+
+    public function deleteHallCart(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'package_id' => 'required|exists:packages,id',
+                'hall_id' => 'required|exists:halls,id',
+                'cart_id' =>'required|exists:cart_halls,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['package_id'] = $request->package_id;
+        $request['hall_id'] = $request->hall_id;
+        $request['cart_id'] = $request->cart_id;
+        $this->userObject->deleteHallCart($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
+    }
+
+    public function updateHallCart(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'package_id' => 'required|exists:packages,id',
+                'hall_id' => 'required|exists:halls,id',
+                'cart_id' =>'required|exists:cart_halls,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['user_id'] = $user->id;
+        $request['package_id'] = $request->package_id;
+        $request['hall_id'] = $request->hall_id;
+        $request['cart_id'] = $request->cart_id;
+        $this->userObject->updateHallCart($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
+    }
+
+    public function deleteProductsCart(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'cart_id' =>'required|exists:cart,id',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['cart_id'] = $request->cart_id;
+        $this->userObject->deleteHallCart($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
+    }
+
+    public function updateProductsCart(Request $request)
+    {
+        $lang = getLang();
+        App::setLocale($lang);
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'cart_id' =>'required|exists:cart,id',
+                'quantity'=>'required',
+            ]
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
+        }
+
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $request['cart_id'] = $request->cart_id;
+        $this->userObject->updateProductsCart($request);
+        return response()->json(res($lang, success(), 'done', []), 200);
+    }
+
 }

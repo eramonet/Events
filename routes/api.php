@@ -87,6 +87,12 @@ Route::controller(UserController::class)->group(function () {
             Route::get('brand-products/{brand_id}', 'getBrandProducts');
             Route::get('order-details/{order_id}', 'orderDetails');
             Route::post('cancel-order', 'cancelOrder');
+            Route::post('rate-us', 'rateUs');
+            Route::post('invite-friend', 'inviteFriend');
+            Route::post('delete-hall-cart', 'deleteHallCart');
+            Route::post('update-hall-cart', 'updateHallCart');
+            Route::post('delete-products-cart', 'deleteProductsCart');
+            Route::post('update-products-cart', 'updateProductsCart');
         });
     } else {
         Route::get('home', 'home');

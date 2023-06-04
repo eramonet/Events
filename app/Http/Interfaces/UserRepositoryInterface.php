@@ -59,4 +59,14 @@ interface UserRepositoryInterface
     public function myOrders($user, $lang);
 
     public function orderDetails($user,$order_id,$lang);
+
+    public function rateUs($request);
+
+    public function deleteHallCart($request);
+
+    public function updateHallCart($request);
+
+    public function deleteProductsCart($request);
+
+    public function updateProductsCart($request);
 }
