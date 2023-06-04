@@ -26,7 +26,7 @@ class PackageResource extends JsonResource
             'plan_of_the_day_description' => $lang == 'en' ? $this->plan_of_the_day_description_en : $this->plan_of_the_day_description_en,
             'flowers_description' => $lang == 'en' ? $this->flowers_description_en : $this->flowers_description_en,
             'decoration_description' => $lang == 'en' ? $this->decoration_description_en : $this->decoration_description_en,
-
+            'real_price' => $this->real_price,
         ];
     }
 }
