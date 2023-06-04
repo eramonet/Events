@@ -11,7 +11,7 @@ class CartHall extends Model
 
     protected $table='cart_halls';
 
-    protected $fillable=['package_id','hall_id','user_id'];
+    protected $fillable=['package_id','hall_id','user_id','date','time_from','time_to'];
 
 
     public function user()

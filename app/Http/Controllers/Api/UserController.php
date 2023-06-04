@@ -191,6 +191,9 @@ class UserController extends Controller
                 'option_id.*' => 'required',
                 'quantity' => 'required|array',
                 'quantity.*' => 'required',
+                'date'=>'required',
+                'time_from'=>'required',
+                'time_to'=>'required',
             ]
         );
         if ($validator->fails()) {

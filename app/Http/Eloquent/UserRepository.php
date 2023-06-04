@@ -518,7 +518,10 @@ class UserRepository implements UserRepositoryInterface
         $cart = CartHall::create([
             'package_id' => $request->package_id,
             'hall_id' => $request->hall_id,
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id,
+            'date'=>$request->date,
+            'time_from'=>$request->time_from,
+            'time_to'=>$request->time_to,
         ]);
         $options = $request->option_id;
         $quantities = $request->quantity;

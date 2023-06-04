@@ -21,6 +21,9 @@ return new class extends Migration
             $table->foreign('hall_id')->references('id')->on('halls')->cascadeOnUpdate()->cascadeOnDelete();
             $table->unsignedBigInteger('package_id')->nullable();
             $table->foreign('package_id')->references('id')->on('packages')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->date('date');
+            $table->time('time_from');
+            $table->time('time_to');
             $table->timestamps();
         });
     }
