@@ -411,7 +411,7 @@ class UserController extends Controller
         if($product->stock<="0"){
             return response()->json(res($lang, failed(), 'product_out_stock', []), 404);
         }
-        if($request->quantity!=$product->limitation){
+        if($request->quantity>$product->limitation){
             return response()->json(res($lang, failed(), 'quantity_not_equal_limitation', []), 404);
         }
         $request['user_id'] = $user->id;
