@@ -74,7 +74,7 @@ class ProductResource extends JsonResource
             'availability' => $this->status,
             'model_number' => $this->model_number,
             'in_stock'=>$this->in_stock,
-            'in_stock_left'=>$this->stock,
+            'in_stock_left'=>$this->in_stock_left,
             'primary_image' => $this->primary_image_url,
             'real_price' => $this->real_price,
             'fake_price' => $this->fake_price,
