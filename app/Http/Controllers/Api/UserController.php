@@ -10,8 +10,10 @@ use App\Models\Product;
 use App\Models\Region;
 use App\Models\User;
 use App\Models\Vendor;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
