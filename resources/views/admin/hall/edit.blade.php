@@ -190,6 +190,121 @@
 
                     {{-- categories --}}
 
+<<<<<<< HEAD
+=======
+                    {{-- Taxes --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="taxes">Taxes <span class="text-danger"></span></label>
+                            <select multiple name="taxes[]" id="taxes"
+                                class="form-select @error('taxes') is-invalid @enderror">
+
+                                @foreach ($taxes as $taxes)
+                                    <option value="{{ $taxes->id }}"
+                                        {{ collect(old('taxes'))->contains($taxes->id) ? 'selected' : '' }}>
+                                        {{ $taxes->title_en . ' - ' . $taxes->title_ar }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        @error('taxes')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+                    {{-- Taxes --}}
+
+
+
+
+
+                    {{-- real_price --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="real_price">Real Price<span class="text-danger">*</span></label>
+                            <input required type="number" step="0.1" name="real_price"
+                                class="form-control @error('real_price') is-invalid @enderror"
+                                value="{{ $hall->real_price }}">
+                        </div>
+
+
+                        @error('real_price')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- real_price --}}
+
+
+                    {{-- fake_price --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="fake_price">Fake Price<span class="text-danger">*</span></label>
+                            <input required type="number" step="0.1" name="fake_price"
+                                class="form-control @error('fake_price') is-invalid @enderror"
+                                value="{{ $hall->fake_price }}">
+                        </div>
+
+
+                        @error('fake_price')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- fake_price --}}
+
+
+                    {{-- offer_end_at --}}
+                    <div class="col-md-6">
+                        <div class="form-group mb-4">
+                            <label for="offer_end_at">Offet End At<span class="text-danger">*</span></label>
+                            <input required type="date" name="offer_end_at"
+                                class="form-control @error('offer_end_at') is-invalid @enderror"
+                                value="{{ $hall->offer_end_at }}">
+                        </div>
+
+
+                        @error('offer_end_at')
+                            <div class="d-flex justify-content-center ">
+
+                                <div class="text-danger">
+                                    <strong>{{ $message }}</strong>
+                                </div>
+                            </div>
+                        @enderror
+                    </div>
+
+                    {{-- offer_end_at --}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 </div>
 
             </div>

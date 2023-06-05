@@ -23,8 +23,11 @@
                                         <img class="model-img" src="{{ $hall->primary_image_url }}" width="150px">
                                     </div>
                                     <ul class="list-group list-group-flush">
+<<<<<<< HEAD
                                         <li class="list-group-item">Created By : {{ $hall->admin ? "Events" : $hall->vendor->title_en }} </li>
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                         <li class="list-group-item">Name [Ar] : {{ $hall->title_ar }} </li>
 
                                         <li class="list-group-item">Name [En] : {{ $hall->title_en }} </li>
@@ -45,6 +48,23 @@
 
                                         <li class="list-group-item">langitude : {!! $hall->longitude !!} </li>
 
+<<<<<<< HEAD
+=======
+                                        <li class="list-group-item">Real Price : {{ $hall->real_price }} AED</li>
+                                        <li class="list-group-item">Fake Price : {{ $hall->real_price }} AED </li>
+                                        <li class="list-group-item">Offer Ended At : {{ $hall->offer_end_at }} </li>
+
+                                        <li class="list-group-item">Taxes :
+                                            @foreach ($hall->taxes as $tax)
+                                                <a>
+                                                    <span class="badge bg-primary">
+                                                        {{ ucfirst($tax->title_en) . ' ' . $tax->percentage . '%' }}
+                                                    </span>
+                                                </a>
+                                            @endforeach
+                                        </li>
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                         <li class="list-group-item">Status :
                                             @if ($hall->accept == 'new')
                                                 <span style="color: blue">New</span>
@@ -273,6 +293,7 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
                     <div class="card mb-4">
                         @if (Auth::guard('admin')->user()->hasRole('super-admin') ||
                                 Auth::guard('admin')->user()->hasRole('admin'))
@@ -301,13 +322,18 @@
                         @endif
 
                     </div>
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 </div>
             </div>
         </div>
     </div>
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
     {{-- on top --}}
 @endsection

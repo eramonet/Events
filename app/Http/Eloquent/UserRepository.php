@@ -232,7 +232,7 @@ class UserRepository implements UserRepositoryInterface
     public function eventHalls($lang, $category_id)
     {
         $categoryHalls = CategoryHall::where('category_id', $category_id)->pluck('hall_id');
-        $halls = Hall::whereIn('id', $categoryHalls)  
+        $halls = Hall::whereIn('id', $categoryHalls)
         ->where('status',1)
         ->where('accept','accepted')->get();
         return HallResource::collection($halls);

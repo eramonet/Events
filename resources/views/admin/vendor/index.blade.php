@@ -201,7 +201,10 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+<<<<<<< HEAD
                     <th class="border-gray-200">Image</th>
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <th class="border-gray-200">Title In Arabic</th>
                     <th class="border-gray-200">Title In English</th>
                     <th class="border-gray-200">Commission %</th>
@@ -217,8 +220,11 @@
                     <tr>
                         <td>{{ $vendor->id }}</td>
 
+<<<<<<< HEAD
                         <td><img src="{{ $vendor->image_url }}" width="100px"></td>
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                         <td>{{ $vendor->title_ar }}</td>
                         <td>{{ $vendor->title_en }}</td>
                         <td>{{ $vendor->commission }}%</td>

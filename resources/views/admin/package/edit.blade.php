@@ -41,7 +41,11 @@
     {{-- on top --}}
 
 
+<<<<<<< HEAD
     <form action="{{ route('admin.packages.update', $package->id) }}" method="POST" enctype="multipart/form-data">
+=======
+    <form action="{{ route('admin.packages.update' , $package->id ) }}" method="POST" enctype="multipart/form-data">
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
 
         @csrf
@@ -270,6 +274,7 @@
                                 class="form-select @error('taxes') is-invalid @enderror">
 
                                 @foreach ($taxes as $tax)
+<<<<<<< HEAD
                                     @if ($package->taxes->count() > 0)
                                         @foreach ($package->taxes as $item)
                                             @if ($tax->id == $item->id)
@@ -287,6 +292,20 @@
                                             {{ $tax->title_en . ' - ' . $tax->title_ar }}
                                         </option>
                                     @endif
+=======
+
+                                    @foreach ($package->taxes as $item)
+                                        @if ($tax->id == $item->id)
+                                            <option selected value="{{ $tax->id }}">
+                                                {{ $tax->title_en . ' - ' . $tax->title_ar }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $tax->id }}">
+                                                {{ $tax->title_en . ' - ' . $tax->title_ar }}
+                                            </option>
+                                        @endif
+                                    @endforeach
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 @endforeach
                             </select>
                         </div>

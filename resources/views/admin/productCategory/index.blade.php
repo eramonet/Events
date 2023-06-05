@@ -216,7 +216,10 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+<<<<<<< HEAD
                     <th class="border-gray-200">Image</th>
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <th class="border-gray-200">Title</th>
                     <th class="border-gray-200">Created At</th>
                     <th class="border-gray-200">Status</th>
@@ -234,9 +237,13 @@
                             <p class="text-nowrap">{{ $category->id }}.</p>
                         </td>
 
+<<<<<<< HEAD
                         <td>
                             <p class="text-nowrap"><img src="{{ $category->image }}" width="60px"></p>
                         </td>
+=======
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                         <td>
 
@@ -295,10 +302,16 @@
 
                                 <div class="">
                                     <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
+<<<<<<< HEAD
                                         <button class="btn btn-primary  m-1" data-bs-toggle="modal"
                                             data-bs-target="#modal-{{ $category->id }}" class=""><span
                                                 class="fas fa-eye "></span>
                                         </button>
+=======
+                                        <a href="{{ route('admin.products-categories.show' , $category->id) }}" class="btn btn-primary  m-1"  class=""><span
+                                                class="fas fa-eye "></span>
+                                        </a>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                     </div>
                                 </div>
 

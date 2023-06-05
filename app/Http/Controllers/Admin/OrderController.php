@@ -537,7 +537,6 @@ class OrderController extends Controller
             }])->where("order_number", $id)->first();
         }
 
-
         if (!$order) {
             $request->session()->flash('failed', 'Order Not Found');
             return redirect()->back();

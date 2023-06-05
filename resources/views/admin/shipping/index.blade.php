@@ -217,7 +217,11 @@
                     <tr>
                         <td>{{ $shipping->id }}</td>
 
+<<<<<<< HEAD
                         <td>{{ $shipping->vendor ? $shipping->admin->title_en : "Events"  }}</td>
+=======
+                        <td>{{ $shipping->admin ? $shipping->admin->title_en : "Events"  }}</td>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                         <td>{{ $shipping->text_en }}</td>
 

@@ -513,6 +513,9 @@ Route::prefix('acp')->name('admin.')->group(function () {
 
         Route::get('successfullBookings', 'successfullBookings')->name('successfullBookings');
         Route::get('cancelledBookings', 'cancelledBookings')->name('cancelledBookings');
+
+        Route::get('pinddingdBookings', 'pendingBookings')->name('pinddingdBookings');
+
         Route::put('/{id}/successAction', 'successAction')->name('successAction');
         Route::delete('/{id}/cancelledAction', 'cancelledAction')->name('cancelledAction');
         Route::get('/show/{id}', 'show')->name('show');

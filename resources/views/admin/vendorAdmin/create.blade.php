@@ -360,10 +360,17 @@
 
 
 
+<<<<<<< HEAD
                 <div class="accordion">
 
 
                     <div class="row" id="accordionPermissions">
+=======
+                <div class="accordion" id="accordionPermissions">
+
+
+                    <div class="row">
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                         @foreach ($permissions as $model => $cruds)
                             <div class="col-md-4">
@@ -452,12 +459,17 @@
         $("#vendor_id").change(function() {
             vendor = $(this).children("option:selected").val();
 
+<<<<<<< HEAD
             complete_url = "/acp/vendor-admins/get-permission/" + vendor;
+=======
+            complete_url = "/acp/vendor-admins/get-vendor-order-balance/" + vendor + "/" + key + "/" + order_number;
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
             $.ajax({
                 type: "GET",
                 url: complete_url,
                 success: function(data) {
+<<<<<<< HEAD
                     console.log(data)
                     $('#accordionPermissions').empty() ;
 
@@ -465,6 +477,14 @@
                         for( x = 0 ; x < data.length ; x++ ){
                             $('#accordionPermissions').append(`<h1>hello</h1>`) ;
                         }
+=======
+                    if (data == "empty") {
+                        $("#client_order_balance_inpt").val(0);
+                        $("#selected_order_balance").text(0)
+                    } else {
+                        $("#client_order_balance_inpt").val(data[0]);
+                        $("#selected_order_balance").text(data[0])
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     }
                 },
                 error: function(data) {

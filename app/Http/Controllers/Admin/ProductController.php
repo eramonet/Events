@@ -434,7 +434,6 @@ class ProductController extends Controller
     {
 
         $products = Product::where('accept', $status)->paginate(10);
-
         return view('admin.product.product_request', compact('products', 'status'));
     }
 

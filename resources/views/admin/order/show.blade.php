@@ -375,11 +375,19 @@
                                         @php
                                             $order_status_color = 'secondary';
 
+<<<<<<< HEAD
                                             if ($order->current_login_action == 'inprogress') {
                                                 $order_status_color = 'info';
                                             } elseif ($order->current_login_action == 'delivered') {
                                                 $order_status_color = 'success';
                                             } elseif ($order->current_login_action == 'cancelled') {
+=======
+                                            if ($order->status == 'inprogress') {
+                                                $order_status_color = 'info';
+                                            } elseif ($order->status == 'delivered') {
+                                                $order_status_color = 'success';
+                                            } elseif ($order->status == 'cancelled') {
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                                 $order_status_color = 'danger';
                                             }
 
@@ -387,7 +395,11 @@
                                         <p class="h6">
 
                                             <span class="badge badge-lg bg-{{ $order_status_color }}">
+<<<<<<< HEAD
                                                 {{ ucfirst($order->current_login_action) }}</span>
+=======
+                                                {{ ucfirst($order->status) }}</span>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                                         </p>
                                     </td>
@@ -541,15 +553,26 @@
 
                                     </th>
 
+<<<<<<< HEAD
+=======
+                                    <th class="">
+
+                                        <p class="h6 text-bold">Events Commission [AED]</p>
+
+                                    </th>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 {{-- @endif --}}
                                 <th class=" rounded-end">
                                     <p class="h6 text-bold">Taxes</p>
                                 </th>
 
+<<<<<<< HEAD
                                 <th class=" rounded-end">
                                     <p class="h6 text-bold">Status</p>
                                 </th>
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
 
                             </tr>
@@ -576,7 +599,11 @@
                                     </td>
 
                                     <td class="">
+<<<<<<< HEAD
                                         <p class="h5 text-nowrap"> {{ number_format($product->product_quantity) }}</p>
+=======
+                                        <p class="h5 text-nowrap"> {{ $product->product_quantity }}</p>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                     </td>
 
 
@@ -592,7 +619,23 @@
                                                 %</p>
                                         </td>
                                     {{-- @endif --}}
+<<<<<<< HEAD
 
+=======
+                                    <td class="">
+                                        <p class="h5 text-nowrap">
+                                            {{ $product->product->owner
+                                                ? number_format($product->price * $product->product_quantity * ($product->product->owner->commission / 100))
+                                                : 0 }}
+                                            AED</p>
+                                        @if ($product->product->owner)
+                                            <?php $our_comission_price += $product->price * $product->product_quantity * ($product->product->owner->commission / 100); ?>
+                                        @else
+                                            <?php $our_comission_price += 0; ?>
+                                        @endif
+
+                                    </td>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                     <td class="">
                                         @if ($product->product->taxes->count() > 0)
 
@@ -609,10 +652,13 @@
 
                                     </td>
 
+<<<<<<< HEAD
                                     <td class="">
                                         <p class="h5 text-nowrap"> {{ $product->status }} </p>
                                     </td>
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
 
                                 </tr>
@@ -679,13 +725,51 @@
                                 </td>
 
                                 <td class="">
+<<<<<<< HEAD
                                     <p class="h4"> {{ number_format($order->total_products_price) }} AED</p>
+=======
+                                    <p class="h4"> {{ number_format($total_products_final) }} AED</p>
+                                </td>
+
+
+                            </tr>
+                            @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin')
+                                <tr>
+
+
+                                    <td class="">
+                                        <p class="h4"> Total Commision Price</p>
+                                    </td>
+
+                                    <td class="">
+                                        <p class="h4"> {{ number_format($total_commissions) }} AED</p>
+                                    </td>
+
+
+                                </tr>
+                            @endif
+                            <tr>
+
+
+                                <td class="">
+                                    <p class="h4"> Total Products Taxes</p>
+                                </td>
+
+                                <td class="">
+                                    <p class="h4"> {{ number_format($total_taxes_value) }} AED</p>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 </td>
 
 
                             </tr>
 
+<<<<<<< HEAD
                             @if ($order->customer_promo_code_title)
+=======
+
+
+                            @if ($order->promo_discount)
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 <tr>
 
 
@@ -694,7 +778,11 @@
                                     </td>
 
                                     <td class="">
+<<<<<<< HEAD
                                         <p class="h4"> {{ $order->customer_promo_code_title }} </p>
+=======
+                                        <p class="h4"> {{ $order->customer_promo_code_titel }} </p>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                     </td>
 
 
@@ -725,6 +813,7 @@
                                 </tr>
                             @endif
 
+<<<<<<< HEAD
 
                             {{-- @if (auth()->guard('admin')->user()->getRoles()[0] != 'vendor-admin') --}}
                                 <tr>
@@ -757,6 +846,8 @@
 
                             </tr>
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                         </tbody>
                     </table>
 
@@ -768,20 +859,32 @@
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
             <p class="h2">Total Events Commission <span class="badge badge-lg bg-success "
+<<<<<<< HEAD
                     style="font-size: 30px">{{ number_format($order->total_comissions) }}
+=======
+                    style="font-size: 30px">{{ number_format($total_commissions) }}
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 </span> AED </p>
         </div>
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
             <p class="h2">Shipping <span class="badge badge-lg bg-success "
+<<<<<<< HEAD
                     style="font-size: 30px">{{ number_format($order->shipping) }}
+=======
+                    style="font-size: 30px">{{ number_format($shippings) }}
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 </span> AED </p>
         </div>
 
 
         <div class="alert my-4 text-center text-white" style="background: #1f2937">
             <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
+<<<<<<< HEAD
                 style="font-size: 30px">{{ number_format($total_orders_price) }}
+=======
+                style="font-size: 30px">{{ number_format($total_product_with_taxes) }}
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
             </span> AED </p>
 
         </div>
@@ -804,14 +907,22 @@
 
 
 
+<<<<<<< HEAD
                 @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->current_login_action == 'new')
+=======
+                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->final_status == 'new')
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <form class="action_btn"
                         data-message="Are You Sure You Want To Move This Order To Inprogress Status ?"
                         action="{{ route('admin.orders.inprogressAction', $order->order_number) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <button type="submit"
+<<<<<<< HEAD
                             class="btn  btn-lg btn-info d-inline-flex align-items-center m-2 text-white">
+=======
+                            class="btn  btn-lg btn-success d-inline-flex align-items-center m-2 text-white">
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                             <span class="fas fa-check me-2"></span>In Progress
 
                         </button>
@@ -836,7 +947,11 @@
                 @endif
 
 
+<<<<<<< HEAD
                 @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->current_login_action == 'inprogress')
+=======
+                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->final_status == 'inprogress')
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <form class="action_btn" data-message="Are You Sure You Want To Move This Order To Delivered Status ?"
                         action="{{ route('admin.orders.deliveredAction', $order->order_number) }}" method="POST">
                         @csrf
@@ -848,7 +963,11 @@
                     </form>
                 @endif
 
+<<<<<<< HEAD
                 @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->current_login_action == 'inprogress'))
+=======
+                @if (Auth::guard('admin')->user()->hasPermission('orders-update') && $order->final_status == 'inprogress'))
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <form class="action_btn" data-message="Are You Sure You Want To Move This Order To Cancelled Status ?"
                         action="{{ route('admin.orders.cancelledAction', $order->order_number) }}" method="POST">
                         @csrf

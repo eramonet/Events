@@ -4,6 +4,10 @@
 @endsection
 
 @section('content')
+<<<<<<< HEAD
+=======
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
         <div class="d-block mb-4 mb-md-0">
             <nav aria-label="breadcrumb" class=" d-md-inline-block">
@@ -66,7 +70,11 @@
                         </td>
                         <td>
                             <p class="text-nowrap">
+<<<<<<< HEAD
                                 {{ number_format($order->total_order_price) . ' AED' }}</p>
+=======
+                                {{ number_format($order->total_price_for_this) . ' AED' }}</p>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                         </td>
 
                         <td> <span class="badge bg-info text-nowrap"
@@ -101,6 +109,7 @@
                             <div class="d-flex  align-items-center justify-content-center flex-md-nowrap">
 
                                 @if (Auth::guard('admin')->user()->hasPermission('orders-read'))
+<<<<<<< HEAD
                                     <div class="">
                                         <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
 
@@ -185,6 +194,92 @@
                                         </form>
                                     @else
                                     @endif
+=======
+                                <div class="">
+                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
+
+
+                                        <a class="btn btn-primary  m-1" style="font-size: 16px"
+                                            href="{{ route('admin.orders.show', $order->order_number) }}"> <span
+                                                class="fas fa-eye "></span></a>
+                                    </div>
+                                </div>
+                                @endif
+
+                                @if (Auth::guard('admin')->user()->hasPermission('orders-update'))
+
+                                @if ($order->status == 'pending')
+                                    <form class="action_btn"
+                                        data-message="Are You Sure You Want To Move This Order To Inprogress Status ?"
+                                        action="{{ route('admin.orders.inprogressAction', $order->order_number) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button data-bs-toggle="tooltip" data-bs-placement="top" title="Inprogress Action"
+                                            type="submit" class="btn btn-info text-white  m-1" style="font-size: 16px">
+                                            <span class="fas fa-check"></span>
+                                        </button>
+                                    </form>
+
+
+
+                                    <form class="action_btn"
+                                        data-message="Are You Sure You Want To Move This Order To Delivered Status ?"
+                                        action="{{ route('admin.orders.deliveredAction', $order->order_number) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button style="font-size: 16px" type="submit" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" title="Delivered Action" type="submit"
+                                            class="btn btn-success text-white  m-1">
+                                            <span class="fas fa-check-double "></span>
+                                        </button>
+                                    </form>
+
+
+                                    <form class="action_btn"
+                                        data-message="Are You Sure You Want To Move This Order To Cancelled Status ?"
+                                        action="{{ route('admin.orders.cancelledAction', $order->order_number) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Cancelled Action" type="submit" class="btn btn-danger text-white  m-1"
+                                            style="font-size: 16px">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </form>
+                                @elseif ($order->status == 'inprogress')
+                                    <form class="action_btn"
+                                        data-message="Are You Sure You Want To Move This Order To Delivered Status ?"
+                                        action="{{ route('admin.orders.deliveredAction', $order->order_number) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <button style="font-size: 16px" type="submit" data-bs-toggle="tooltip"
+                                            data-bs-placement="top" title="Delivered Action" type="submit"
+                                            class="btn btn-success text-white  m-1">
+                                            <span class="fas fa-check-double "></span>
+                                        </button>
+                                    </form>
+
+
+                                    <form class="action_btn"
+                                        data-message="Are You Sure You Want To Move This Order To Cancelled Status ?"
+                                        action="{{ route('admin.orders.cancelledAction', $order->order_number) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" data-bs-toggle="tooltip" data-bs-placement="top"
+                                            title="Cancelled Action" type="submit"
+                                            class="btn btn-danger text-white  m-1" style="font-size: 16px">
+                                            <span class="fas fa-times"></span>
+                                        </button>
+                                    </form>
+                                @else
+                                @endif
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 @endif
 
 
@@ -225,7 +320,11 @@
 
 
             <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
+<<<<<<< HEAD
                     style="font-size: 30px">{{ number_format($total_outer_orders_price) }}
+=======
+                    style="font-size: 30px">{{ number_format($total_product_with_taxes) }}
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 </span> AED </p>
 
 

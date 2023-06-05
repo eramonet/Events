@@ -474,7 +474,7 @@ class UserController extends Controller
         $request['promo_code'] = $request->promo_code;
         $request['order_from'] = $request->order_from;
 
-        return $this->userObject->checkoutProduct($request);
+        $this->userObject->checkoutProduct($request);
         return response(res($lang, success(), 'checkout', []), 200);
     }
 

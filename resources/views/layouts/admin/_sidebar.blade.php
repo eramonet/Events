@@ -319,7 +319,10 @@
                 @endif
             @endif
             @if ($useradmin->hasRole('vendor-admin'))
+<<<<<<< HEAD
                 {{-- @if (Auth::guard('admin')->user()->hasPermission('with-darw-read')) --}}
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 <li class="nav-item ">
                     <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
                         data-bs-toggle="collapse" data-bs-target="#with_draw_vendor" aria-expanded="false">
@@ -400,7 +403,10 @@
                         </ul>
                     </div>
                 </li>
+<<<<<<< HEAD
                 {{-- @endif --}}
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
             @endif
 
             {{-- promo-codes --}}
@@ -926,6 +932,14 @@
                             <div class="multi-level collapse {{ Route::is('admin.halls-categories.') || Route::is('admin.halls.') ? 'show' : '' }}"
                                 role="list" id="halls" aria-expanded="true">
                                 <ul class="flex-column nav">
+<<<<<<< HEAD
+=======
+
+
+
+
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                     {{-- halls --}}
 
                                     @if (Auth::guard('admin')->user()->hasPermission('halls-read'))
@@ -942,6 +956,7 @@
                                             </a>
                                         </li>
                                     @endif
+<<<<<<< HEAD
                                     @if (Auth::guard('admin')->user()->hasPermission('packages-options-categories-read'))
                                         <li class="nav-item">
                                             <a href="{{ route('admin.packages.index') }}" class="nav-link ">
@@ -1003,6 +1018,8 @@
                                         </li>
                                     @endif
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                     {{-- halls --}}
 
 
@@ -1103,6 +1120,7 @@
                                 @endif
 
                                 @if (Auth::guard('admin')->user()->hasPermission('packages-available-dates-and-times-read'))
+<<<<<<< HEAD
                                     <li class="nav-item">
                                         <a href="{{ route('admin.availabel_date.index') }}" class="nav-link ">
                                             <span class="sidebar-icon">
@@ -1117,6 +1135,22 @@
                                         </a>
                                     </li>
                                 @endif
+=======
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.availabel_date.index') }}" class="nav-link ">
+                                        <span class="sidebar-icon">
+                                            <i class="fa-regular fa-circle icon icon-xs me-2"></i>
+                                        </span>
+                                        <span class="sidebar-text">Available Dates</span>
+                                        <span
+                                            style="border: 1px solid red ; padding: 0px 5px; border-radius: 50%; background-color: red">
+                                            {{ \App\Models\Available_date::count() }}
+                                        </span>
+
+                                    </a>
+                                </li>
+                            @endif
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                             </ul>
                         </div>
@@ -1281,6 +1315,7 @@
                         </div>
                     </li>
                 @endif
+<<<<<<< HEAD
             @else
                 @if (Auth::guard('admin')->user()->hasPermission('hall_request-read'))
                     <li class="nav-item ">
@@ -1354,6 +1389,9 @@
                         </div>
                     </li>
                 @endif
+=======
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
             @endif
 
 
@@ -2112,8 +2150,12 @@
 
                             @if (Auth::guard('admin')->user()->hasPermission('settings-read'))
                                 <li class="nav-item {{ Route::is('admin.countries.*') ? 'active' : '' }}">
+<<<<<<< HEAD
                                     <a href="{{ route('admin.front-settings.shop_by_brands') }}"
                                         class="nav-link ">
+=======
+                                    <a href="{{ route('admin.front-settings.shop_by_brands') }}" class="nav-link ">
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                         <span class="sidebar-icon">
                                             <i class="fa-regular fa-circle icon icon-xs me-2"></i>
                                         </span>
