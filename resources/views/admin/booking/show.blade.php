@@ -1,6 +1,10 @@
 @extends('layouts.admin.master')
 @section('title')
+
+    Show Hall Booking Details
+
     Show Product
+
 @endsection
 @section('content')
     {{-- on top --}}
@@ -20,6 +24,16 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item ">
+
+                        <a href="{{ route('admin.hall-booking.successfullBookings') }}">Show Hall Booking Details</a>
+                    </li>
+
+                    <li class="breadcrumb-item active" aria-current="page">Show Hall Booking Details</li>
+
+                </ol>
+            </nav>
+            <h2 class="h4">Show Hall Booking Details</h2>
+
                         <a href="{{ route('admin.hall-booking.successfullBookings') }}">Halls Bookings</a>
                     </li>
 
@@ -65,6 +79,10 @@
                                         <p class="h6"> Hall Name</p>
                                     </td>
                                     <td class=" font-weight-bold">
+
+                                        <p class="h6"> {{ $booking->hall ? $booking->hall->title_en : 'removed Hall' }}
+                                        </p>
+
                                         <p class="h6"> {{ $booking->hall->title_en }}</p>
                                     </td>
 
@@ -76,12 +94,32 @@
                                     </td>
                                     <td class=" font-weight-bold">
                                         <p class="h6"> {{ $booking->hall->email }} </p>
+
                                     </td>
 
                                 </tr>
 
                                 <tr>
                                     <td class="">
+
+                                        <p class="h6"> Hall Owner ( Created By )</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        <p class="h6"> {{ $booking->admin ? 'Events' : $booking->vendor->title_en }}</p>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Hall Serve</p>
+                                    </td>
+                                    <td class=" font-weight-bold">
+                                        @foreach ($booking->hall->occasions as $occasion)
+                                            <span class="badge bg-primary">
+                                                {{ $occasion->category->title_en }}
+                                            </span>
+                                        @endforeach
                                         <p class="h6"> Hall Phone</p>
                                     </td>
                                     <td class=" font-weight-bold">
@@ -428,6 +466,30 @@
                                 </tr>
                                 <!-- End of Item -->
 
+
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Booking Date</p>
+                                    </td>
+
+                                    @if ($booking->time_from)
+                                        <td>
+                                            <p class="h6"> <i class="fas fa-clock text-success"></i>
+                                                {{ $booking->created_at }}
+                                            </p>
+                                        </td>
+                                    @else
+                                        ...
+                                    @endif
+
+                                </tr>
+
+                                <!-- Item -->
+                                <tr>
+                                    <td class="">
+                                        <p class="h6"> Event Date</p>
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                                 <!-- Item -->
                                 <tr>
                                     <td class="">
@@ -450,7 +512,12 @@
                                 <!-- Item -->
                                 <tr>
                                     <td class="">
+
                                         <p class="h6"> Booking Time From</p>
+
+                                        <p class="h6"> Event Time From</p>
+
+
                                     </td>
 
                                     @if ($booking->time_from)
@@ -468,7 +535,12 @@
 
                                 <tr>
                                     <td class="">
+
                                         <p class="h6"> Booking Time To</p>
+
+                                        <p class="h6"> Event Time To</p>
+
+                 
                                     </td>
 
                                     @if ($booking->time_to)
@@ -489,7 +561,11 @@
                                     </td>
 
                                     <td>
+
                                         <p class="h6"> <i class="fas fa-clock text-success"></i>
+
+                                        <p class="h6">
+
                                             {{ number_format($booking->extra_guest) }} Guest
                                         </p>
                                     </td>
@@ -503,22 +579,48 @@
 
             <div class="col-md-12">
                 <div class="card card-body my-4">
+
                     <h4>Package Options</h4>
+
+                    <h4>Extras</h4>
+
                     <div class="table-responsive">
 
                         <table class="table table-hover table-centered table-striped table-bordered text-center">
                             <thead>
                                 <tr>
+
+                                    <th class="border-gray-200">Extra Decoration Image </th>
+                                    <th class="border-gray-200">Extra Decoration Name</th>
+                                    <th class="border-gray-200">Extra Image </th>
+                                    <th class="border-gray-200">Extra Name</th>
+
                                     <th class="border-gray-200">Category Image </th>
                                     <th class="border-gray-200">Category Name</th>
                                     <th class="border-gray-200">Option Image </th>
                                     <th class="border-gray-200">Option Name</th>
+
                                     <th class="border-gray-200">Quantity</th>
                                     <th class="border-gray-200">Price</th>
                                     <th class="border-gray-200">Total Price</th>
                                 </tr>
                             </thead>
                             <tbody>
+
+                                <?php $total_extras = 0; ?>
+                                @foreach ($booking->options as $item)
+                                    <tr>
+                                        <td><img src="{{ $item->option->category->image_url }}" width="80px"></td>
+                                        <td>{{ $item->option->category->title_en }}</td>
+                                        <td><img src="{{ $item->option->image_url }}" width="80px"></td>
+                                        <td>{{ $item->option->title_en }}</td>
+                                        <td>{{ number_format($item->quantity) }} Item</td>
+                                        <td>{{ number_format($item->option->price) }} AED</td>
+                                        <td>{{ number_format($item->option->price * $item->quantity) }} AED</td>
+                                        <?php $total_extras += $item->quantity * $item->option->price; ?>
+                                    </tr>
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                                 <?php $total_extras = 0 ?>
                                 @foreach ( $booking->packge->options as $option)
                                 <tr>
@@ -531,6 +633,7 @@
                                     <td>{{ number_format($option->price * $option->quantity) }} AED</td>
                                     <?php $total_extras += $option->quantity * $option->price ?>
                                 </tr>
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -559,13 +662,68 @@
                         </td>
 
                         <td class="">
+
                             <p class="h4"> {{ number_format($booking->packge->real_price) }} AED</p>
+
+                            <p class="h4"> {{ number_format($booking->package_price) }} AED</p>
+
+
                         </td>
 
 
                     </tr>
 
 
+
+                    @if ($booking->promo_code_name)
+                        <tr>
+
+                            <td class="">
+                                <p class="h4"> Promo Code Title </p>
+                            </td>
+
+                            <td class="">
+                                <p class="h4"> {{ $booking->promo_code_name }}</p>
+                            </td>
+
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="">
+                                <p class="h4"> Promo Code Type </p>
+                            </td>
+
+                            <td class="">
+                                <p class="h4"> {{ $booking->promo_code_type }}</p>
+                            </td>
+
+
+                        </tr>
+
+                        <tr>
+
+                            <td class="">
+                                <p class="h4"> Promo Code Value </p>
+                            </td>
+
+                            <td class="">
+                                <p class="h4">
+                                    {{ $booking->promo_code_type == 'amount' ? $booking->promo_code_value . ' AED' : $booking->promo_code_value . ' %' }}
+                                </p>
+                            </td>
+
+
+                        </tr>
+                    @endif
+
+
+
+
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                     <tr>
 
 
@@ -576,6 +734,9 @@
                         <td class="">
                             <p class="h4">
                                 {{ number_format($booking->extra_guest * $booking->packge->extra_guest_price) }} AED</p>
+
+                                {{ number_format($booking->extra_guest_price) }} AED</p>
+
                         </td>
 
 
@@ -588,7 +749,11 @@
                         </td>
 
                         <td class="">
+
+                            <p class="h4"> {{ number_format($booking->extras_price) }} AED</p>
+
                             <p class="h4"> {{ number_format($total_extras) }} AED</p>
+
                         </td>
 
 
@@ -599,20 +764,49 @@
 
                         <td class="">
                             <p class="h4"> Events Commission
+
                                 [
                                 {{ $booking->packge->admin->vendor ? number_format($booking->packge->admin->vendor->commission) . ' %' : 0 . ' AED' }}
                                 ]
+
+                                [
+                                {{ $booking->packge->admin->vendor ? number_format($booking->packge->admin->vendor->commission) . ' %' : 0 . ' AED' }}
+                                ]
+
                             </p>
                         </td>
 
                         <td class="">
                             <p class="h4">
+
+                                {{ $booking->commission . ' AED' }}
+                            </p>
+                        </td>
+
+
+                    </tr>
+
+                    <tr>
+
+
+                        <td class="">
+                            <p class="h4"> Total Taxes
+
+                            </p>
+                        </td>
+
+                        <td class="">
+                            <p class="h4">
+                                {{ $booking->taxes . ' AED' }}
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                                 {{ $booking->packge->admin->vendor
                                     ? number_format(
                                             ( ($booking->extra_guest * $booking->packge->extra_guest_price) + $booking->packge->real_price + $total_extras) *
                                                 ($booking->packge->admin->vendor->commission / 100),
                                         ) . ' AED'
                                     : ( $booking->extra_guest * $booking->packge->extra_guest_price ) + $booking->packge->real_price + $total_extras . ' AED' }}
+
                             </p>
                         </td>
 
@@ -633,8 +827,16 @@
     </div>
 
     <div class="alert my-4 text-center text-white" style="background: #1f2937">
+
         <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
                 style="font-size: 30px">{{ number_format( ($booking->extra_guest * $booking->packge->extra_guest_price) + $booking->packge->real_price + $total_extras) }}
+
+        <p class="h2">Booking Total Price <span class="badge badge-lg bg-success "
+                style="font-size: 30px">{{ number_format($booking->final_price) }}
+
+        <p class="h2">Order Total Price <span class="badge badge-lg bg-success "
+                style="font-size: 30px">{{ number_format( ($booking->extra_guest * $booking->packge->extra_guest_price) + $booking->packge->real_price + $total_extras) }}
+
             </span> AED </p>
 
 
@@ -655,7 +857,13 @@
 
 
 
+
                 @if ($booking->status == 'pending')
+
+                @if ($booking->current_login_action == 'pending')
+
+                @if ($booking->status == 'pending')
+
                     <form class="action_btn"
                         data-message="Are You Sure You Want To Move This Order To Inprogress Status ?"
                         action="{{ route('admin.bookings.successAction', $booking->id) }}" method="POST">
@@ -676,12 +884,21 @@
                         </button>
                     </form>
 
+                @endif
+                <a href="{{ route('admin.hall-booking.pendingBookings') }}"
+                    class="btn btn-lg btn-primary d-inline-flex align-items-center m-2">
+                    <i style="margin-right: 10px" class="fa fa-arrow-circle-left icon icon-xs ms-2"></i>
+                    Back
+                </a>
+
+
                     <a href="{{ route('admin.hall-booking.pendingBookings') }}"
                         class="btn btn-lg btn-primary d-inline-flex align-items-center m-2">
                         <i style="margin-right: 10px" class="fa fa-arrow-circle-left icon icon-xs ms-2"></i>
                         Back
                     </a>
                 @endif
+
 
 
 

@@ -154,7 +154,6 @@ class PackageController extends Controller
 
     public function edit(Request $request, $id)
     {
-
         $package = $this->packageService->getById($id);
         if (!$package) {
             $request->session()->flash('failed', 'Package Not Found');

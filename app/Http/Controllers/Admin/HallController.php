@@ -133,7 +133,6 @@ class HallController extends Controller
                     $request->session()->flash('failed', 'Something Wrong');
                 }
                 return redirect('acp/halls');
-
             } else {
                 $request->session()->flash('failed', 'You have reached your Halls limit');
                 return redirect('acp/halls');

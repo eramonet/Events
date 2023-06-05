@@ -422,7 +422,6 @@ class WithDrawController extends Controller
             }
         }
 
-
         if (count($withdraw) > 0) {
             foreach ($withdraw as $withdrawItem) {
                 $withdrawItem["sent_money"] = WithDrawRequest::where("vendor_id", $withdrawItem->vendor->id)->fromAdmin()->Accepted()->sum("budget");

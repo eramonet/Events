@@ -155,7 +155,6 @@
                             <label for="vendor_id">Vendor <span class="text-danger">*</span></label>
                             <select required name="vendor_id" id="vendor_id"
                                 class="form-select @error('vendor_id') is-invalid @enderror">
-
                                 @foreach ($vendors as $vendor)
                                     <option value="{{ $vendor->id }}"
                                         {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>
@@ -359,12 +358,16 @@
 
 
 
+ 
+                <div class="accordion">
 
+
+                    
                 <div class="accordion" id="accordionPermissions">
 
 
                     <div class="row">
-
+ 
                         @foreach ($permissions as $model => $cruds)
                             <div class="col-md-4">
                                 <div class="accordion-item mb-4">

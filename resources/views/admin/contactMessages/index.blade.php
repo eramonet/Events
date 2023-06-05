@@ -1,5 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
+ 
 Contact Messages
 @endsection
 
@@ -40,10 +41,6 @@ Contact Messages
 
 
 
-{{-- on top --}}
-
-
-
 
 {{-- table --}}
 <div class="card card-body border-0 shadow table-wrapper table-responsive">
@@ -72,6 +69,37 @@ Contact Messages
                 <td>
                     <p class="text-nowrap">{{ substr($contact_message->message, 0, 30) }} ....</a>
                 </td>
+
+    {{-- table --}}
+    <div class="card card-body border-0 shadow table-wrapper table-responsive">
+        <table class="table table-hover table-centered table-striped table-bordered text-center ">
+            <thead>
+                <tr>
+                    <th class="border-gray-200">Name</th>
+                    <th class="border-gray-200">Email</th>
+                    <th class="border-gray-200">Message</th>
+                    <th class="border-gray-200">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach ($contact_messages as $contact_message)
+                    <tr>
+
+                        <td>
+                            <p class="text-nowrap">{{ $contact_message->name }}</a>
+                        </td>
+
+                        <td>
+                            <p class="text-nowrap">{{ $contact_message->email }}</a>
+                        </td>
+
+                        <td>
+                            <p class="text-nowrap">{{ substr($contact_message->message, 0, 30) }} ....</a>
+                        </td>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
+
 
 
 
@@ -205,9 +233,48 @@ Contact Messages
                             </div>
                             <div class="modal-footer">
 
+                        <td>
 
 
 
+                            <div class="d-flex  align-items-center justify-content-center flex-md-nowrap">
+
+
+                                <div class="">
+                                    <a href="{{ route('admin.contact-messages.destroy', $contact_message->id) }}"
+                                        class="btn btn-danger m-1">
+                                        <span class="fas fa-trash "></span>
+                                    </a>
+                                </div>
+
+
+                                <div class="">
+                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
+                                        <button class="btn btn-success  m-1" data-bs-toggle="modal"
+                                            data-bs-target="#modal1-{{ $contact_message->id }}" class=""><span
+                                                class="fas fa-reply "></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
+                                        <button class="btn btn-primary  m-1" data-bs-toggle="modal"
+                                            data-bs-target="#modal2-{{ $contact_message->id }}" class=""><span
+                                                class="fas fa-eye "></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+                            </div>
 
                                 <button type="button" class="btn btn-link text-gray ms-auto"
                                     data-bs-dismiss="modal">Close</button>
@@ -219,12 +286,116 @@ Contact Messages
             @endforeach
 
 
+                        </td>
 
 
 
 
 
 
+
+
+
+
+
+
+                        <div class="modal fade" id="modal1-{{ $contact_message->id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="modal-default" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="h6 modal-title">Contact Us Details</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <form
+                                        action="{{ route('admin.contact-message-reply.send_reply', $contact_message->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        <div class="modal-body">
+
+                                            <div class="wrapper m-auto">
+
+                                                <ul class="list-group list-group-flush">
+                                                    <textarea class="form-control" name="message" cols="30" rows="10" placeholder="Enter Reply"></textarea>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+
+
+                                            <button type="submit" class="btn btn-success">
+                                                <span class="fas fa-edit me-2"></span>Send</a>
+                                            </button>
+
+                                            <button type="button" class="btn btn-link text-gray ms-auto"
+                                                data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modal fade" id="modal2-{{ $contact_message->id }}" tabindex="-1" role="dialog"
+                            aria-labelledby="modal-default" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="h6 modal-title">Contact Us Details</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="wrapper m-auto">
+
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">Name : {{ $contact_message->name }} </li>
+                                                <li class="list-group-item">Email : {{ $contact_message->email }} </li>
+                                                <li class="list-group-item">Subject : {{ $contact_message->subject }}
+                                                </li>
+                                                <li class="list-group-item">Message : {{ $contact_message->message }}
+                                                </li>
+
+                                            </ul>
+                                            {{-- @if ($contact_message->replies->count() > 0)
+                                                <hr>
+                                                <h2 class="h6 modal-title">Replies</h2>
+                                                <ul class="list-group list-group-flush">
+                                                    @foreach ($contact_message->replies as $reply)
+                                                        <li class="list-group-item">Reply : {{ $reply->message }} </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif --}}
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+
+
+
+
+
+                                        <button type="button" class="btn btn-link text-gray ms-auto"
+                                            data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                @endforeach
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+
+
+
+
+
+
+
+ 
         </tbody>
     </table>
     <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
@@ -241,4 +412,26 @@ Contact Messages
 </div>
 
 {{-- table --}}
+ 
 @endsection
+ 
+            </tbody>
+        </table>
+        <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+            {{-- {!! $taxes->appends(request()->query())->links('pagination::bootstrap-5') !!} --}}
+
+
+
+        </div>
+
+        {{-- @if ($taxes->count() < 1)
+            <div class="d-flex justify-content-center" style="min-height: 300px">
+                Empty
+            </div>
+        @endif --}}
+    </div>
+
+    {{-- table --}}
+@endsection
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37

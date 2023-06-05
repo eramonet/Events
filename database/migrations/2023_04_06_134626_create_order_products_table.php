@@ -17,6 +17,10 @@ return new class extends Migration
             $table->id();
             $table->integer("product_id");
             $table->integer("vendor_id");
+<<<<<<< HEAD
+=======
+            $table->integer("order_id")->nullable();
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
             $table->text("order_number");
             $table->text("product_title");
             $table->text("price");

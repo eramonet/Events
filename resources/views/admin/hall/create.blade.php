@@ -195,6 +195,7 @@
 
                     {{-- categories --}}
 
+
                     {{-- Taxes --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -291,6 +292,7 @@
                     </div>
 
                     {{-- offer_end_at --}}
+
 
 
 
@@ -407,6 +409,9 @@
 
 
                                 @foreach ($firstCountryCities as $city)
+ 
+                                @foreach ($cities as $city)
+ 
                                     <option value="{{ $city->id }}">{{ $city->title_en . ' - ' . $city->title_ar }}
                                     </option>
                                 @endforeach

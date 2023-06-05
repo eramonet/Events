@@ -27,7 +27,6 @@
 
         @php
             $colores = collect(['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'tertiary']);
-
         @endphp
 
         @if ($useradmin->hasRole('super-admin') || $useradmin->hasRole('admin'))
@@ -1252,7 +1251,6 @@
 
 
 
-
                             <div
                                 class="card card-body  py-3  p bg-success   rounded my-3 order-statistics  booking-statistics position-relative mx-4">
 
@@ -1600,7 +1598,6 @@
                     </div>
                 </div>
             </div>
-
 
 
 

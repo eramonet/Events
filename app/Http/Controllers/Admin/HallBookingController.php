@@ -146,5 +146,4 @@ class HallBookingController extends Controller
 
         return redirect()->back();
     }
-
 }

@@ -92,7 +92,6 @@ class PackageOptionsCategoryService
         if( Auth::guard('admin')->user()->vendor){
             $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
         }
-
         $category = $this->category::create($data);
 
         if ($request->hasFile('image')) {

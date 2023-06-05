@@ -23,6 +23,14 @@
                                         <img class="model-img" src="{{ $hall->primary_image_url }}" width="150px">
                                     </div>
                                     <ul class="list-group list-group-flush">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                                        <li class="list-group-item">Created By : {{ $hall->admin ? "Events" : $hall->vendor->title_en }} </li>
+
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                                         <li class="list-group-item">Name [Ar] : {{ $hall->title_ar }} </li>
 
                                         <li class="list-group-item">Name [En] : {{ $hall->title_en }} </li>
@@ -43,6 +51,11 @@
 
                                         <li class="list-group-item">langitude : {!! $hall->longitude !!} </li>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                                         <li class="list-group-item">Real Price : {{ $hall->real_price }} AED</li>
                                         <li class="list-group-item">Fake Price : {{ $hall->real_price }} AED </li>
                                         <li class="list-group-item">Offer Ended At : {{ $hall->offer_end_at }} </li>
@@ -57,6 +70,10 @@
                                             @endforeach
                                         </li>
 
+<<<<<<< HEAD
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                                         <li class="list-group-item">Status :
                                             @if ($hall->accept == 'new')
                                                 <span style="color: blue">New</span>
@@ -285,11 +302,53 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                    <div class="card mb-4">
+                        @if (Auth::guard('admin')->user()->hasRole('super-admin') ||
+                                Auth::guard('admin')->user()->hasRole('admin'))
+                            @if ($hall->accept == 'new')
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-6" style="text-align: right">
+                                            <a style="color: #fff" class="btn btn-success m-1" class="dropdown-item"
+                                                href="{{ route('admin.hall_request.hall_request_accept', $hall->id) }}"
+                                                title="Accept" data-bs-toggle="tooltip" data-bs-placement="top">
+                                                Accept
+                                            </a>
+
+                                        </div>
+                                        <div class="col-6" style="text-align: left">
+                                            <a style="color: #fff" class="btn btn-danger m-1" class="dropdown-item"
+                                                href="{{ route('admin.hall_request.hall_request_reject', $hall->id) }}"
+                                                title="Reject" data-bs-toggle="tooltip" data-bs-placement="top">
+                                                Reject
+
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endif
+
+                    </div>
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                 </div>
             </div>
         </div>
     </div>
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
     {{-- on top --}}
 @endsection

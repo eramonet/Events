@@ -65,8 +65,10 @@
         <table class="table table-hover table-centered table-striped table-bordered text-center ">
             <thead>
                 <tr>
-                    <th class="border-gray-200">name</th>
+ 
                     <th class="border-gray-200">Image</th>
+                    <th class="border-gray-200">name</th>
+ 
                     <th class="border-gray-200">Link</th>
                     <th class="border-gray-200">Action</th>
                 </tr>

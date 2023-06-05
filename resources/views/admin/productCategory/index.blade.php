@@ -216,7 +216,9 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+ 
                     <th class="border-gray-200">Image</th>
+ 
                     <th class="border-gray-200">Title</th>
                     <th class="border-gray-200">Created At</th>
                     <th class="border-gray-200">Status</th>
@@ -234,9 +236,11 @@
                             <p class="text-nowrap">{{ $category->id }}.</p>
                         </td>
 
+ 
                         <td>
                             <p class="text-nowrap"><img src="{{ $category->image }}" width="60px"></p>
                         </td>
+ 
 
                         <td>
 
@@ -295,10 +299,12 @@
 
                                 <div class="">
                                     <div data-bs-toggle="tooltip" data-bs-placement="top" title="Show Details">
+ 
                                         <button class="btn btn-primary  m-1" data-bs-toggle="modal"
                                             data-bs-target="#modal-{{ $category->id }}" class=""><span
                                                 class="fas fa-eye "></span>
                                         </button>
+ 
                                     </div>
                                 </div>
 

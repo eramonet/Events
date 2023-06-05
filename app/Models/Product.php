@@ -87,6 +87,14 @@ class Product extends Model
         );
     }
 
+<<<<<<< HEAD
+=======
+    public function buying_count()
+    {
+        return $this->hasMany(OrderProduct::class , "product_id");
+    }
+
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
 
     public function category()
     {

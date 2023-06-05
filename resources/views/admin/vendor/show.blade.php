@@ -1,5 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
+ 
 {{ $vendor->title_en }} Information
 @endsection
 
@@ -107,12 +108,17 @@
                                 </div>
                             </div>
 
-                        </div>
+                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+ </div>
+{{-- on top --}}
+@endsection
+=======
 </div>
 {{-- on top --}}
 @endsection
+ 

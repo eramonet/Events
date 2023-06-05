@@ -201,7 +201,9 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+ 
                     <th class="border-gray-200">Image</th>
+ 
                     <th class="border-gray-200">Title In Arabic</th>
                     <th class="border-gray-200">Title In English</th>
                     <th class="border-gray-200">Commission %</th>
@@ -217,8 +219,9 @@
                     <tr>
                         <td>{{ $vendor->id }}</td>
 
+ 
                         <td><img src="{{ $vendor->image_url }}" width="100px"></td>
-
+ 
                         <td>{{ $vendor->title_ar }}</td>
                         <td>{{ $vendor->title_en }}</td>
                         <td>{{ $vendor->commission }}%</td>

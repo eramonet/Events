@@ -126,7 +126,10 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function becomeVendor($request)
     {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
         $become = Become_vendor::create(array_merge($request->all(), [
             'name' => $request->name,
             'email' => $request->email,
@@ -143,6 +146,7 @@ class SettingsRepository implements SettingsRepositoryInterface
             'desc_en' => 'you have new become vendor request',
         ]);
     }
+<<<<<<< HEAD
 
     public function becomeVendorWithToken($request)
     {
@@ -164,4 +168,6 @@ class SettingsRepository implements SettingsRepositoryInterface
             'desc_en' => 'you have new become vendor request',
         ]);    
     }
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
 }

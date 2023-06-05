@@ -34,4 +34,8 @@ return new class extends Migration
     {
         Schema::dropIfExists('rates');
     }
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37

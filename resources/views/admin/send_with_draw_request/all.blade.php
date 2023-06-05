@@ -111,6 +111,7 @@
                 <th class="border-gray-200">Request Date </th>
                 <th class="border-gray-200">Transaction From </th>
                 <th class="border-gray-200">Creator Name </th>
+ 
                 <th class="border-gray-200">Sent To </th>
                 <th class="border-gray-200">Value</th>
                 <th class="border-gray-200">Notes</th>
@@ -132,9 +133,11 @@
                         <p class="text-nowrap">{{ $item->type == "from_vendor" ? $item->vendor->title_en : "Events" }}</p>
                     </td>
                     <td>
+ 
                         <p class="text-nowrap">{{ $item->admin->title_en }}</p>
                     </td>
                     <td>
+ 
                         <p class="text-nowrap">{{ number_format($item->budget) }} AED</p>
                     </td>
                     <td>

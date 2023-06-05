@@ -205,6 +205,13 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                    <th class="border-gray-200">Created By </th>
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
                     <th class="border-gray-200">Title </th>
                     <th class="border-gray-200">Price</th>
                     <th class="border-gray-200">Stock</th>
@@ -411,6 +418,16 @@
                             <p class="text-nowrap">{{ $product->id }}.</p>
                         </td>
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                        <td>
+                            <p class="text-nowrap">{{ $product->owner ? $product->owner->title_en : "Events" }}</p>
+                        </td>
+
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
 
 
                         <td>

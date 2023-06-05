@@ -101,7 +101,11 @@
                             <select name="vendor_email" class="form-control" id="choose_client">
                                 <option value="">Choose Vendor -----</option>
                                 @foreach ($all_vendors as $vendor)
+ 
                                     <option value="{{ $vendor->email }}">{{ $vendor->title_en }}</option>
+ 
+                                    <option value="{{ $vendor->title_en }}">{{ $vendor->title_en }}</option>
+ 
                                 @endforeach
                             </select>
                         </div>
@@ -173,7 +177,10 @@
         }
 
         $("#choose_client").change(function() {
+ 
+      
             client_id = $(this).children("option:selected").val();
+ 
 
             if (client_id == "") {
                 client_id = "empty";
@@ -191,7 +198,11 @@
                         $("#inp_balance").val(0);
                         $("#client_id").val("");
                     } else {
+ 
                         $("#client_email_inpt").val(data[1].email);
+ 
+                        $("#client_email_inpt").val(data[1].title_en);
+ 
 
                         $("#balance_price").text(addCommas(data[0].toFixed(2)).split('.')[1] == 00 ?
                             addCommas(data[0]) : addCommas(data[0].toFixed(2)));
@@ -240,7 +251,10 @@
                             `);
                             for (x = 0; x < data[1].my_orders.length; x++) {
                                 $('#choose_client_orders').append(`
-                                        <option value="${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+                                         <option value="${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+
+                                        <option value="0000${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+ 
                                 `);
                             }
                         }

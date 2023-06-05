@@ -190,6 +190,7 @@
 
                     {{-- categories --}}
 
+ 
                     {{-- Taxes --}}
                     <div class="col-md-6">
                         <div class="form-group mb-4">
@@ -302,7 +303,7 @@
 
 
 
-                </div>
+                 </div>
 
             </div>
         </div>

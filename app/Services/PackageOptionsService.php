@@ -87,6 +87,12 @@ class PackageOptionsService
 
         ]);
         $data['admin_id'] = Auth::guard('admin')->id();
+<<<<<<< HEAD
+=======
+        if( Auth::guard('admin')->user()->vendor){
+            $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
+        }
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
         $option = $this->option::create($data);
 
         if ($request->hasFile('image')) {

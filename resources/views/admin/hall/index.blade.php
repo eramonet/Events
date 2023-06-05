@@ -34,7 +34,11 @@
 
                 @if (Auth::guard('admin')->user()->vendor->halls_count >
                         Auth::guard('admin')->user()->vendor->halls->count())
+
                     @if (Auth::guard('admin')->user()->hasPermission('products-create'))
+
+                    @if (Auth::guard('admin')->user()->hasPermission('halls-create'))
+
                         <a href="{{ route('admin.halls.create') }}"
                             class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                             <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -48,6 +52,9 @@
                 @endif
             @else
                 @if (Auth::guard('admin')->user()->hasPermission('products-create'))
+
+                @if (Auth::guard('admin')->user()->hasPermission('halls-create'))
+
                     <a href="{{ route('admin.halls.create') }}"
                         class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -224,6 +231,9 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+
+                    <th class="border-gray-200">Added By</th>
+
                     <th class="border-gray-200">Image</th>
                     <th class="border-gray-200">Title In Arabic</th>
                     <th class="border-gray-200">Title In English</th>
@@ -243,12 +253,17 @@
                     <tr>
                         <td>{{ $hall->id }}</td>
 
+
+                        <td>{{ $hall->admin ? "Events" : $hall->vendor->title_en }}</td>
+
                         <td><img src="{{ $hall->primary_image_url }}" width="50px"></td>
 
                         <td>{{ $hall->title_ar }}</td>
                         <td>{{ $hall->title_en }}</td>
 
+
                         <td>{{ number_format($hall->real_price) }} AED</td>
+
 
                         <td>
                             @if ($hall->created_at)

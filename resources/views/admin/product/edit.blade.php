@@ -315,7 +315,11 @@
                     <div class="col-md-6">
                         <div class="form-group mb-4">
                             <label for="taxes">Occasions <span class="text-danger">*</span></label>
+
                             <select required multiple name="occasion_id[]" id="occasion_id"
+
+                            <select required multiple name="occasion_id[]" id="taxes"
+
                                 class="form-select @error('occasion_id') is-invalid @enderror">
 
                                 {{-- <option value="" {{ !old('taxes')  ?'selected':'' }}>No Taxes</option> --}}
@@ -550,6 +554,7 @@
                     </div>
 
                     {{-- details_en --}}
+ 
                     <div class="col-md-12">
                         <div class="form-group mb-4">
                             <label for="model_number">Model Number <span class="text-danger">*</span></label>
@@ -586,7 +591,7 @@
                             </div>
                         @enderror
                     </div>
-
+ 
 
                 </div>
 
@@ -1175,14 +1180,14 @@
             width: "100%"
         });
 
-
+ 
         $('#occasion_id').select2({
             width: "100%"
         });
 
         $('#color_id').select2({
             width: "100%" ;
-        });
+ 
 
         $('#products_with').select2({
             width: "100%"

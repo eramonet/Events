@@ -41,7 +41,11 @@
     {{-- on top --}}
 
 
+ 
+    <form action="{{ route('admin.packages.update', $package->id) }}" method="POST" enctype="multipart/form-data">
+ 
     <form action="{{ route('admin.packages.update' , $package->id ) }}" method="POST" enctype="multipart/form-data">
+ 
 
 
         @csrf
@@ -270,6 +274,26 @@
                                 class="form-select @error('taxes') is-invalid @enderror">
 
                                 @foreach ($taxes as $tax)
+ 
+                                    @if ($package->taxes->count() > 0)
+                                        @foreach ($package->taxes as $item)
+                                            @if ($tax->id == $item->id)
+                                                <option selected value="{{ $tax->id }}">
+                                                    {{ $tax->title_en . ' - ' . $tax->title_ar }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $tax->id }}">
+                                                    {{ $tax->title_en . ' - ' . $tax->title_ar }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <option value="{{ $tax->id }}">
+                                            {{ $tax->title_en . ' - ' . $tax->title_ar }}
+                                        </option>
+                                    @endif
+=======
+>>>>>>> 211d721c3ef82e51a3d2067398967a033afbaa37
 
                                     @foreach ($package->taxes as $item)
                                         @if ($tax->id == $item->id)
@@ -282,7 +306,7 @@
                                             </option>
                                         @endif
                                     @endforeach
-                                @endforeach
+                                 @endforeach
                             </select>
                         </div>
 
