@@ -1,0 +1,1001 @@
+body { direction: rtl ; }
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f3a095;
+}
+
+title {
+  text-transform: capitalize;
+}
+
+.row > div {
+  padding:0 5px !important;
+}
+
+/*----------------------- start reset element -----------------------*/
+* ul {
+  padding:0;
+  margin:0;
+}
+a:hover,
+a {
+  text-decoration: none;
+}
+
+body {
+  padding:0;
+  overflow: hidden !important;
+}
+body.active {
+  overflow-y: visible !important;
+}
+
+.row {
+  width: 100%;
+  margin:0;
+}
+
+/*----------------------- end reset element -----------------------*/
+/*----------------------- start upperNav -----------------------*/
+.allNavs.active {
+  position: fixed;
+  width: 100%;
+  right: 0;
+  top: 0;
+  z-index: 200;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.12);
+}
+.allNavs.removeUpper .upperNav {
+  display: none;
+}
+.allNavs {
+  background: #fff;
+}
+.upperNav {
+  background: #fff;
+  padding:15px 0 0;
+  border-bottom: 1px solid #eee;
+}
+.upperNav .row > div .discount p {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  background-color: #ff6e5a;
+  color: white;
+  display: inline-block;
+  padding:6px 10px;
+  margin:0;
+}
+.upperNav .row > div {
+  padding:5px !important;
+}
+.upperNav .row > div .callUs {
+  text-align: left;
+}
+.upperNav .row > div .callUs span:nth-child(1) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #555555;
+  text-transform: capitalize;
+}
+.upperNav .row > div .callUs span:nth-child(2) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* font-family: 'Montserrat', sans-serif; */
+
+/*----------------------- end  upperNav -----------------------*/
+
+/*----------------------- start  navbar -----------------------*/
+.navbar {
+  position: relative;
+  padding:26px 0 15px;
+}
+.navbar .row {
+  align-items: center;
+}
+/*------------ list_link ------------------*/
+.navbar .row > div .list_link li.active a,
+.navbar .row > div .list_link li.active,
+.navbar .row > div .list_link li:hover > a {
+  color: #f3a095 !important;
+  transition: 0.4s;
+}
+.navbar .row > div .list_link li {
+  position: relative;
+  font-family: "Montserrat";
+
+  /* padding-top: 15px; */
+}
+.navbar .row > div .list_link > ul > li:not(:last-of-type) {
+  margin-left: 20px;
+}
+.navbar .row > div .list_link li > ul {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 10;
+  width: 200px;
+  padding-top: 15px;
+}
+.navbar .row > div .list_link li > ul {
+  display: none;
+}
+.navbar .row > div .list_link li > ul li {
+  padding:5px 10px;
+  background: #eee;
+  color: #444;
+  text-transform: capitalize;
+  border: 1px solid #ddd;
+  /* transform: translateZ(0); */
+  opacity: 0;
+}
+.navbar .row > div .list_link li > ul li a {
+  display: block;
+  width: 100%;
+}
+/* .navbar .row > div .list_link > ul li:hover ul li:nth-of-type(1) {
+  animation-delay: 0.1s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(2) {
+  animation-delay: 0.2s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(3) {
+  animation-delay: 0.3s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(4) {
+  animation-delay: 0.4s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(5) {
+  animation-delay: 0.5s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(6) {
+  animation-delay: 0.6s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(7) {
+  animation-delay: 0.8s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(8) {
+  animation-delay: 1s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(9) {
+  animation-delay: 1.2s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(10) {
+  animation-delay: 1.4s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(11) {
+  animation-delay: 1.8s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(12) {
+  animation-delay: 2s;
+}
+.navbar .row > div .list_link > ul li:hover ul li:nth-of-type(13) {
+  animation-delay: 2.2s;
+} */
+.navbar .row > div .list_link > ul li:hover > ul li {
+  animation: nestedMenue 0.6s ease-in-out;
+  animation-fill-mode: forwards;
+}
+.navbar .row > div .list_link > ul li:hover > ul {
+  display: block;
+}
+@keyframes nestedMenue {
+  0% {
+    transform: translateZ(0);
+    opacity: 0;
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    -o-transform: translateZ(0);
+  }
+  50% {
+    transform: translateZ(110px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+}
+.navbar .row > div .list_link a,
+.navbar .row > div .list_link li {
+  font-size: 14px;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+.navbar .row > div .list_link li i {
+  font-size: 12px;
+}
+.navbar .row > div .list_link a,
+.navbar .row > div .list_link li {
+  color: #555555;
+}
+.navbar .row > div .list_link li:nth-child(1) i {
+  margin-left: 5px;
+}
+.navbar .row > div .list_link li:not(:nth-child(1)) i {
+  margin-right: 7pxpx;
+  font-size: 10px;
+}
+/*------------ list_link ------------------*/
+
+/*------------ logo ------------------*/
+.navbar .row > div .logo {
+  position: absolute;
+  top: 0;
+  right: 50%;
+  transform: translate(+50%, -80%);
+  -webkit-transform: translate(+50%, -80%);
+  -moz-transform: translate(+50%, -80%);
+  -ms-transform: translate(+50%, -80%);
+  -o-transform: translate(+50%, -80%);
+}
+.navbar .row > div .logo img {
+  width: 76px;
+}
+/*------------ logo ------------------*/
+
+/*------------ favorit ------------------*/
+.navbar .row div div.favorit ul .searchBox {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  justify-content: space-between;
+  background: #eee;
+  border-radius:100px;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  -moz-border-radius:100px;
+  -webkit-border-radius:100px;
+  -ms-border-radius:100px;
+  -o-border-radius:100px;
+  transition: 1s;
+  -webkit-transition: 1s;
+  -moz-transition: 1s;
+  -ms-transition: 1s;
+  -o-transition: 1s;
+}
+.navbar .row div div.favorit ul .searchBox input {
+  width: 0;
+  height: 0;
+  background: #eee;
+  cursor: auto;
+  border-radius:100px;
+  width: 25px;
+  height: 25px;
+  padding:0;
+  -webkit-border-radius:100px;
+  -moz-border-radius:100px;
+  -ms-border-radius:100px;
+  -o-border-radius:100px;
+}
+.navbar .row div div.favorit ul .searchBox i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  background: #eee;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  -ms-border-radius:50%;
+  -o-border-radius:50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.navbar .row div div.favorit ul .searchBox:hover {
+  flex-grow: 1;
+}
+.navbar .row div div.favorit ul .searchBox:hover input {
+  width: 100%;
+  padding-top: 2px; padding-left: 30px; padding-bottom: 2px; padding-right: 10px;
+}
+.navbar .row div div.favorit ul .languageIcon img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+.navbar .row div div.favorit ul .languageIcon span {
+  font-family: "Sulphur Point";
+  background: none;
+  color: #000;
+  font-size: 14px;
+  transition: 0.6s;
+  -webkit-transition: 0.6s;
+  -moz-transition: 0.6s;
+  -ms-transition: 0.6s;
+  -o-transition: 0.6s;
+  text-transform: capitalize;
+}
+.navbar .row div div.favorit ul .languageIcon ul.active {
+  visibility: visible;
+  opacity: 1;
+}
+.navbar .row div div.favorit ul .languageIcon ul {
+  position: absolute;
+  top: calc(100% + 30px);
+  left: 100px;
+  background: white;
+  z-index: 100;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.6s;
+  -webkit-transition: 0.6s;
+  -moz-transition: 0.6s;
+  -ms-transition: 0.6s;
+  -o-transition: 0.6s;
+  width: 100px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+}
+.navbar .row div div.favorit ul .languageIcon ul li:hover {
+  background: #eee;
+}
+
+.navbar .row div div.favorit ul .languageIcon ul li:hover span {
+  color: #ff6e5a !important;
+}
+.navbar .row div div.favorit ul .languageIcon ul li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding:4px 5px;
+  color: #000;
+}
+.navbar .row div div.favorit ul .languageIcon ul li a img {
+  width: 30px;
+}
+
+.navbar .row div div.favorit ul .languageIcon ul li:not(:last-of-type) a {
+  border-bottom: 1px solid #aaa;
+}
+.navbar .row div div.favorit ul {
+  justify-content: end;
+}
+.navbar .row div div.favorit > ul > li:not(:last-child) {
+  margin-left: 25px;
+}
+.navbar .row div div.favorit {
+  position: relative;
+}
+
+.navbar .row div div.favorit .shoppingCurt,
+.navbar .row div div.favorit .favoritCart {
+  overflow-y: scroll;
+  position: absolute;
+  top: calc(100% + 30px);
+  left: 0;
+  width: 110%;
+  background: white;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding:20px;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+  max-height: 400px;
+}
+.navbar .row div div.favorit .favoritCart {
+  left: 55px;
+}
+.navbar .row div div.favorit .shoppingCurt.active,
+.navbar .row div div.favorit .favoritCart.active {
+  visibility: visible;
+  opacity: 1;
+}
+.navbar .row div div.favorit .shoppingCurt::after,
+.navbar .row div div.favorit .favoritCart::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 0%;
+  transform: translateY(-100%);
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid red;
+}
+.navbar .row div div.favorit .favoritCart h2,
+.navbar .row div div.favorit .shoppingCurt h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 21px;
+  line-height: 120%;
+  text-transform: capitalize;
+  color: #ff6e5a;
+  margin-bottom: 20px;
+}
+.navbar .row div div.favorit .favoritCart ul,
+.navbar .row div div.favorit .shoppingCurt ul {
+  margin-bottom: 20px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li,
+.navbar .row div div.favorit .favoritCart ul li {
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  display: flex;
+}
+.navbar .row div div.favorit .shoppingCurt ul li.noProduct,
+.navbar .row div div.favorit .favoritCart ul li.noProduct {
+  font-family: "Sulphur Point";
+  font-size: 16px;
+}
+.navbar .row div div.favorit .favoritCart ul li .image {
+  width: 60px;
+  height: 60px;
+}
+.navbar .row div div.favorit .favoritCart ul li .image img {
+  width: 100%;
+  height: 100%;
+}
+.navbar .row div div.favorit .shoppingCurt ul li:not(:last-of-type) {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li:not(:last-of-type)::after {
+  content: "";
+  width: calc(100% - 40px);
+  height: 1px;
+  background: #ff6e5a;
+  position: absolute;
+  bottom: 0px;
+  right: 50%;
+  transform: translateX(+50%);
+}
+.navbar .row div div.favorit .shoppingCurt ul li .details {
+  align-items: flex-end;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .details .image {
+  width: 60px;
+  margin-left: 5px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .details .image img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+}
+.navbar .row div div.favorit .favoritCart ul li h5,
+.navbar .row div div.favorit .shoppingCurt ul li .details .data h5 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #555555;
+  margin:0;
+}
+.navbar .row div div.favorit .favoritCart ul li .favorit i.active {
+  color: #f3a095;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .details .data span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 10px;
+  color: #111111;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .countControlle {
+  background: #f8f8fa;
+  height: 40px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .countControlle button {
+  border: 0;
+  outline: none;
+  background: none;
+  width: 35px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .countControlle button i {
+  color: #ff6e5a;
+  font-size: 12px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .countControlle input {
+  width: 35px;
+  color: #ff6e5a;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .controlle i {
+  text-align: left;
+  display: block;
+  color: #ff6e5a;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+.navbar .row div div.favorit .shoppingCurt ul li .controlle span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: left;
+  color: #111111;
+}
+.navbar .row div div.favorit .shoppingCurt .totalPrice {
+  justify-content: space-between;
+  padding:10px;
+  border-top: 1px solid #eee;
+}
+.navbar .row div div.favorit .shoppingCurt .totalPrice span:nth-of-type(1) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  color: #111111;
+  text-transform: capitalize;
+}
+.navbar .row div div.favorit .shoppingCurt .totalPrice span:last-of-type {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: left;
+  color: #ff6e5a;
+}
+.navbar .row div div.favorit .shoppingCurt > a {
+  width: 100%;
+  height: 40px;
+  display: block;
+  background: #ff6e5a;
+  border: 0;
+  outline: 0;
+  color: white;
+  font-family: "Montserrat";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+.navbar .row div div.favorit ul li input {
+  color: #555555;
+  font-size: 14px;
+  cursor: pointer;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  text-align: center;
+}
+
+.navbar .row div div.favorit > ul > li > span,
+.navbar .row div div.favorit > ul > li > a > span {
+  background: #f3a095;
+  width: 15px;
+  height: 15px;
+  color: white;
+  border-radius:50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.navbar .row div div.favorit .user {
+  position: relative;
+}
+.navbar .row div div.favorit .user > i {
+  cursor: pointer;
+}
+.navbar .row div div.favorit ul li i {
+  color: #555555;
+  font-size: 14px;
+  cursor: pointer;
+}
+.navbar .row div div.favorit ul li > img {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.navbar .row div div.favorit .user div.userProfile.active {
+  visibility: visible;
+  opacity: 1;
+}
+.navbar .row div div.favorit .user .userProfile {
+  position: absolute;
+  z-index: 100;
+  top: 100%;
+  right: -40px;
+  padding-top: 30px;
+  visibility: hidden;
+  transition: 0.6s;
+  opacity: 0;
+}
+.navbar .row div div.favorit .user .userProfile ul {
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  width: 200px;
+  border: 1px solid #ddd;
+  /* padding:5px; */
+}
+.navbar .row div div.favorit .user > .userProfile ul::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 35px;
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid #fff;
+}
+.navbar .row div div.favorit .user .userProfile ul li a {
+  padding:6px;
+  border-bottom: 1px solid #ddd;
+  background: white;
+  font-family: "Montserrat";
+  width: 100%;
+  display: block;
+  text-transform: capitalize;
+  color: #222;
+  transition: 0.5s;
+  font-size: 15px;
+}
+.navbar .row div div.favorit .user .userProfile ul li a:hover {
+  padding-right: 10px;
+  background-color: #eee;
+}
+/*------------ favorit ------------------*/
+
+/*------------ smNav ------------------*/
+.row > div:last-of-type {
+  position: inherit;
+}
+.smNav .icon {
+  text-align: left;
+  font-size: 22px;
+  color: #555;
+  cursor: pointer;
+}
+.smNav .icon i {
+  transform: rotate(90deg);
+  font-size: 25px;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+}
+.navbar .pagesLink .list_link ul li.language ul li {
+  padding:4px 2px;
+}
+.navbar .pagesLink .list_link ul li.language ul li a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  font-size: 13px;
+}
+.navbar .pagesLink .list_link ul li.language ul li img {
+  width: 20px !important;
+  height: 12px !important;
+  margin-right: 4px;
+}
+.navbar .pagesLink .list_link ul li.language img {
+  width: 20px;
+  height: 15px;
+}
+.navbar .pagesLink .list_link ul li.language ul {
+  width: auto !important;
+}
+
+/* ////////////////////// start media query /////////////////////////*/
+@media (max-width: 1200px) {
+  /* .container {
+    max-width: 100% !important;
+  } */
+  .navbar .row > div .list_link > ul > li:not(:last-of-type) {
+    margin-left: 10px !important;
+  }
+  /* ////////////// links ///////////////*/
+  .navbar .row > div .list_link li {
+    margin-left: 10px;
+  }
+  .navbar .row > div .list_link a {
+    font-size: 13px;
+    text-transform: capitalize;
+  }
+  .navbar .row div div.favorit .shoppingCurt,
+  .navbar .row div div.favorit .favoritCart {
+    width: 140% !important;
+    left: -50px;
+  }
+}
+
+@media (max-width: 992px) {
+  .container {
+   max-width: 100% !important;
+  }
+  .navbar .row div div.favorit ul .searchBox input {
+    width: 100% !important;
+    padding-top: 2px; padding-left: 30px; padding-bottom: 2px; padding-right: 10px;
+  }
+  .navbar .row div div.favorit ul .searchBox {
+    flex-grow: 1;
+  }
+  /* ////////////// upper nav div ///////////////*/
+  .upperNav {
+    padding:20px 0 0;
+  }
+  .upperNav .row > div .discount p {
+    font-size: 12px;
+  }
+  /* ////////////// navbar ///////////////*/
+  .navbar {
+    position: relative;
+    padding:3px 0;
+  }
+  /* ////////////// logo div ///////////////*/
+  .navbar .row > div .logo {
+    transform: none;
+    position: static;
+    text-align: right;
+  }
+  .navbar .row > div .logo img {
+    width: 40px;
+  }
+  /* ////////////// start nav list ///////////////*/
+  .navbar .pagesLink {
+    position: absolute !important;
+    top: calc(100% + 10px);
+    z-index: 20;
+    background: white;
+    right: 20px;
+    width: calc(100% - 40px);
+    padding:0 !important;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.6s ease-in-out;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.12);
+  }
+  .navbar .pagesLink.active {
+    max-height: 800px;
+  }
+  .navbar .pagesLink .list_link ul {
+    display: block !important;
+    padding:15px;
+  }
+
+  .navbar .pagesLink .list_link ul li,
+  .navbar .pagesLink .list_link ul li a {
+    display: block;
+    font-size: 18px;
+  }
+
+  .navbar .pagesLink .list_link > ul > li {
+    background: #eee;
+    padding:5px;
+  }
+  .navbar .pagesLink .list_link > ul > li:not(:last-of-type) {
+    margin-bottom: 10px;
+  }
+  .navbar .pagesLink .list_link ul li ul {
+    position: inherit;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    padding:0;
+  }
+  .navbar .pagesLink .list_link ul li:hover ul {
+    max-height: 500px;
+    padding:5px;
+  }
+  .navbar .pagesLink .list_link ul li ul li:not(:last-of-type) {
+    margin-bottom: 5px;
+  }
+  .navbar .pagesLink .list_link ul li ul li {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+    border: 0;
+    width: 100%;
+    background: #ddd;
+  }
+}
+@media (max-width: 768px) {
+  /* ////////////// upper nav div ///////////////*/
+  .upperNav .row > div div {
+    text-align: center !important;
+  }
+  .upperNav .row > div .discount p {
+    margin-bottom: 10px;
+  }
+
+  /* ////////////// favorit div ///////////////*/
+  .navbar .row div div.favorit ul {
+    justify-content: center;
+  }
+  .navbar .container {
+    max-width: 90%;
+  }
+
+  /*------------ smNav ------------------*/
+  .smNav .icon {
+    text-align: left;
+  }
+}
+@media (max-width: 575px) {
+  .navbar .container {
+    max-width: 100%;
+  }
+  /* ////////////// upper nav div ///////////////*/
+  .upperNav .row > div .discount p {
+    font-size: 12px;
+  }
+
+  .upperNav .row > div .callUs span {
+    font-size: 12px !important;
+  }
+  .navbar .row > div .logo img {
+    width: 40px;
+  }
+  /*------------ smNav ------------------*/
+  .smNav .icon {
+    text-align: center;
+  }
+  .navbar .row > div .logo {
+    padding:5px 0;
+  }
+  .navbar .row > div:nth-of-type(4) {
+    order: 3;
+  }
+  .navbar .row > div:nth-of-type(3) {
+    order: 2;
+  }
+  .upperNav {
+    padding:0;
+  }
+}
+/* ////////////////////// start media query /////////////////////////*/
+
+/*----------------------- end  navbar -----------------------*/
+
+/*----------------------- start  landing page -----------------------*/
+.loadingPage {
+  min-height: 100vh;
+  min-width: 100vw;
+  background: #1b1b1b;
+  display: grid;
+  place-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-image: linear-gradient(to left, #555555, #343a40);
+  z-index: 2000;
+  --size: 3rem;
+  --margin:0.25rem;
+  opacity: 0;
+  visibility: hidden;
+  /* transition: 0.6s;
+  -webkit-transition: 0.6s;
+  -moz-transition: 0.6s;
+  -ms-transition: 0.6s;
+  -o-transition: 0.6s; */
+}
+.loadingPage.active {
+  opacity: 1;
+  visibility: visible;
+}
+.loadingPage .container {
+  display: grid;
+  place-items: center;
+}
+
+.loadingPage .container > img{
+   animation: rotation 4s infinite linear;
+}
+
+.wrapper {
+  width: 200px;
+  height: 200px;
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius:50%;
+  border-top: 16px solid #f3ada4;
+  width: 200px;
+  height: 200px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+.wrapper {
+  background: url('https://the-events-app.com/website/images/logo/events-w.png') center no-repeat;
+  background-size:50%;
+  animation: rotation 4s infinite linear;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.loadingPage .svg-container {
+  width: 10%;
+}
+
+.loadingPage .hex {
+  position: relative;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-delay: var(--anim-delay);
+  transform-origin: 50% 50%;
+  animation-name: growIn;
+}
+
+.loadingPage [data-index="1"] {
+  --anim-delay: 300ms;
+}
+
+.loadingPage [data-index="2"] {
+  --anim-delay: 400ms;
+}
+
+.loadingPage [data-index="3"] {
+  --anim-delay: 500ms;
+}
+
+.loadingPage [data-index="4"] {
+  --anim-delay: 600ms;
+}
+
+.loadingPage [data-index="5"] {
+  --anim-delay: 700ms;
+}
+
+.loadingPage [data-index="6"] {
+  --anim-delay: 800ms;
+}
+
+.loadingPage [data-index="7"] {
+  --anim-delay: 900ms;
+}
+
+@keyframes growIn {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.1, 0.1);
+    -webkit-transform: scale(0.1, 0.1);
+    -moz-transform: scale(0.1, 0.1);
+    -ms-transform: scale(0.1, 0.1);
+    -o-transform: scale(0.1, 0.1);
+  }
+  20%,
+  70% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}

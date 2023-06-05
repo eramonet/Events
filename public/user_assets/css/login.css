@@ -1,0 +1,258 @@
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 51px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+
+/*----------------------- start  login -----------------------*/
+.login {
+  display: flex;
+  justify-content: center;
+  padding: 100px 0;
+}
+.login .content {
+  width: 40%;
+  border: 2px solid #ff6e5a;
+  padding: 40px;
+  text-align: center;
+}
+.login .content header h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 37px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #ff6e5a;
+  margin-bottom: 60px;
+}
+.login .content form .input {
+  margin-bottom: 20px;
+}
+.login .content form .input label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #636363;
+  display: block;
+  text-align: left;
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+.login .content form .input input,
+.login .content form .input input::-webkit-input-placeholder {
+  width: 100%;
+  padding: 7px 10px;
+  outline: none;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #b0b0b0;
+}
+.login .content form .input input {
+  border: 1px solid #b0b0b0;
+}
+.login .content form .input > div {
+  position: relative;
+}
+
+.login .content form .input > div i {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #dadada;
+  cursor: pointer;
+}
+.login .content form .input .notification {
+  max-height: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  transition: 0.8s ease-in-out;
+  font-family: "Montserrat";
+  font-style: normal;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.login .content form .input .notification.active {
+  max-height: 200px;
+  padding: 10px;
+  border: 1px solid #f5c6cb;
+  overflow: visible;
+}
+.login .content form .input > div i.active {
+  color: #aaa;
+}
+.login .content form > a {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #2d9cdb;
+  display: block;
+  margin-bottom: 20px;
+}
+.login .content form > button {
+  width: 70%;
+  height: 44px;
+  outline: none;
+  border: 0;
+  color: white;
+  margin: 0 auto 20px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #ffffff;
+  display: block;
+  text-transform: capitalize;
+}
+.login .content form > button:nth-of-type(1) {
+  background: #dbdbdb;
+}
+.login .content form > button:nth-of-type(2) {
+  background: #4e61b0;
+}
+.login .content form > button:nth-of-type(3) {
+  background: #d5513c;
+}
+.login .content form > span {
+  display: block;
+  margin-bottom: 20px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  color: #636363;
+}
+.login .content form > span:nth-of-type(2) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #01425a;
+}
+.login .content form {
+  margin-bottom: 45px;
+}
+.login .content .dontHaveAcount span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  text-align: center;
+  color: #636363;
+}
+.login .content .dontHaveAcount a {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #ff6e5a;
+}
+
+/*////////////////////////// start news media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .login .content {
+    width: 75%;
+  }
+}
+@media (max-width: 768px) {
+  .login .content {
+    width: 85%;
+  }
+}
+@media (max-width: 575px) {
+  .login .content {
+    width: 95%;
+  }
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+/*----------------------- end  login -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

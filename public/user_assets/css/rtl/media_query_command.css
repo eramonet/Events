@@ -1,0 +1,137 @@
+body { direction: rtl ; }
+@media (max-width: 575px) {
+  .navbar .row > div .logo {
+    padding:5px 0;
+    text-align: center;
+    display: none;
+  }
+
+  .navbar .container .row .nav1,
+  .navbar .container .row .nav2 {
+    padding:0px !important;
+  }
+
+  .showDetails .container .row .flower1 {
+    display: none;
+  }
+  .showDetails .container .row .index_banner {
+    position: static !important;
+  }
+
+  .showDetails .container .row .h1_index_banner {
+    display: none;
+  }
+
+  .showDetails .container .row .below_small_image_sliders,
+  .showDetails .container .row .left_buttons_flower,
+  .eventsCategories .container .row .left_buttons_flower,
+  .start_flower_section .left_buttons_flower,
+  .container .latest_product_second_row .left_buttons_flower,
+  .showAll .container .row .left_buttons_flower {
+    display: none;
+  }
+
+  .slider_doted_next_prev {
+    display: none;
+  }
+
+  .sider_big_slider .container .row .small_slider_right {
+    display: none;
+  }
+  #icon_plus {
+    display: none;
+  }
+
+  .navbar .container .row .nav1 .custom_links {
+    padding:0px !important;
+    margin-top: 20px;
+  }
+
+  #choose_city_fav_bag {
+    width: auto !important;
+    padding:0px !important;
+    margin-top: 20px;
+  }
+
+  #big_image_slider {
+    border-radius:0px !important;
+  }
+  #images_of_big_slider {
+    border-radius:0px !important;
+  }
+  #latest_product_filteration {
+    overflow-x: scroll;
+    justify-content: flex-start;
+  }
+
+  #products_latest_products1,
+  #products_latest_products2,
+  #products_latest_products3,
+  #products_latest_products4,
+  #products_latest_products5,
+  #products_latest_products6 {
+    height: auto !important;
+  }
+
+  #fav_icon1,
+  #fav_icon2,
+  #fav_icon3 {
+    margin-right: 20px;
+  }
+
+  #view_all_prod_custom {
+    padding:40px;
+  }
+  #hovering_div1,
+  #hovering_div2,
+  #hovering_div3,
+  #hovering_div4,
+  #hovering_div5,
+  #hovering_div6 {
+    bottom: 25px !important;
+    top: 48% !important;
+  }
+  #input_search_input{
+    width: auto !important;
+  }
+
+  #modal_diaglog_show_cities{
+    width: 90% !important ;
+  }
+
+  #modal_body_show_cities{
+    width: 100% !important;
+  }
+  #modal_content_show_citites{
+    width: auto !important;
+  }
+
+  #active_product_custom1 ,
+  #active_product_custom2 ,
+  #active_product_custom3{
+    width: 100% !important;
+  }
+
+  #plus_icon_custom1 ,
+  #plus_icon_custom2{
+    visibility: hidden;
+  }
+
+  #sub_menus{
+    margin-top: 50px;
+  }
+  .brand_custom{
+    padding:20px;
+    width:60%;
+    margin:auto;
+  }
+
+  #small_screen_navbar{
+    display: block !important;
+  }
+
+  #big_screen_navbar{
+    display: none;
+  }
+
+}

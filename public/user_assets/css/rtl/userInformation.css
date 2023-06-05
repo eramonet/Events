@@ -1,0 +1,337 @@
+body { direction: rtl ; }
+.allNavs {
+  box-shadow: 10px 10px 30px rgb(0 0 0 / 12%) !important;
+}
+
+/*----------------------- start  userInformation -----------------------*/
+.userInformation {
+  display: flex;
+  justify-content: center;
+  padding:100px 0;
+}
+.userInformation .content {
+  width: 40%;
+  border: 2px solid #ff6e5a;
+  padding:40px;
+  text-align: center;
+}
+.userInformation .content header {
+  margin-bottom: 40px;
+}
+.userInformation .content header h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 34px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #ff6e5a;
+  margin-bottom: 10px;
+}
+.userInformation .content header .socialmedia {
+  margin-bottom: 40px;
+  align-items: center;
+}
+.userInformation .content header .socialmedia i {
+  width: 40px;
+  height: 40px;
+  border-radius:50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  position: relative;
+  /* background: #eee; */
+}
+.userInformation .content header .socialmedia > a:nth-of-type(1) i {
+  color: #3b5998;
+}
+.userInformation .content header .socialmedia > a:nth-of-type(2) i {
+  color: #00acee;
+}
+.userInformation .content header .socialmedia > a:nth-of-type(3) i {
+  color: #f14336;
+}
+.userInformation .content header .socialmedia i::before {
+  position: relative;
+  z-index: 2;
+}
+.userInformation .content header .socialmedia i::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px dashed rgba(136, 136, 136, 0.3);
+  border-radius:50%;
+  animation: reotate 3s linear infinite;
+}
+@keyframes reotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.userInformation .content header .socialmedia label {
+  margin:0;
+  margin-right: 10px;
+  font-family: "Montserrat";
+}
+.userInformation .content header .image {
+  width: 25%;
+  aspect-ratio: 1/1;
+  margin:auto;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+  border-radius:50%;
+  position: relative;
+  outline: hidden;
+}
+.userInformation .content header .image img {
+  width: 100%;
+  height: 100%;
+}
+.userInformation .content header .image .file {
+  position: absolute;
+  bottom: 3px;
+  left: 14px;
+  width: 30%;
+  aspect-ratio: 1/1;
+  background: #fff;
+  border-radius:50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: -5px -5px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer !important;
+}
+.userInformation .content header .image .file i {
+  color: #dadada;
+  font-size: 14px;
+}
+.userInformation .content header .image .file i::before {
+  position: relative;
+  z-index: 1;
+}
+.userInformation .content header .image .file input {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+}
+.userInformation .content form .input {
+  margin-bottom: 20px;
+}
+.userInformation .content form .input label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #636363;
+  display: block;
+  text-align: right;
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+.userInformation .content form .input input,
+.userInformation .content form .input input::-webkit-input-placeholder {
+  width: 100%;
+  padding:7px 10px;
+  outline: none;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #b0b0b0;
+}
+.userInformation .content form .input input::-webkit-input-placeholder {
+  text-transform: capitalize;
+}
+.userInformation .content form .input input {
+  border: 1px solid #b0b0b0;
+  height: 50px;
+  border-radius:10px;
+  color: #0b0b0b;
+}
+.userInformation .content form .input > div {
+  position: relative;
+}
+
+.userInformation .content form .input > div > i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #dadada;
+  cursor: pointer;
+}
+.userInformation .content form .input .notification {
+  max-height: 0;
+  padding:0;
+  border: none;
+  overflow: hidden;
+  transition: 0.8s ease-in-out;
+  font-family: "Montserrat";
+  font-style: normal;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.userInformation .content form .input .notification.active {
+  max-height: 200px;
+  padding:10px;
+  border: 1px solid #f5c6cb;
+  overflow: visible;
+}
+.userInformation .content form .input > div i.active {
+  color: #aaa;
+}
+.userInformation .content form .input.dateFiled > div {
+  position: relative;
+}
+.userInformation .content form .input.dateFiled > div > div {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.userInformation .content form .input.dateFiled > div > div i {
+  color: #aaa;
+  font-size: 15px;
+}
+.userInformation .content form .input.dateFiled > div > div input {
+  width: 200%;
+  height: 100%;
+  position: absolute;
+  border: 0;
+  outline: 0;
+  right: -7px;
+  top: 0;
+  opacity: 0;
+}
+.userInformation .content form > a {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #2d9cdb;
+  display: block;
+  margin-bottom: 20px;
+}
+.userInformation .content form > button {
+  width: 70%;
+  height: 44px;
+  outline: none;
+  border: 0;
+  color: white;
+  margin:0 auto 0;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  display: block;
+  text-transform: capitalize;
+}
+.userInformation .content form > button:nth-of-type(1) {
+  background: #ff6e5a;
+  margin-top: 50px;
+}
+
+.userInformation .content form > span {
+  display: block;
+  margin-bottom: 20px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  color: #636363;
+}
+.userInformation .content form > span:nth-of-type(2) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #01425a;
+}
+.userInformation .content form {
+  margin-bottom: 45px;
+}
+
+/*////////////////////////// start news media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .userInformation .content {
+    width: 75%;
+  }
+}
+@media (max-width: 768px) {
+  .userInformation .content {
+    width: 85%;
+  }
+  .userInformation .content header h2 {
+    font-size: 30px;
+  }
+  .userInformation .content header .socialmedia label {
+    font-size: 14px;
+  }
+  .userInformation .content header .socialmedia i {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+  .userInformation .content form .input input {
+    height: 40px;
+    border-radius:4px;
+  }
+}
+@media (max-width: 575px) {
+  .userInformation .content {
+    width: 95%;
+  }
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+/*----------------------- end  userInformation -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

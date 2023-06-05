@@ -1,0 +1,217 @@
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start Order details -----------------------*/
+.orderDetails {
+  padding: 70px 0;
+  overflow: hidden;
+}
+.orderDetails .container {
+  max-width: 70% !important;
+}
+.orderDetails .orderData {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ff6e5a;
+  padding-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.orderDetails .orderData .data ul li span:nth-of-type(1),
+.orderDetails .orderData .data ul li span:nth-of-type(2) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  color: #ff6e5a;
+}
+.orderDetails .orderData .data ul li span:nth-of-type(1) {
+  width: 200px;
+  display: inline-block;
+}
+.orderDetails .orderData .data ul li span:nth-of-type(2) {
+  font-family: "Akshar";
+  color: #222;
+}
+.orderDetails .orderData .printer label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: #ff6e5a;
+  margin-right: 10px;
+}
+.orderDetails .orderData .printer img {
+  width: 55px;
+  height: 55px;
+}
+
+.orderDetails .relatedProducs {
+  padding: 50px 0;
+  border-bottom: 1px solid #ff6e5a;
+  margin-bottom: 50px;
+}
+.orderDetails .relatedProducs .product .image {
+  width: 130px;
+  height: 130px;
+}
+
+.orderDetails .relatedProducs .product .image img {
+  width: 100%;
+  height: 100%;
+}
+.orderDetails .relatedProducs .product .details {
+  padding-left: 20px;
+}
+.orderDetails .relatedProducs .product .details ul li {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #ff6e5a;
+}
+.orderDetails .relatedProducs .product .details ul li:not(:last-of-type) {
+  margin-bottom: 0px;
+}
+.orderDetails .relatedProducs .product .details ul li span {
+  font-family: "Akshar";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  text-transform: capitalize;
+  color: #000;
+}
+.orderDetails .billing ul li {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  text-transform: capitalize;
+  color: #000000;
+}
+.orderDetails .cancelOrder {
+  padding: 100px 0 50px;
+}
+.orderDetails .cancelOrder a {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #ff6e5a;
+  display: inline-block;
+}
+.orderDetails .cancelOrder button {
+  padding: 7px 0;
+  width: 300px;
+  outline: 0;
+  color: white;
+  text-transform: capitalize;
+  background: #d83939;
+  border: 1px solid red;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+/*/ ///////////////////////// end Order details media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .orderDetails .orderData .data {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .orderDetails .container {
+    max-width: 90% !important;
+  }
+  .orderDetails .relatedProducs .row > div:not(:last-of-type) {
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 768px) {
+}
+@media (max-width: 575px) {
+}
+/*/ ///////////////////////// end Order details media query ///////////////////////////// /*/
+/*----------------------- end  Order details -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

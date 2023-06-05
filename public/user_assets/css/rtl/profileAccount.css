@@ -1,0 +1,191 @@
+body { direction: rtl ; }
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 51px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start  my profile -----------------------*/
+.profileAccount {
+  padding:100px 0;
+}
+.profileAccount aside {
+  border: 1px solid #ff6e5a;
+  padding:15px 5px;
+}
+.profileAccount aside ul li {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  padding:7px 15px;
+  width: 100%;
+  background: #898989;
+  cursor: pointer;
+}
+.profileAccount aside ul li.active {
+  background: #ff6e5a;
+}
+.profileAccount aside ul li i {
+  margin-left: 15px;
+}
+.profileAccount aside ul li:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+.profileAccount aside ul li:last-of-type {
+  margin-top: 200px;
+}
+.profileAccount .data {
+  padding-right: 20px;
+}
+.profileAccount .data header h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  text-transform: capitalize;
+  color: #111111;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgb(221, 221, 221, 0.4);
+  margin-bottom: 30px;
+}
+
+.profileAccount .data .input {
+  margin-bottom: 25px;
+}
+.profileAccount .data .input > label {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 550;
+  font-size: 20px;
+  text-transform: capitalize;
+  color: #111111;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.profileAccount .data .input > label i {
+  color: #ff6e5a;
+}
+.profileAccount .data .input > div {
+  border: 1px solid #ff6e5a;
+  padding:10px;
+}
+
+.profileAccount .data .input > div ul li {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #000000;
+}
+.profileAccount .data .input > div ul li span:nth-of-type(1) {
+  font-weight: 600;
+}
+.profileAccount .data .input > div ul li span:nth-of-type(2) {
+  color: #666666;
+  font-size: 15px;
+}
+.profileAccount .data .input > div ul li:not(:last-of-type) {
+  margin-bottom: 10px;
+}
+.profileAccount .data .input > div p {
+  margin:0 !important;
+  font-size: 15px;
+}
+.profileAccount .data .input:last-of-type > div p {
+  color: #ff6e5a;
+}
+/*////////////////////////// start news media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+}
+@media (max-width: 768px) {
+  .profileAccount .data {
+    padding:20px 0 0;
+  }
+}
+@media (max-width: 575px) {
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+/*----------------------- end  my profile -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
