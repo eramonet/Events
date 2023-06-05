@@ -1,0 +1,75 @@
+shipping 
+
+  1-الفلتر مش شغال
+  2-export as excel not work
+  3-delete text ar and text en in create and edit if not need it
+  4-نتاكد على حتة ان سعر الشحن ممكن يساوى صفر
+  5-in edit we need use old to get last data if have validation error
+  6-حتة حنتفة لو فى وقت لو المدينة ليها شحن قبل كدا متظهرش فى السلكت الى فى الاضافة و التعديل
+  7-in edit make submit botton save not edit 
+  8-delete soft delete to fix taken id
+
+
+===================================
+
+promo codes
+
+  1- when create new promo code it can be status = active 
+  2- admin can add old date for expiration date
+  3- in index table make typy if prcent make it prcent% not just %
+  4- max times of use must be 1 not 0 & promo code value
+  5- when dedicated to spacial user make serch for user email not name
+
+==================================
+
+
+voendors 
+
+  1- cant create error(PHP Fileinfo extension must be installed/enabled to use Intervention Image.)
+  2- The commission must be an integer eroor in edit
+
+===================================
+
+products
+  
+  1-filter not work
+  2-tabel td must values in center
+  3-image in show error
+  4-in show page details show html code not just value
+  5-delete linke from show page
+  6-colors not show in crate
+  7-offer end date cant b old date
+  8-edit page not have all inputs in crate page (Offet Ending At * input)
+  9-Theprice must be an integer error in price and fake price
+  10-stock cant be negtev value 
+  11- in index if upate fake price can be biger then rel price and user can add negative value
+  12-edit stock from index tabel add valdation vant make it negative value
+  13-in index table make category link go to show category not categorys index
+  14-limit product with to be 2 elements only
+
+=====================================
+
+
+
+occasions
+  
+  1-filter not work (its search in product category not in occasions)
+  2-create botton like go to crete product category
+  3-if edit one of tow image will delete secend image
+  4- edit top text in crete and edit pages 
+
+======================================
+
+colors
+
+  1-in show name in arabic show name_en not name_ar 
+  2-filter not work
+
+======================================
+
+citys 
+  1-filte not work
+
+======================================
+Region 
+   1-in edit page submit botton save not edit

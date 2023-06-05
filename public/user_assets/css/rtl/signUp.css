@@ -1,0 +1,313 @@
+body { direction: rtl ; }
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 51px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+
+/*----------------------- start  signUp -----------------------*/
+.signUp {
+  display: flex;
+  justify-content: center;
+  padding:100px 0;
+}
+.signUp .content {
+  width: 40%;
+  border: 2px solid #ff6e5a;
+  padding:40px;
+  text-align: center;
+}
+.signUp .content header h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 37px;
+  text-align: center;
+  text-transform: capitalize;
+  color: #ff6e5a;
+  margin-bottom: 20px;
+}
+.signUp .content header .socialmedia {
+  margin-bottom: 40px;
+  align-items: center;
+}
+.signUp .content header .socialmedia i {
+  width: 40px;
+  height: 40px;
+  border-radius:50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  position: relative;
+  /* background: #eee; */
+}
+.signUp .content header .socialmedia > a:nth-of-type(1) i {
+  color: #3b5998;
+}
+.signUp .content header .socialmedia > a:nth-of-type(2) i {
+  color: #00acee;
+}
+.signUp .content header .socialmedia > a:nth-of-type(3) i {
+  color: #f14336;
+}
+.signUp .content header .socialmedia i::before {
+  position: relative;
+  z-index: 2;
+}
+.signUp .content header .socialmedia i::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 1px dashed rgba(136, 136, 136, 0.3);
+  border-radius:50%;
+  animation: reotate 3s linear infinite;
+}
+@keyframes reotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.signUp .content header .socialmedia label {
+  margin:0;
+  margin-right: 10px;
+  font-family: "Montserrat";
+}
+.signUp .content form .input {
+  margin-bottom: 20px;
+}
+.signUp .content form .input label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #636363;
+  display: block;
+  text-align: right;
+  text-transform: capitalize;
+  margin-bottom: 10px;
+}
+.signUp .content form .input input,
+.signUp .content form .input input::-webkit-input-placeholder {
+  width: 100%;
+  padding:7px 10px;
+  outline: none;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: #b0b0b0;
+}
+.signUp .content form .input input::-webkit-input-placeholder {
+  text-transform: capitalize;
+}
+.signUp .content form .input input {
+  border: 1px solid #b0b0b0;
+  height: 50px;
+  border-radius:10px;
+}
+.signUp .content form .input > div {
+  position: relative;
+}
+
+.signUp .content form .input > div i {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #dadada;
+  cursor: pointer;
+}
+.signUp .content form .input .notification {
+  max-height: 0;
+  padding:0;
+  border: none;
+  overflow: hidden;
+  transition: 0.8s ease-in-out;
+  font-family: "Montserrat";
+  font-style: normal;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.signUp .content form .input .notification.active {
+  max-height: 200px;
+  padding:10px;
+  border: 1px solid #f5c6cb;
+  overflow: visible;
+}
+.signUp .content form .input > div i.active {
+  color: #aaa;
+}
+.signUp .content form > a {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  color: #2d9cdb;
+  display: block;
+  margin-bottom: 20px;
+}
+.signUp .content form > button {
+  width: 70%;
+  height: 44px;
+  outline: none;
+  border: 0;
+  color: white;
+  margin:0 auto 20px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  display: block;
+  text-transform: capitalize;
+}
+.signUp .content form > button:nth-of-type(1) {
+  background: #ff6e5a;
+  margin-top: 50px;
+}
+
+.signUp .content form > span {
+  display: block;
+  margin-bottom: 20px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  text-align: center;
+  color: #636363;
+}
+.signUp .content form > span:nth-of-type(2) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  text-align: center;
+  color: #01425a;
+}
+.signUp .content form {
+  margin-bottom: 45px;
+}
+
+/*////////////////////////// start news media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .signUp .content {
+    width: 75%;
+  }
+}
+@media (max-width: 768px) {
+  .signUp .content {
+    width: 85%;
+  }
+  .signUp .content header h2 {
+    font-size: 30px;
+  }
+  .signUp .content header .socialmedia label {
+    font-size: 14px;
+  }
+  .signUp .content header .socialmedia i {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+  .signUp .content form .input input {
+    height: 40px;
+    border-radius:4px;
+  }
+}
+@media (max-width: 575px) {
+  .signUp .content {
+    width: 95%;
+  }
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+/*----------------------- end  signUp -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

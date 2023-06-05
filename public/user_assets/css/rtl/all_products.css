@@ -1,0 +1,23 @@
+body { direction: rtl ; }
+.all_products{
+    background-color: #F0F0F0;
+    padding:80px ;
+}
+
+.car_container ,
+.certificate_container ,
+.flower_container{
+    width: 100%;
+}
+
+.car_container > i ,
+.certificate_container > i  ,
+.flower_container > i {
+    font-size: 20px;
+}
+.titleHere .head .explore_categories{
+    margin-bottom: 0px;
+}
+.titleHere .head .p_explore_categories{
+    color: #FF6E5A;
+}

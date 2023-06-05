@@ -1,0 +1,173 @@
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 51px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start  Wishlist -----------------------*/
+.Wishlist {
+  padding: 100px 0;
+}
+.Wishlist header {
+  margin-bottom: 100px;
+}
+.Wishlist header span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #555555;
+}
+.Wishlist .product .image {
+  width: 130px;
+  height: 130px;
+  margin-right: 10px;
+}
+
+.Wishlist .product {
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.Wishlist .row > div:not(:last-of-type) .product {
+  border-bottom: 1px solid rgb(153, 153, 153, 0.4);
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
+.Wishlist .product .image img {
+  width: 100%;
+  height: 100%;
+}
+.Wishlist .product .details {
+  padding-top: 20px;
+}
+.Wishlist .product .details h4 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #555555;
+  margin-bottom: 10px;
+}
+.Wishlist .product .details .price > span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  color: #111111;
+}
+.Wishlist .product .details .price > span:nth-of-type(2) {
+  color: #888888;
+  font-size: 12px;
+  text-decoration: line-through;
+}
+.Wishlist .controlle > i {
+  display: block;
+  color: #999;
+  margin-bottom: 20px;
+}
+.Wishlist .controlle > button {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #ff6e5a;
+  border: 0;
+  background: none;
+  outline: 0;
+}
+.Wishlist .controlle > button i {
+  margin-right: 10px;
+}
+/*////////////////////////// start news media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .Wishlist .product .main {
+    width: 100%;
+  }
+  .Wishlist .controlle > i {
+    margin: 20px 0 10px;
+  }
+}
+@media (max-width: 768px) {
+}
+@media (max-width: 575px) {
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+/*----------------------- end  Wishlist -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

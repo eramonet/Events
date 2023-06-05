@@ -1,0 +1,570 @@
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start  trending -----------------------*/
+.trending {
+  padding: 100px 0;
+  overflow: hidden;
+}
+.trending .leftSide {
+  padding-top: 50px;
+}
+.trending .leftSide > span {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  color: #ffffff;
+  justify-content: center;
+  background: #ff6e5a;
+  padding: 3px 20px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  margin-bottom: 30px;
+}
+.trending .leftSide .firstNews h3 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  color: #333333;
+  width: 85%;
+  margin-bottom: 20px;
+}
+.trending .leftSide .firstNews p {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  color: #666666;
+  margin-bottom: 20px;
+}
+.trending .leftSide .firstNews .content span {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #ff6e5a;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: block;
+}
+.trending .leftSide .firstNews .images .item img {
+  height: 318px;
+  width: 100%;
+}
+.trending .rightSide {
+  background: #fef7f8;
+  padding: 45px 20px;
+}
+.trending .rightSide h3 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 34px;
+  width: 80%;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-bottom: 20px;
+}
+.trending .rightSide .person,
+.latestArticles .articles .article .person {
+  align-items: center;
+  margin-bottom: 20px;
+}
+.trending .rightSide .person .image,
+.latestArticles .articles .article .person .image {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  padding: 0;
+}
+.trending .rightSide .person .image img,
+.latestArticles .articles .article .person > .image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  margin: 0;
+  display: block;
+}
+.trending .rightSide .person .name,
+.latestArticles .articles .article .person h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin: 0;
+  margin-right: 10px;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+}
+.trending .rightSide .person > span.dot,
+.latestArticles .articles .article .person .dote {
+  width: 10px;
+  height: 10px;
+  background: #aaa;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  margin-right: 10px;
+}
+.trending .rightSide .person > span.date,
+.latestArticles .articles .article .person .date {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666666;
+}
+.trending .rightSide .details p,
+.latestArticles .articles .article > p {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  color: #666666;
+}
+.trending .rightSide .details span,
+.latestArticles .articles .article span {
+  color: #ff6e5a;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  cursor: pointer;
+}
+.trending .rightSide .ImageShow {
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.trending .rightSide .ImageShow .image {
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  overflow: hidden;
+  height: 188px;
+}
+.trending .rightSide .ImageShow .image:nth-child(1) {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.trending .rightSide .ImageShow .image:nth-child(2),
+.trending .rightSide .ImageShow .image:nth-child(3) {
+  width: calc(50% - 2.5px);
+}
+.trending .rightSide .ImageShow .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.owl-theme .owl-nav.disabled + .owl-dots {
+  margin-top: 10px;
+}
+.owl-theme .owl-nav.disabled + .owl-dots button {
+  border: 0;
+  outline: none;
+}
+.owl-theme .owl-nav.disabled + .owl-dots button span {
+  margin: 4px;
+  transition: 0.6s;
+  -webkit-transition: 0.6s;
+  -moz-transition: 0.6s;
+  -ms-transition: 0.6s;
+  -o-transition: 0.6s;
+}
+.owl-theme .owl-nav.disabled + .owl-dots button:hover span,
+.owl-theme .owl-nav.disabled + .owl-dots button.active span {
+  background: #ff6e5a;
+}
+.owl-theme .owl-nav.disabled + .owl-dots button.active span {
+  width: 50px;
+}
+/*////////////////////////// start trending media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+}
+@media (max-width: 768px) {
+}
+@media (max-width: 575px) {
+}
+/*/ ///////////////////////// end trending media query ///////////////////////////// /*/
+/*----------------------- end  trending -----------------------*/
+
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start  latest Articles -----------------------*/
+.latestArticles {
+  padding: 50px 0;
+}
+.latestArticles header h2 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-bottom: 30px;
+}
+.latestArticles .articles .article > .image {
+  width: 100%;
+  aspect-ratio: 1/0.4;
+  margin-bottom: 20px;
+}
+.latestArticles .articles .article > .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.latestArticles .articles .article .articleHead h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-bottom: 20px;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+}
+.latestArticles .articles .article:nth-child(1) {
+  margin-bottom: 30px;
+}
+.latestArticles aside .supscripe,
+.latestArticles aside .designNow {
+  background: #ff6e5a;
+  padding: 50px 20px;
+  text-align: center;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.latestArticles aside .supscripe h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  text-align: center;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+.latestArticles aside .supscripe p {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+.latestArticles aside .supscripe form {
+  display: flex;
+  justify-content: space-between;
+}
+.latestArticles aside .supscripe form input {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #999999;
+  border: 0;
+  outline: none;
+  padding: 7px 10px;
+  width: 74%;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  background: white;
+}
+.latestArticles aside .supscripe form button {
+  width: 24%;
+  border: 0;
+  outline: none;
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ff6e5a;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  background: white;
+}
+.latestArticles aside .trendingNow {
+  padding: 30px 20px 0;
+}
+.latestArticles aside .trendingNow h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #161d24;
+  margin-bottom: 20px;
+}
+.latestArticles aside .trendingNow .elements .element:not(:last-of-type) {
+  margin-bottom: 20px;
+}
+.latestArticles aside .trendingNow .element .image {
+  margin-right: 10px;
+  width: 80px;
+  height: 80px;
+}
+.latestArticles aside .trendingNow .element .image img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  display: block;
+}
+.latestArticles aside .trendingNow .element .details {
+  width: calc(100% - 90px);
+}
+.latestArticles aside .trendingNow .element .details p {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+  margin: 0;
+}
+.latestArticles aside .trendingNow .element .details span {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #666666;
+}
+.latestArticles aside .trendingNow .load {
+  text-align: center;
+  padding: 20px 0;
+}
+.latestArticles aside .trendingNow .load i {
+  color: #ff6e5a;
+  cursor: pointer;
+}
+
+.latestArticles aside .designNow h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  text-align: center;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+.latestArticles aside .designNow a {
+  background: #ffffff;
+  border-radius: 8px;
+  display: inline-block;
+  padding: 8px 25px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #ff6e5a;
+  text-transform: capitalize;
+}
+
+.latestArticles .pagination {
+  margin-top: 20px;
+  overflow: hidden;
+  padding: 50px 0;
+}
+.latestArticles .pagination ul {
+  justify-content: center;
+  width: 100%;
+}
+.latestArticles .pagination ul li {
+  margin: 0 20px;
+}
+.latestArticles .pagination ul li a {
+  color: #111111;
+  display: block;
+  width: 100%;
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #111111;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.latestArticles .pagination ul li i {
+  margin: 0 5px;
+}
+.latestArticles .pagination ul li:not(:nth-of-type(1), :last-of-type) a {
+  width: 40px;
+  height: 40px;
+  background: #ddd;
+}
+.latestArticles .pagination ul li:not(:nth-of-type(1), :last-of-type):hover a,
+.latestArticles .pagination ul li:not(:last-of-type).active a {
+  color: white !important;
+  background: #ff6e5a;
+}
+/*////////////////////////// start news media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .latestArticles {
+    padding: 0 0 50px !important;
+  }
+  .latestArticles aside .trendingNow {
+    padding: 30px 0;
+  }
+}
+@media (max-width: 768px) {
+  .trending {
+    padding: 0 0 60px;
+  }
+  .trending .rightSide h3 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 575px) {
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+
+/*----------------------- end  latest Articles -----------------------*/
+
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

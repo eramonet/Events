@@ -1,0 +1,713 @@
+body { direction: rtl ; }
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start  latest Articles -----------------------*/
+.show {
+  padding:100px 0;
+}
+.show .content h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 32px;
+  color: #333333;
+  width: 55%;
+  margin-bottom: 20px;
+}
+.show .content .video {
+  position: relative;
+  aspect-ratio: 1/0.35;
+  border-radius:10px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  -ms-border-radius:10px;
+  -o-border-radius:10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.show .content .video video {
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+.show .content .video .over {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.7s;
+  -webkit-transition: 0.7s;
+  -moz-transition: 0.7s;
+  -ms-transition: 0.7s;
+  -o-transition: 0.7s;
+}
+.show .content .video .over.active {
+  visibility: visible;
+  opacity: 1;
+}
+.show .content .video .over i {
+  color: white;
+  font-size: 60px;
+}
+.newsDetails {
+  padding:50px 0;
+}
+
+.newsDetails .person,
+.similarNews .news .person {
+  align-items: center;
+  margin-bottom: 20px;
+}
+.similarNews .news .person .image,
+.newsDetails .person .image {
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  padding:0;
+}
+.similarNews .news .person .image img,
+.newsDetails .person .image img {
+  width: 100%;
+  height: 100%;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  -ms-border-radius:50%;
+  -o-border-radius:50%;
+  margin:0;
+  display: block;
+}
+.similarNews .news .person .name,
+.newsDetails .person .name {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin:0;
+  margin-left: 10px;
+}
+.similarNews .news .person > span.dot,
+.newsDetails .person > span.dot {
+  width: 10px;
+  height: 10px;
+  background: #aaa;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  -ms-border-radius:50%;
+  -o-border-radius:50%;
+  margin-left: 10px;
+}
+.similarNews .news .person > span.date,
+.newsDetails .person > span.date {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666666;
+}
+
+.newsDetails .article > p {
+  font-family: "Akshar";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #666666;
+  padding-bottom: 20px;
+}
+.newsDetails .article > .image {
+  height: 356px;
+  box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.2);
+  border-radius:10px;
+  overflow: hidden;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  -ms-border-radius:10px;
+  -o-border-radius:10px;
+}
+.newsDetails .article > .image img {
+  width: 100%;
+  height: 100%;
+}
+.newsDetails .article .information h3 {
+  padding:25px 0 20px;
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  text-align: center;
+  margin:0;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+}
+.newsDetails .article > .information p {
+  border-bottom: 1px solid #ffc7cf;
+  padding-bottom: 30px;
+  margin-bottom: 60px;
+  font-family: "Akshar";
+}
+.newsDetails .article .indecators h3,
+.newsDetails .article .reactions h3 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-bottom: 20px;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+}
+
+.newsDetails .article .indecators > div a {
+  width: 140px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f6fe;
+  color: #444;
+  font-size: 14px;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+  /* box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1); */
+  border: 1px solid #ddd;
+}
+.newsDetails .article .reactions {
+  padding:50px 0;
+  width: 60%;
+}
+.newsDetails .article .reactions .icons .reaction {
+  width: 22%;
+  background: #f7f6fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1/1;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+}
+.newsDetails .article .reactions .icons .reaction i {
+  font-size: 60px;
+}
+.newsDetails .article .reactions .icons .reaction.active {
+  color: #ff6e5a;
+}
+.newsDetails .article .indecators > div a:nth-of-type(1) {
+  margin-left: 20px;
+}
+.newsDetails .article .sendQuestion {
+  padding:50px 0;
+}
+.newsDetails .article .sendQuestion .question .head {
+  background: #ffc7cf;
+  padding:15px 20px;
+  justify-content: space-between;
+  border: 1px solid #ff6e5a;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+.newsDetails .article .sendQuestion .question .head .information {
+  width: 100%;
+}
+.newsDetails .article .sendQuestion .question .head .information .image,
+.newsDetails
+  .article
+  .sendQuestion
+  .question
+  .questionAnswer
+  .information
+  .image {
+  width: 20px;
+  height: 20px;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  -ms-border-radius:50%;
+  -o-border-radius:50%;
+  margin-left: 10px;
+}
+.newsDetails .article .sendQuestion .question .head .information .image img,
+.newsDetails
+  .article
+  .sendQuestion
+  .question
+  .questionAnswer
+  .information
+  .image
+  img {
+  width: 100%;
+  height: 100%;
+}
+.newsDetails .article .sendQuestion .question .head .options i,
+.newsDetails .article .sendQuestion .question .questionAnswer .options i {
+  cursor: pointer;
+}
+.newsDetails .article .sendQuestion .question .head .userData,
+.newsDetails .article .sendQuestion .question .questionAnswer .userData {
+  width: calc(100% - 50px);
+}
+.newsDetails .article .sendQuestion .question .head .userData .name h5,
+.newsDetails
+  .article
+  .sendQuestion
+  .question
+  .questionAnswer
+  .userData
+  .name
+  h5 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-top: 0; margin-left: 10px; margin-bottom: 10px; margin-right: 0;
+}
+.newsDetails .article .sendQuestion .question .head .userData .name span,
+.newsDetails
+  .article
+  .sendQuestion
+  .question
+  .questionAnswer
+  .userData
+  .name
+  span {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666666;
+}
+.newsDetails .article .sendQuestion .question .head .userData p,
+.newsDetails .article .sendQuestion .question .questionAnswer .userData p {
+  font-family: "Akshar";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #666666;
+  margin:0;
+  width: 95%;
+}
+.newsDetails .article .sendQuestion .question .questionAnswer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 15px; padding-left: 20px; padding-bottom: 15px; padding-right: 50px;
+  border: 1px solid #ffc7cf;
+  border-top: none;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.newsDetails .article .sendQuestion .questionField {
+  padding:30px 0 50px;
+  position: relative;
+}
+.newsDetails .article .sendQuestion .questionField form {
+  margin:none;
+  position: relative;
+}
+.newsDetails .article .sendQuestion .questionField form textarea {
+  border: 1px solid #ffc7cf;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+  font-family: "Akshar";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  color: #999999;
+  padding:20px 10px;
+  resize: none;
+  outline: none;
+  width: 100%;
+  aspect-ratio: 1/0.3;
+}
+.newsDetails .article .sendQuestion .questionField form button {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-family: "Akshar";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ffffff;
+  background: #ff6e5a;
+  border: 1px solid #ff6e5a;
+  border-radius:3px;
+  text-transform: capitalize;
+  padding:4px 15px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+  -ms-border-radius:3px;
+  -o-border-radius:3px;
+}
+
+.similarNews {
+  padding:0px 0;
+}
+.similarNews header h2 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-bottom: 40px;
+}
+.similarNews .news {
+  margin-bottom: 20px;
+}
+.similarNews .news > .image {
+  height: 320px;
+  margin-bottom: 20px;
+}
+.similarNews .news > .image > img {
+  width: 100%;
+  height: 100%;
+}
+.similarNews .news > .head h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  margin-bottom: 20px;
+}
+.similarNews .news > p {
+  font-family: "Akshar";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #666666;
+}
+.similarNews .news > span {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #ff6e5a;
+  text-transform: capitalize;
+}
+.similarNews .loadMore button {
+  background: #ff6e5a;
+  color: white;
+  padding:8px 20px;
+  border: 0;
+  outline: none;
+  width: 150px;
+  margin:60px auto 80px;
+  display: block;
+  border-radius:4px;
+  text-transform: capitalize;
+  -webkit-border-radius:4px;
+  -moz-border-radius:4px;
+  -ms-border-radius:4px;
+  -o-border-radius:4px;
+}
+.newsDetails .article {
+  padding-top: 0; padding-left: 20px; padding-bottom: 0; padding-right: 0;
+}
+.newsDetails aside .supscripe,
+.newsDetails aside .designNow {
+  background: #ff6e5a;
+  padding:50px 20px;
+  text-align: center;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+}
+.newsDetails aside .supscripe h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  text-align: center;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #ffffff;
+  margin-bottom: 20px;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+}
+.newsDetails aside .supscripe p {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+.newsDetails aside .supscripe form {
+  display: flex;
+  justify-content: space-between;
+}
+.newsDetails aside .supscripe form input {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #999999;
+  border: 0;
+  outline: none;
+  padding:7px 10px;
+  width: 74%;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+  background: white;
+}
+.newsDetails aside .supscripe form button {
+  width: 24%;
+  border: 0;
+  outline: none;
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ff6e5a;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+  background: white;
+}
+.newsDetails aside .trendingNow {
+  padding:30px 20px 0;
+}
+.newsDetails aside .trendingNow h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #161d24;
+  margin-bottom: 20px;
+}
+.newsDetails aside .trendingNow .elements .element:not(:last-of-type) {
+  margin-bottom: 20px;
+}
+.newsDetails aside .trendingNow .element .image {
+  margin-left: 10px;
+  width: 80px;
+  height: 80px;
+}
+.newsDetails aside .trendingNow .element .image img {
+  width: 100%;
+  height: 100%;
+  border-radius:10px;
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  -ms-border-radius:10px;
+  -o-border-radius:10px;
+  display: block;
+}
+.newsDetails aside .trendingNow .element .details {
+  width: calc(100% - 90px);
+}
+.newsDetails aside .trendingNow .element .details p {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #333333;
+  -webkit-font-feature-settings: "pnum" on, "lnum" on;
+  -moz-font-feature-settings: "pnum" on, "lnum" on;
+  margin:0;
+}
+.newsDetails aside .trendingNow .element .details span {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #666666;
+}
+.newsDetails aside .trendingNow .load {
+  text-align: center;
+  padding:20px 0;
+}
+.newsDetails aside .trendingNow .load i {
+  color: #ff6e5a;
+  cursor: pointer;
+}
+
+.newsDetails aside .designNow h4 {
+  font-family: "Libre Franklin";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  text-align: center;
+  font-feature-settings: "pnum" on, "lnum" on;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+.newsDetails aside .designNow a {
+  background: #ffffff;
+  border-radius:8px;
+  display: inline-block;
+  padding:8px 25px;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  -ms-border-radius:5px;
+  -o-border-radius:5px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #ff6e5a;
+  text-transform: capitalize;
+}
+/*////////////////////////// start newsDetails media query ///////////////////////////// /*/
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .show .content .video {
+    aspect-ratio: 1/0.6;
+  }
+  .show .content h2 {
+    width: 100%;
+  }
+  .newsDetails {
+    padding:0 0 50px !important;
+  }
+  .newsDetails aside .trendingNow {
+    padding:30px 0;
+  }
+  .newsDetails .article {
+    padding:0;
+  }
+  .newsDetails .article .reactions .icons .reaction i {
+    font-size: 40px;
+  }
+  .newsDetails .article .sendQuestion {
+    padding:20px 0;
+  }
+}
+@media (max-width: 768px) {
+  .newsDetails .article .reactions .icons .reaction i {
+    font-size: 30px;
+  }
+  .newsDetails {
+    padding:0 0 60px;
+  }
+  .newsDetails .rightSide h3 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 575px) {
+}
+/*/ ///////////////////////// end newsDetails media query ///////////////////////////// /*/
+
+/*----------------------- end newsDetails -----------------------*/
+
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/

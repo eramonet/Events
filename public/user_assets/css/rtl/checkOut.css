@@ -1,0 +1,584 @@
+body { direction: rtl ; }
+/*----------------------- start landingPage -----------------------*/
+.landingPage {
+  height: 412px;
+  overflow: hidden;
+  position: relative;
+}
+.landingPage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.landingPage .over {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+.landingPage .over h2 {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 42px;
+  font-variant: small-caps;
+  color: #000000;
+  text-align: center;
+}
+/*----------------------- end  landingPage -----------------------*/
+/*
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+*/
+/*----------------------- start  checkOut -----------------------*/
+.checkOut {
+  padding:70px 0;
+}
+.checkOut .header .row {
+  margin-bottom: 120px;
+}
+.checkOut header .row .controller {
+  align-items: center;
+  transition: 0.5s;
+  opacity: 0.5;
+  display: flex;
+  cursor: pointer;
+}
+.checkOut header .row .controller .image {
+  margin-left: 10px;
+  width: 40px;
+  height: 40px;
+}
+.checkOut header .row .controller .image img {
+  width: 100%;
+  height: 100%;
+}
+.checkOut header .row .controller h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  text-transform: capitalize;
+  margin:0;
+  color: #111111;
+}
+.checkOut header .row .controller.active {
+  opacity: 1;
+}
+.checkOut header .indecators {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #ff6e5a;
+  padding:100px 0 0px;
+}
+.checkOut header .indecators span,
+.checkOut header .indecators label {
+  cursor: pointer !important;
+}
+.checkOut header .indecators label {
+  margin:0;
+}
+.checkOut header .indecators > span:nth-of-type(1) i {
+  margin-left: 10px;
+}
+.checkOut header .indecators > span:nth-of-type(2) i {
+  margin-right: 10px;
+}
+.checkOut .container {
+  overflow: hidden;
+}
+.checkOut .content {
+  padding:60px 0;
+  overflow: hidden;
+}
+.checkOut .content > div {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.checkOut .content > div.active {
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+}
+.checkOut .content > div.pageOne .personalData > div:not(:last-of-type) {
+  margin-bottom: 20px;
+}
+.checkOut .content > div.pageOne .personalData > div h4 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  text-transform: capitalize;
+  color: #111111;
+  margin-bottom: 20px;
+}
+.checkOut .content > div.pageOne .personalData > div div.row > div {
+  padding-top: 0 !important; padding-left: 40px !important; padding-bottom: 0 !important; padding-right: 0 !important;
+}
+.checkOut .content > div.pageOne .personalData > div div.input {
+  position: relative;
+  margin-bottom: 20px;
+}
+.checkOut .content > div.pageOne .personalData > div div.input input,
+.checkOut
+  .content
+  > div.pageOne
+  .personalData
+  > div
+  div.input
+  input::-webkit-input-placeholder {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #888888;
+  text-transform: capitalize;
+}
+.checkOut .content > div.pageOne .personalData > div div.input input,
+.checkOut .content > div.pageOne .personalData > div div.input textarea {
+  padding:9px 0px;
+  border: 0;
+  border-bottom: 1px solid #888888;
+  text-transform: none;
+  outline: none;
+  width: 100%;
+}
+.checkOut .content > div.pageOne .personalData > div div.input textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.checkOut .content > div.pageOne .personalData > div div.input > i {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  color: #888888;
+  font-size: 12px;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+}
+.checkOut .content > div.pageOne .personalData > div div.input .overInput {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-transform: translateY(-50%);
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -o-transform: translateY(-50%);
+}
+.checkOut .content > div.pageOne .personalData > div .input .overInput input {
+  width: 100%;
+  height: 100%;
+  background: red;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+}
+.checkOut .content > div.pageOne .personalData > div div.input .overInput i {
+  color: #888;
+  font-size: 12px;
+}
+.checkOut .content > div.pageOne .personalData .checkBoxs .box > input {
+  display: none;
+}
+.checkOut .content > div.pageOne .personalData .checkBoxs .box {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.checkOut
+  .content
+  > div.pageOne
+  .personalData
+  .checkBoxs
+  .box:not(:last-of-type) {
+  margin-bottom: 20px;
+}
+.checkOut .content > div.pageOne .personalData .checkBoxs .box > div {
+  width: 15px;
+  height: 15px;
+  background: #eee;
+  border: 1px solid #ddd;
+  border-radius:4px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.checkOut .content > div.pageOne .personalData .checkBoxs .box > div i {
+  color: #000;
+  font-size: 10px;
+  display: none;
+}
+.checkOut .content > div.pageOne .personalData .checkBoxs .box label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #555555;
+  cursor: pointer;
+  margin:0;
+}
+.checkOut
+  .content
+  > div.pageOne
+  .personalData
+  .checkBoxs
+  .box
+  > input:checked
+  + div
+  i {
+  display: block;
+}
+.checkOut .content .pageTow div.paymentData {
+  padding-left: 50px;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay {
+  padding:20px 10px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  align-items: center;
+}
+.checkOut .content .pageTow div.paymentData form > div:not(:last-child) {
+  margin-bottom: 10px;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay label {
+  margin:0;
+  cursor: pointer;
+}
+
+.checkOut .content .pageTow div.paymentData .typeOfPay label .image {
+  width: 50px;
+  height: 30px;
+}
+.checkOut
+  .content
+  .pageTow
+  div.paymentData
+  .typeOfPay
+  label
+  .image:not(:last-of-type) {
+  margin-left: 5px;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay label .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay label span {
+  font-family: "Sulphur Point";
+  font-size: 16px;
+  text-transform: capitalize;
+  color: #111111;
+  margin-right: 10px;
+  font-weight: 550;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay > input {
+  color: #111111 !important;
+  visibility: visible;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay > input::before,
+.checkOut .content .pageTow div.paymentData .typeOfPay > input::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  border: 1px solid #111;
+  border-radius:50%;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  -ms-border-radius:50%;
+  -o-border-radius:50%;
+  background: white;
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay > input::after {
+  width: 70%;
+  height: 70%;
+  right: 50%;
+  top: 50%;
+  transform: translate(+50%, -50%);
+  background: #222;
+  border: 0;
+  visibility: hidden;
+  transition: 0.5s;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -o-transition: 0.5s;
+  opacity: 0;
+  -webkit-transform: translate(+50%, -50%);
+  -moz-transform: translate(+50%, -50%);
+  -ms-transform: translate(+50%, -50%);
+  -o-transform: translate(+50%, -50%);
+}
+.checkOut .content .pageTow div.paymentData .typeOfPay > input:checked:after {
+  opacity: 1;
+  visibility: visible;
+}
+.checkOut .content .pageTow div.paymentData .inputs .input {
+  margin-bottom: 20px;
+}
+.checkOut .content .pageTow div.paymentData .inputs .input:nth-of-type(1) {
+  width: 100%;
+}
+.checkOut .content .pageTow div.paymentData .inputs .input:nth-of-type(2) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.checkOut
+  .content
+  .pageTow
+  div.paymentData
+  .inputs
+  .input:nth-of-type(2)
+  div:nth-child(1) {
+  width: calc((100% / 3 * 2) - 10px);
+}
+.checkOut
+  .content
+  .pageTow
+  div.paymentData
+  .inputs
+  .input:nth-of-type(2)
+  div:nth-child(1)
+  div {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.checkOut
+  .pageTow
+  div.paymentData
+  .inputs
+  .input:nth-of-type(2)
+  div:nth-child(2) {
+  width: calc((100% / 3) - 10px);
+}
+.checkOut
+  .content
+  .pageTow
+  div.paymentData
+  .inputs
+  .input:nth-of-type(2)
+  div:nth-child(1)
+  input {
+  width: calc((100% / 2) - 10px);
+}
+.checkOut .content .pageTow div.paymentData .inputs .input input {
+  padding:12px 0;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+  outline: 0;
+}
+.checkOut .content .pageTow div.paymentData .inputs .input label {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #111111;
+  display: block;
+  margin-bottom: 0px;
+}
+.checkOut .content .pageThree .finish h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 110%;
+  text-transform: capitalize;
+  width: 30%;
+  margin-bottom: 20px;
+}
+.checkOut .content .pageThree .finish p {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #666666;
+}
+.checkOut .content .pageThree .finish p a {
+  color: #ec9dab;
+}
+.checkOut
+  .content
+  .pageTow
+  div.paymentData
+  .inputs
+  .input
+  .checkOut
+  .content
+  .bill {
+  padding-right: 40px;
+  border-right: 1px solid #ddd;
+}
+.checkOut .content .bill {
+  border-right: 1px solid #eee;
+  padding-right: 40px;
+}
+.checkOut .content .bill h2 {
+  font-family: "Sulphur Point";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 34px;
+  text-transform: capitalize;
+  color: #ff6e5a;
+  margin-bottom: 20px;
+}
+.checkOut .content .bill ul li {
+  padding:15px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.checkOut .content .bill ul li span {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  color: #555555;
+  text-transform: capitalize;
+}
+.checkOut .content .bill ul li:nth-of-type(1) span:nth-of-type(2),
+.checkOut .content .bill ul li:nth-of-type(3) span:nth-of-type(2) {
+  color: #000;
+  font-weight: 600;
+}
+.checkOut .content .bill .totalPrice {
+  padding:30px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.checkOut .content .bill .totalPrice span:nth-of-type(1) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  color: #111111;
+  text-transform: capitalize;
+}
+.checkOut .content .bill .totalPrice span:nth-of-type(2) {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 17px;
+  text-align: left;
+  color: #ff6e5a;
+}
+.checkOut .content .bill button {
+  background: #ff6e5a;
+  width: 100%;
+  padding:10px;
+  font-size: 15px;
+  text-transform: uppercase;
+  color: #ffffff;
+  border: 0;
+  outline: 0;
+  font-weight: 400;
+}
+@media (max-width: 1200px) {
+}
+@media (max-width: 995px) {
+  .checkOut .content .bill {
+    margin-top: 40px;
+  }
+  .checkOut header .row .controlle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .checkOut header .row .controlle h2 {
+    font-size: 20px;
+  }
+  .checkOut header .row .controlle .image {
+    width: 30px;
+    height: 30px;
+  }
+  .checkOut .content .bill {
+    border: none;
+    padding-right: 0px;
+  }
+  .checkOut .content > div.pageOne .personalData > div div.row > div {
+    padding:0 !important;
+  }
+}
+@media (max-width: 768px) {
+  .checkOut header .row .controlle {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+  }
+  .checkOut header .indecators {
+    padding:70px 0;
+  }
+  .checkOut header .row > div:not(:last-of-type) {
+    margin-bottom: 20px;
+  }
+  .checkOut .content {
+    padding:30px 0;
+  }
+  .checkOut .content .pageThree .finish h2 {
+    width: 100%;
+  }
+}
+@media (max-width: 575px) {
+  .checkOut .content .bill {
+    padding:0;
+    border: none;
+  }
+}
+/*/ ///////////////////////// end news media query ///////////////////////////// /*/
+/*----------------------- end  checkOut -----------------------*/
