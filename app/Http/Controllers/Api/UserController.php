@@ -189,13 +189,14 @@ class UserController extends Controller
             [
                 'package_id' => 'required|exists:packages,id',
                 'hall_id' => 'required|exists:halls,id',
-                'option_id' => 'required|array|exists:package_options,id',
-                'option_id.*' => 'required',
-                'quantity' => 'required|array',
-                'quantity.*' => 'required',
+                'option_id' => 'nullable|array|exists:package_options,id',
+                'option_id.*' => 'nullable',
+                'quantity' => 'nullable|array',
+                'quantity.*' => 'nullable',
                 'date'=>'required',
                 'time_from'=>'required',
                 'time_to'=>'required',
+                'extra_guest' => 'required',
             ]
         );
         if ($validator->fails()) {
@@ -206,11 +207,14 @@ class UserController extends Controller
             return response()->json(res($lang, expired(), 'user_not_found', []), 404);
         }
         $cartHall = CartHall::where('hall_id', $request->hall_id)->first();
-        if ($cartHall == null) {
+         if ($cartHall == null) {
             $request['user_id'] = $user->id;
             $request['package_id'] = $request->package_id;
             $request['hall_id'] = $request->hall_id;
-
+            $request['date'] = $request->date;
+            $request['time_from'] = $request->time_from;
+            $request['time_to'] = $request->time_to;
+            $request['extra_guest'] =$request->extra_guest;
             $result = $this->userObject->createHallsCart($request);
             return response(res($lang, success(), 'add_to_cart', $result), 200);
         } else {
@@ -557,7 +561,7 @@ class UserController extends Controller
         return response()->json(res($lang, success(), 'done', []), 200);
     }
 
-    public function inviteFriend(Request $request)
+   public function inviteFriend(Request $request)
     {
         $lang = getLang();
         App::setLocale($lang);
@@ -566,8 +570,9 @@ class UserController extends Controller
             $request->all(),
             [
                 'email' => [
-                    'required', 'email','regex:/^\w+[-\.\w]*@(?!(?:myemail)\.com$)\w+[-\.\w]*?\.\w{2,4}$/'
+                    'sometimes', 'email','regex:/^\w+[-\.\w]*@(?!(?:myemail)\.com$)\w+[-\.\w]*?\.\w{2,4}$/'
                 ],
+                'phone'=>'sometimes'
             ]
         );
         if ($validator->fails()) {
@@ -577,17 +582,23 @@ class UserController extends Controller
         if ($user == 'false') {
             return response()->json(res($lang, expired(), 'user_not_found', []), 404);
         }
-        try{
+        if($request->email!=null){
+        // try{
         $data = array('email' => $request->email,'name'=>$user->name);
-            Mail::send('email.invite', $data, function ($message) use ($request) {
+            Mail::send('emails.invite', $data, function ($message) use ($request) {
                 $message->to($request->email)->subject('Invitation');
                 $message->from('events@gmail.com', 'Events App');
             });
             return response()->json(res($lang, success(), 'done', []), 200);
-
-        }catch(Exception $e){
-            return response()->json(res($lang, failed(), 'email_not_found', []), 404);
         }
+        // catch(Exception $e){
+        //     return response()->json(res($lang, failed(), 'email_not_found', []), 404);
+        // }
+    //   }
+      else{
+        $whats="https://wa.me/$request->phone?text=your friend $user->name send you invite on events app";
+        return response()->json(res($lang, success(), 'done', ["whats_link"=>$whats]), 200);
+      }
     }
 
     public function deleteHallCart(Request $request)
@@ -695,6 +706,17 @@ class UserController extends Controller
         $request['cart_id'] = $request->cart_id;
         $this->userObject->updateProductsCart($request);
         return response()->json(res($lang, success(), 'done', []), 200);
+    }
+    
+     public function myCart(Request $request)
+    {
+        $lang = getLang();
+        $user = User::where('id', $request->user()->id)->first();
+        if ($user == 'false') {
+            return response()->json(res($lang, expired(), 'user_not_found', []), 404);
+        }
+        $result=$this->userObject->myCart($user,$lang);
+        return response()->json(res($lang, success(), 'get_cart',$result), 200);
     }
 
 }

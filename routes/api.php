@@ -33,6 +33,7 @@ Route::controller(SettingsController::class)->group(function () {
             Route::get('notifications', 'getNotifications');
             Route::post('send-query', 'send_query');
             Route::get('my-queries', 'myQueries');
+            Route::post('become-vendor', 'becomeVendor');
         });
     } else {
         Route::post('contactus', 'insertContactForm');
@@ -93,6 +94,8 @@ Route::controller(UserController::class)->group(function () {
             Route::post('update-hall-cart', 'updateHallCart');
             Route::post('delete-products-cart', 'deleteProductsCart');
             Route::post('update-products-cart', 'updateProductsCart');
+            Route::post('check-date', 'checkDate');
+            Route::get('mycart', 'myCart');
         });
     } else {
         Route::get('home', 'home');
@@ -111,6 +114,6 @@ Route::controller(UserController::class)->group(function () {
         Route::get('package-details/{package_id}', 'getPackage');
         Route::post('filter', 'filter');
         Route::post('check-date', 'checkDate');
-
+        
     }
 });

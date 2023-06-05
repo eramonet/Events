@@ -69,4 +69,6 @@ interface UserRepositoryInterface
     public function deleteProductsCart($request);
 
     public function updateProductsCart($request);
+
+    public function myCart($user, $lang);
 }

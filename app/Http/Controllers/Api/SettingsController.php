@@ -236,7 +236,7 @@ class SettingsController extends Controller
 
     }
 
-    public function becomeVendor(Request $request)
+   public function becomeVendor(Request $request)
     {
         $lang = getLang();
         App::setLocale($lang);
@@ -254,7 +254,22 @@ class SettingsController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => $validator->errors()->first(), 'data' => []], 200);
         }
-
+        $a = $request->header('Authorization');
+        if (isset($a)) {
+            $user = User::where('id', $request->user()->id)->first();
+            if ($user == 'false') {
+                return response()->json(res($lang, expired(), 'user_not_found',[]), 404);
+            }
+            $request['user_id']=$user->id;
+            $request['name'] = $request->name;
+            $request['email'] = $request->email;
+            $request['phone_number'] = $request->phone_number;
+            $request['coment'] = $request->coment;
+            $request['sign_from'] = $request->sign_from;
+            $this->settingObject->becomeVendorWithToken($request);
+            return response()->json(res($lang, success(), 'request_sent', []), 200);
+           
+        }else{
             $request['name'] = $request->name;
             $request['email'] = $request->email;
             $request['phone_number'] = $request->phone_number;
@@ -262,7 +277,8 @@ class SettingsController extends Controller
             $request['sign_from'] = $request->sign_from;
             $this->settingObject->becomeVendor($request);
             return response()->json(res($lang, success(), 'request_sent', []), 200);
-
+        }
     }
+
 
 }

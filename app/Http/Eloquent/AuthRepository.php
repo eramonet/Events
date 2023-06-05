@@ -29,9 +29,9 @@ class AuthRepository implements AuthRepositoryInterface
             $this->verification_Ob->code = $code;
             $this->verification_Ob->save();
            // $data = array('name' => $userToVerify->name, 'code' => $code);
-            // Mail::send('email.verify', $data, function ($message) use ($userToVerify) {
+            // Mail::send('emails.verify', $data, function ($message) use ($userToVerify) {
             //     $message->to($userToVerify->email)->subject('activation code');
-            //     $message->from('events@gmail.com', 'Events App');
+            //     $message->from('no-replay@the-events-app.com', 'Events App');
             // });
             return 'code_sent';
         } else {

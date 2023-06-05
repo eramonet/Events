@@ -9,7 +9,6 @@ use App\Http\Resources\HallResource;
 use App\Http\Resources\PackageResource;
 use App\Http\Resources\ProductResource;
 use App\Models\Ad;
-use App\Models\Admin;
 use App\Models\Available_date;
 use App\Models\BookingDetail;
 use App\Models\Brand;
@@ -27,7 +26,6 @@ use App\Models\Occasion;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderProduct;
-use App\Models\OrderTaxes;
 use App\Models\Package;
 use App\Models\PackageOption;
 use App\Models\Product;
@@ -42,7 +40,6 @@ use App\Models\Tax;
 use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Wishlist;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Calculation\Category;
 
@@ -50,20 +47,20 @@ class UserRepository implements UserRepositoryInterface
 {
     public function home($lang)
     {
-        $categories = HallCategory::take(4)->orderBy('id', 'asc')->get();
+        $categories = Occasion::where('for_what','hall')->orWhere('for_what','both')->take(4)->orderBy('id', 'asc')->get();
         $allcats = array();
         $i = 0;
         foreach ($categories as $category) {
             $allcats[$i]['id'] = $category->id;
             $allcats[$i]['name'] =  $lang == 'en' ? $category->title_en : $category->title_ar;
-            $allcats[$i]['icon'] = $category->image_url;
+            $allcats[$i]['icon'] = $category->icon;
             $i++;
         }
 
         $getWeddingHalls = CategoryHall::where('category_id', 6)->pluck('hall_id');
         $weddingsHalls = Hall::whereIn('id', $getWeddingHalls)
-        ->where('status',1)
-        ->where('accept','accepted')
+            ->where('status',1)
+            ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allweddingshalls = array();
@@ -79,7 +76,7 @@ class UserRepository implements UserRepositoryInterface
         $getbirthdaysHalls = CategoryHall::where('category_id', 2)->pluck('hall_id');
         $birthdaysHalls = Hall::whereIn('id', $getbirthdaysHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allbirthdayshalls = array();
@@ -92,8 +89,9 @@ class UserRepository implements UserRepositoryInterface
             $i++;
         }
 
-        $latestProducts = Product::where('status',1)
-        ->where('accept','accepted')->where('stock', '>', '0')
+        $latestProducts = Product::where('status', 1)->where('stock', '>', '0')
+        ->where('status',1)
+        ->where('accepted','accepted')
             ->take(4)
             ->latest()->get();
         $allproducts = array();
@@ -177,7 +175,7 @@ class UserRepository implements UserRepositoryInterface
         $getEngagementsHalls = CategoryHall::where('category_id', 3)->pluck('hall_id');
         $engagementsHalls = Hall::whereIn('id', $getEngagementsHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allEngagementshalls = array();
@@ -193,7 +191,7 @@ class UserRepository implements UserRepositoryInterface
         $getconferencesHalls = CategoryHall::where('category_id', 4)->pluck('hall_id');
         $conferencesHalls = Hall::whereIn('id', $getconferencesHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allconferenceshalls = array();
@@ -231,9 +229,10 @@ class UserRepository implements UserRepositoryInterface
     public function eventHalls($lang, $category_id)
     {
         $categoryHalls = CategoryHall::where('category_id', $category_id)->pluck('hall_id');
-        $halls = Hall::whereIn('id', $categoryHalls)  
+        $halls = Hall::whereIn('id', $categoryHalls)
         ->where('status',1)
-        ->where('accept','accepted')->get();
+        ->where('accepted','accepted')
+        ->get();
         return HallResource::collection($halls);
     }
 
@@ -242,7 +241,7 @@ class UserRepository implements UserRepositoryInterface
         $getWeddingHalls = CategoryHall::where('category_id', 6)->pluck('hall_id');
         $weddingsHalls = Hall::whereIn('id', $getWeddingHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->latest()->get();
         return HallResource::collection($weddingsHalls);
     }
@@ -252,7 +251,7 @@ class UserRepository implements UserRepositoryInterface
         $getBirthdaysHalls = CategoryHall::where('category_id', 2)->pluck('hall_id');
         $birthdaysHalls = Hall::whereIn('id', $getBirthdaysHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->latest()->get();
         return HallResource::collection($birthdaysHalls);
     }
@@ -262,7 +261,7 @@ class UserRepository implements UserRepositoryInterface
         $getEngagementsHalls = CategoryHall::where('category_id', 3)->pluck('hall_id');
         $engagementsHalls = Hall::whereIn('id', $getEngagementsHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->latest()->get();
         return HallResource::collection($engagementsHalls);
     }
@@ -272,7 +271,7 @@ class UserRepository implements UserRepositoryInterface
         $getConferencesHalls = CategoryHall::where('category_id', 4)->pluck('hall_id');
         $conferencesHalls = Hall::whereIn('id', $getConferencesHalls)
         ->where('status',1)
-        ->where('accept','accepted')
+        ->where('accepted','accepted')
             ->latest()->get();
         return HallResource::collection($conferencesHalls);
     }
@@ -281,6 +280,8 @@ class UserRepository implements UserRepositoryInterface
     {
 
         $latestProducts = Product::where('status', 1)->where('stock', '>', '0')
+        ->where('status',1)
+        ->where('accepted','accepted')
             ->latest()->get();
         $allproducts = array();
         $i = 0;
@@ -376,7 +377,8 @@ class UserRepository implements UserRepositoryInterface
     {
         $brand = Vendor::where('id', $brand_id)->first();
         $products = Product::where('admin_id', $brand->id)
-            ->where('status', 1)
+        ->where('status',1)
+        ->where('accepted','accepted')
             ->where('stock', '>', '0')
             ->latest()->get();
         $allproducts = array();
@@ -396,9 +398,10 @@ class UserRepository implements UserRepositoryInterface
 
     public function getCategoryProducts($lang, $category_id)
     {
-        $category = ProductCategory::where('id', $category_id)->first();
+        $category = ProductCategory::withTrashed()->where('id', $category_id)->first();
         $products = Product::where('id', $category->id)
-            ->where('status', 1)
+        ->where('status',1)
+        ->where('accepted','accepted')
             ->where('stock', '>', '0')
             ->latest()->get();
         $allproducts = array();
@@ -440,6 +443,8 @@ class UserRepository implements UserRepositoryInterface
         $weddingsHalls = Hall::whereIn('id', $getWeddingHalls)
             ->where('title_en', 'LIKE', '%' . $request->search . '%')
             ->orWhere('title_ar',  'LIKE', '%' . $request->search . '%')
+            ->where('status',1)
+            ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allweddingshalls = array();
@@ -456,6 +461,8 @@ class UserRepository implements UserRepositoryInterface
         $birthdaysHalls = Hall::whereIn('id', $getbirthdaysHalls)
             ->where('title_en',  'LIKE', '%' . $request->search . '%')
             ->orWhere('title_ar',  'LIKE', '%' . $request->search . '%')
+            ->where('status',1)
+            ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allbirthdayshalls = array();
@@ -471,6 +478,8 @@ class UserRepository implements UserRepositoryInterface
         $latestProducts = Product::where('status', 1)->where('stock', '>', '0')
             ->where('title_en',  'LIKE', '%' . $request->search . '%')
             ->orWhere('title_ar',  'LIKE', '%' . $request->search . '%')
+            ->where('status',1)
+            ->where('accepted','accepted')
             ->take(4)
             ->latest()->get();
         $allproducts = array();
@@ -493,6 +502,8 @@ class UserRepository implements UserRepositoryInterface
         $engagementsHalls = Hall::whereIn('id', $getEngagementsHalls)
             ->where('title_en',  'LIKE', '%' . $request->search . '%')
             ->orWhere('title_ar',  'LIKE', '%' . $request->search . '%')
+            ->where('status',1)
+            ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allEngagementshalls = array();
@@ -509,6 +520,8 @@ class UserRepository implements UserRepositoryInterface
         $conferencesHalls = Hall::whereIn('id', $getconferencesHalls)
             ->where('title_en',  'LIKE', '%' . $request->search . '%')
             ->orWhere('title_ar',  'LIKE', '%' . $request->search . '%')
+            ->where('status',1)
+            ->where('accepted','accepted')
             ->take(2)
             ->latest()->get();
         $allconferenceshalls = array();
@@ -522,7 +535,6 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $data = [
-
             'latest_wedings_halls' => $allweddingshalls,
             'latest_birthdays_halls' => $allbirthdayshalls,
             'latest_products' => $allproducts,
@@ -538,12 +550,14 @@ class UserRepository implements UserRepositoryInterface
             'package_id' => $request->package_id,
             'hall_id' => $request->hall_id,
             'user_id' => $request->user_id,
-              'date'=>$request->date,
+            'date'=>$request->date,
             'time_from'=>$request->time_from,
             'time_to'=>$request->time_to,
+            'extra_guest'=>$request->extra_guest
         ]);
         $options = $request->option_id;
         $quantities = $request->quantity;
+        if(isset($options)){
         for ($i = 0; $i < sizeof($options); $i++) {
             CartHallOption::create([
                 'cart_hall_id' => $cart->id,
@@ -551,6 +565,7 @@ class UserRepository implements UserRepositoryInterface
                 'quantity' => $quantities[$i],
             ]);
         }
+    }
     }
 
     public function getHallsCart($user, $lang)
@@ -563,6 +578,8 @@ class UserRepository implements UserRepositoryInterface
             $allcarts[$i]['hall_id'] = $cart->hall_id;
             $allcarts[$i]['hall_name'] =  $lang == 'en' ? Hall::where('id', $cart->hall_id)->first()->title_en : Hall::where('id', $cart->hall_id)->first()->title_ar;
             $allcarts[$i]['package_id'] = $cart->package_id;
+            $allcarts[$i]['package_price'] = $cart->package->real_price;
+            $allcarts[$i]['package_image'] = $cart->package->image_url;
             $allcarts[$i]['package_name'] =  $lang == 'en' ? Package::where('id', $cart->package_id)->first()->title_en : Package::where('id', $cart->package_id)->first()->title_ar;
             $getOptions = CartHallOption::where('cart_hall_id', $cart->id)->pluck('option_id');
             $options = PackageOption::whereIn('id', $getOptions)->select('id', 'title_' . $lang . ' as name', 'limitation', 'quantity', 'price')->get();
@@ -790,6 +807,7 @@ class UserRepository implements UserRepositoryInterface
         ]);
     }
 
+
     public function checkDate($request)
     {
         $dates = Available_date::where('hall_id', $request->hall_id)
@@ -833,39 +851,6 @@ class UserRepository implements UserRepositoryInterface
         return $allcarts;
     }
 
-    // check promodcode function
-    public function check_promo_code($promo_code)
-    {
-        $user = auth()->user();
-        if ($promo_code) {
-            // check exist
-            $exist = PromoCode::where("title", $promo_code)->first();
-            if (!$exist || $exist->expiration_date < Carbon::now() || $exist->maximum_times_of_use <= 0) {
-                return "invalid";
-            }
-
-            // check dedicated to this promocode
-            if ($exist->dedicated_to == "male" || $exist->dedicated_to == "females") {
-                if ($user->gender != $exist->dedicated_to) {
-                    return "invalid";
-                }
-            }
-
-            if ($exist->dedicated_to == "spacial_user") {
-                if ($exist->user_id != $user->id) {
-                    return "invalid";
-                }
-            }
-
-            // increment promocode 1 for this usage
-            $exist->update([
-                "maximum_times_of_use" => $exist->maximum_times_of_use - 1
-            ]);
-
-
-            return [$exist->value, $exist->type];
-        }
-    }
     public function checkoutProduct($request)
     {
         global $productAfterCommissionAndPromocode;
@@ -882,7 +867,7 @@ class UserRepository implements UserRepositoryInterface
             'customer_phone' => $request->customer_phone,
             'order_from' => $request->order_from,
             'order_number' =>  Order::latest()->first() ? str_pad(Order::latest()->first()->id + 1, 9, '0', STR_PAD_LEFT) : str_pad(1, 9, '0', STR_PAD_LEFT),
-            'customer_promo_code_title' => $code != null ? $code->text_en : "",
+            'customer_promo_code_title' => $code != null ? $code->title  : "",
             'customer_promo_code_value' => $code != null ? $code->value : "",
             'customer_promo_code_type' => $code != null ? $code->type : "",
             'order_from' => $request->order_from,
@@ -905,7 +890,7 @@ class UserRepository implements UserRepositoryInterface
             if ($item->product->owner) {
                 $product_owner_id = $item->product->owner->id;
             } else {
-                $product_owner_id = Admin::where("id", $item->product->admin_id)->first();
+                $product_owner_id = Admin::where("id", $item->product->admin_id)->first()->id;
             }
 
             // calculate commission
@@ -924,7 +909,7 @@ class UserRepository implements UserRepositoryInterface
                 foreach ($item->product->taxes as $taxe) {
                     $total_taxes += ($taxe->tax->percentage / 100);
 
-                    // set taxes for this order related by product id 
+                    // set taxes for this order related by product id
                     OrderTaxes::create([
                         "order_number" => $order->order_number,
                         "product_name" => $item->product->title_en,
@@ -934,7 +919,7 @@ class UserRepository implements UserRepositoryInterface
                 }
             }
 
-            // check promocode 
+            // check promocode
 
 
             $promocode_status = $this->check_promo_code($request->code);
@@ -947,6 +932,7 @@ class UserRepository implements UserRepositoryInterface
             OrderProduct::create([
                 "product_id" => $item->product->id,
                 "vendor_id" => $product_owner_id,
+                "order_id" => $order->id,
                 "order_number" => $order->order_number,
                 "product_title" => $item->product->title_en,
                 "price" => $item->product->real_price,
@@ -966,15 +952,14 @@ class UserRepository implements UserRepositoryInterface
                 "customer_promo_code_value" => PromoCode::where("title", $request->code)->first()->value,
                 "customer_promo_code_type" => PromoCode::where("title", $request->code)->first()->type,
             ]);
-
-            
         }
 
 
-
+       Cart::where("user_id", $user->id)->delete();
 
         return $order;
     }
+
 
     public function myOrders($user, $lang)
     {
@@ -1088,7 +1073,7 @@ class UserRepository implements UserRepositoryInterface
             'id' => $request->cart_id,
             'user_id' => $request->user_id
         ])->update(['package_id', $request->package_id]);
-
+  
         $options = $request->option_id;
         $quantities = $request->quantity;
         if (isset($options)) {
@@ -1116,4 +1101,56 @@ class UserRepository implements UserRepositoryInterface
         ->where('user_id',$request->user_id)
         ->update(['quantity'=>$request->quantity]);
     }
+    
+
+    public function myCart($user,$lang)
+    {
+     
+        $productscarts = Cart::where('user_id', $user->id)->get();
+        $allpcarts = array();
+        $i = 0;
+        foreach ($productscarts as $pcart) {
+            $allpcarts[$i]['id'] = $pcart->id;
+            $allpcarts[$i]['product_id'] = $pcart->product_id;
+            $allpcarts[$i]['product_name'] =  $lang == 'en' ? Product::withTrashed()->where('id', $pcart->product_id)->first()->title_en : Product::withTrashed()->where('id', $pcart->product_id)->first()->title_ar;
+            $allpcarts[$i]['quantity'] = $pcart->quantity;
+            $allpcarts[$i]['real_price'] = Product::withTrashed()->where('id', $pcart->product_id)->first()->real_price;
+            $allpcarts[$i]['fake_price'] = Product::withTrashed()->where('id', $pcart->product_id)->first()->fake_price;
+            $allpcarts[$i]['image'] = Product::withTrashed()->where('id', $pcart->product_id)->first()->primary_image_url;
+
+            $i++;
+        }
+        return $allpcarts;
+
+        $carts = CartHall::where('user_id', $user->id)->latest()->get();
+        $allcarts = array();
+        $i = 0;
+        foreach ($carts as $cart) {
+            $allcarts[$i]['id'] = $cart->id;
+            $allcarts[$i]['hall_id'] = $cart->hall_id;
+            $allcarts[$i]['hall_name'] =  $lang == 'en' ? Hall::where('id', $cart->hall_id)->first()->title_en : Hall::where('id', $cart->hall_id)->first()->title_ar;
+            $allcarts[$i]['date'] = $cart->date;
+            $allcarts[$i]['time_from'] = $cart->time_from;
+            $allcarts[$i]['time_to'] = $cart->time_to;
+            $allcarts[$i]['extra_guest'] = $cart->extra_guest;
+            $allcarts[$i]['package_id'] = $cart->package_id;
+            $allcarts[$i]['package_price'] = Package::where('id', $cart->package_id)->first()->real_price;
+            $allcarts[$i]['package_image'] = Package::where('id', $cart->package_id)->first()->image_url;
+            $allcarts[$i]['package_name'] =  $lang == 'en' ? Package::where('id', $cart->package_id)->first()->title_en : Package::where('id', $cart->package_id)->first()->title_ar;
+            $allcarts[$i]['package_disc'] =  $lang == 'en' ? Package::where('id', $cart->package_id)->first()->summary_en : Package::where('id', $cart->package_id)->first()->summary_ar;
+            $getOptions = CartHallOption::where('cart_hall_id', $cart->id)->pluck('option_id');
+            $options = PackageOption::whereIn('id', $getOptions)->select('id', 'title_' . $lang . ' as name', 'limitation', 'quantity', 'price')->get();
+            $allcarts[$i]['options'] = $options;
+            $i++;
+        }
+        return $data=[
+            'poducts'=>$allpcarts,
+            'halls'=>$allcarts
+        ];
+
+
+
+    }
+    
+    
 }

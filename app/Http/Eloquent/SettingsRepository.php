@@ -126,6 +126,7 @@ class SettingsRepository implements SettingsRepositoryInterface
 
     public function becomeVendor($request)
     {
+
         $become = Become_vendor::create(array_merge($request->all(), [
             'name' => $request->name,
             'email' => $request->email,
@@ -141,5 +142,26 @@ class SettingsRepository implements SettingsRepositoryInterface
             'desc_ar' => 'طلب تقديم بائع جديد',
             'desc_en' => 'you have new become vendor request',
         ]);
+    }
+
+    public function becomeVendorWithToken($request)
+    {
+
+        $become = Become_vendor::create(array_merge($request->all(), [
+            'user_id'=>$request->user_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'coment' => $request->coment,
+            'sign_from' => $request->sign_from,
+        ]));
+
+        Notification::create([
+            'request_id' => $become->id,
+            'title_ar' => 'لديك طلب جديد',
+            'title_en' => 'you have new request',
+            'desc_ar' => 'طلب تقديم بائع جديد',
+            'desc_en' => 'you have new become vendor request',
+        ]);    
     }
 }
