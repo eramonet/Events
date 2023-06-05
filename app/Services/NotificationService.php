@@ -135,6 +135,7 @@ class NotificationService
         // "3" ==> All users
         // "4" ==> One vendor or many vendor
 
+
         if ($request->user_type == 0) {
             for ($i = 0; $i < count($request->user_id); $i++) {
                 $notification = Notification::create([

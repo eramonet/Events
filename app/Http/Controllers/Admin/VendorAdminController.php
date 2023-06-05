@@ -254,7 +254,7 @@ class VendorAdminController extends Controller
             }
         }
 
-        return $permissions ;
+        return [$permissions] ;
     }
 
 

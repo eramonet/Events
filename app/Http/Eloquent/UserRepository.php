@@ -51,7 +51,9 @@ class UserRepository implements UserRepositoryInterface
 {
     public function home($lang)
     {
+
         $categories = HallCategory::take(4)->orderBy('id', 'asc')->get();
+        
         $allcats = array();
         $i = 0;
         foreach ($categories as $category) {
@@ -232,7 +234,7 @@ class UserRepository implements UserRepositoryInterface
     public function eventHalls($lang, $category_id)
     {
         $categoryHalls = CategoryHall::where('category_id', $category_id)->pluck('hall_id');
-        $halls = Hall::whereIn('id', $categoryHalls)  
+        $halls = Hall::whereIn('id', $categoryHalls)
         ->where('status',1)
         ->where('accept','accepted')->get();
         return HallResource::collection($halls);

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger("code_id")->unsigned()->nullable();
             $table->string("title_ar");
             $table->string("type");
-            $table->string("sent_from");
+            $table->string("sent_from")->nullable();
             $table->string("sent_to");
             $table->bigInteger("vendor_id")->nullable();
             $table->bigInteger("admin_id")->nullable();

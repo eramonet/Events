@@ -155,7 +155,7 @@
                             <label for="vendor_id">Vendor <span class="text-danger">*</span></label>
                             <select required name="vendor_id" id="vendor_id"
                                 class="form-select @error('vendor_id') is-invalid @enderror">
-
+                                <option value="">Please Choose Vendor</option>
                                 @foreach ($vendors as $vendor)
                                     <option value="{{ $vendor->id }}"
                                         {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>
@@ -448,7 +448,7 @@
         });
     </script>
 
-    {{-- <script>
+    <script>
         $("#vendor_id").change(function() {
             vendor = $(this).children("option:selected").val();
 
@@ -458,11 +458,10 @@
                 type: "GET",
                 url: complete_url,
                 success: function(data) {
-                    console.log(data)
                     $('#accordionPermissions').empty() ;
 
                     if( data.length > 0 ){
-                        for( x = 0 ; x < data.length ; x++ ){
+                        foreach( x = 0 ; x < data.length ; x++ ){
                             $('#accordionPermissions').append(`<h1>hello</h1>`) ;
                         }
                     }
@@ -472,5 +471,5 @@
                 },
             });
         });
-    </script> --}}
+    </script>
 @endsection

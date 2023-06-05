@@ -36,7 +36,7 @@ class OccasionController extends Controller
     {
 
         $occasions =  Occasion::latest()->paginate(10);
-
+        return $occasions ;
         return \view('admin.occasions.index', [
             'occasions' => $occasions
         ]);

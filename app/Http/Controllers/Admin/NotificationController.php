@@ -72,7 +72,7 @@ class NotificationController extends Controller
         ]);
 
 
-        $created = $this->notificationService->store($request);
+        return $created = $this->notificationService->store($request);
 
         if ($created) {
             $request->session()->flash('success', 'Notification Created SuccessFully');
