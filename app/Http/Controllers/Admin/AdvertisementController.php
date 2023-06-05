@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class AdvertisementController extends Controller
 {
 
@@ -38,13 +39,14 @@ class AdvertisementController extends Controller
             'address' => ['required', 'string'],
         ]);
 
+        $data = $request->all();
 
-        $created = OuterClients::create([
-            "image" => $request->image ? $this->store_image($request, "image", "user_assets/uploads/ads") :  "empty.png",
-            "name" => $request->name,
-            "phone" => $request->phone,
-            "address" => $request->address,
-        ]);
+        $imageName = time() . Hash::make($request->name) .'.' . $request->image->getClientOriginalExtension();
+        $request->image->move(public_path('user_assets/uploads/ads/'), $imageName);
+        $data['image'] = $imageName;
+
+        $created = OuterClients::create($data);
+
 
         if ($created) {
             $request->session()->flash('success', 'Outer Client Created SuccessFully');
@@ -129,16 +131,17 @@ class AdvertisementController extends Controller
             'description_en' => ['sometimes'],
             'link' => ['required', 'string'],
         ]);
+        $data = $request->all();
 
-        $created = Advertisement::create([
-            "name" => $request->name,
-            "image" => $request->image ? $this->store_image($request, "image", "user_assets/uploads/ads") :  "empty.png",
-            "title_ar" => $request->title_ar ? $request->title_ar : null,
-            "title_en" => $request->title_en ? $request->title_en : null,
-            "description_ar" => $request->description_ar ? $request->description_ar : null,
-            "description_en" => $request->description_en ? $request->description_en : null,
-            "link" => $request->link,
-        ]);
+                $imageName = time() . Hash::make($request->name) .'.' . $request->image->getClientOriginalExtension();
+
+        $request->image->move(public_path('user_assets/uploads/ads/'), $imageName);
+        $data['image'] = $imageName;
+
+
+
+
+        $created = Advertisement::create($data);
 
         if ($created) {
             $request->session()->flash('success', 'Outer Client Created SuccessFully');
@@ -166,16 +169,12 @@ class AdvertisementController extends Controller
             'link' => ['required', 'string'],
         ]);
 
+        $data = $request->all();
+                $imageName = time() . Hash::make($request->name) .'.' . $request->image->getClientOriginalExtension();
 
-        $created = Advertisement::find($id)->update([
-            "name" => $request->name,
-            "image" => $request->image ? $this->store_image($request, "image", "user_assets/uploads/ads") :  Advertisement::find($id)->image,
-            "title_ar" => $request->title_ar ? $request->title_ar : null,
-            "title_en" => $request->title_en ? $request->title_en : null,
-            "description_ar" => $request->description_ar ? $request->description_ar : null,
-            "description_en" => $request->description_en ? $request->description_en : null,
-            "link" => $request->link,
-        ]);
+        $request->image->move(public_path('user_assets/uploads/ads/'), $imageName);
+        $data['image'] = $imageName;
+        $created = Advertisement::find($id)->update($data);
 
         if ($created) {
             $request->session()->flash('success', 'Item Updated SuccessFully');

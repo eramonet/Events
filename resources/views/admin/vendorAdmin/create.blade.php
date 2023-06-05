@@ -360,10 +360,17 @@
 
 
 
+<<<<<<< HEAD
                 <div class="accordion">
 
 
                     <div class="row" id="accordionPermissions">
+=======
+                <div class="accordion" id="accordionPermissions">
+
+
+                    <div class="row">
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                         @foreach ($permissions as $model => $cruds)
                             <div class="col-md-4">
@@ -458,12 +465,21 @@
                 type: "GET",
                 url: complete_url,
                 success: function(data) {
+                    console.log(data)
                     $('#accordionPermissions').empty() ;
 
                     if( data.length > 0 ){
                         foreach( x = 0 ; x < data.length ; x++ ){
                             $('#accordionPermissions').append(`<h1>hello</h1>`) ;
                         }
+
+                    if (data == "empty") {
+                        $("#client_order_balance_inpt").val(0);
+                        $("#selected_order_balance").text(0)
+                    } else {
+                        $("#client_order_balance_inpt").val(data[0]);
+                        $("#selected_order_balance").text(data[0])
+                        
                     }
                 },
                 error: function(data) {

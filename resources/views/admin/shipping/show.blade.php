@@ -20,8 +20,12 @@
                             <div class=" card-body ">
                                 <div class="wrapper m-auto">
                                     <ul class="list-group list-group-flush">
+<<<<<<< HEAD
                                         <li class="list-group-item">Name [En] : {{ $shipping->text_en }} </li>
                                         <li class="list-group-item">Name [Ar] : {{ $shipping->text_ar }} </li>
+=======
+                                        <li class="list-group-item">Name : {{ $shipping->text_en }} </li>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                         <li class="list-group-item">Cost : {{ number_format($shipping->cost) . " AED" }} </li>
                                         <li class="list-group-item">Added Date : <i
                                                 class="fas fa-calendar-week text-info"></i>

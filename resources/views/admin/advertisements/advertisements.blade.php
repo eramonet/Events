@@ -65,8 +65,13 @@
         <table class="table table-hover table-centered table-striped table-bordered text-center ">
             <thead>
                 <tr>
+<<<<<<< HEAD
                     <th class="border-gray-200">name</th>
                     <th class="border-gray-200">Image</th>
+=======
+                    <th class="border-gray-200">Image</th>
+                    <th class="border-gray-200">name</th>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <th class="border-gray-200">Link</th>
                     <th class="border-gray-200">Action</th>
                 </tr>

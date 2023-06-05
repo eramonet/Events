@@ -34,7 +34,11 @@
 
                 @if (Auth::guard('admin')->user()->vendor->halls_count >
                         Auth::guard('admin')->user()->vendor->halls->count())
+<<<<<<< HEAD
                     @if (Auth::guard('admin')->user()->hasPermission('halls-create'))
+=======
+                    @if (Auth::guard('admin')->user()->hasPermission('products-create'))
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                         <a href="{{ route('admin.halls.create') }}"
                             class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                             <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -47,7 +51,11 @@
                     @endif
                 @endif
             @else
+<<<<<<< HEAD
                 @if (Auth::guard('admin')->user()->hasPermission('halls-create'))
+=======
+                @if (Auth::guard('admin')->user()->hasPermission('products-create'))
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <a href="{{ route('admin.halls.create') }}"
                         class="btn btn-sm btn-gray-800 d-inline-flex align-items-center">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -224,7 +232,10 @@
             <thead>
                 <tr>
                     <th class="border-gray-200">ID</th>
+<<<<<<< HEAD
                     <th class="border-gray-200">Added By</th>
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                     <th class="border-gray-200">Image</th>
                     <th class="border-gray-200">Title In Arabic</th>
                     <th class="border-gray-200">Title In English</th>
@@ -244,13 +255,21 @@
                     <tr>
                         <td>{{ $hall->id }}</td>
 
+<<<<<<< HEAD
                         <td>{{ $hall->admin ? "Events" : $hall->vendor->title_en }}</td>
 
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                         <td><img src="{{ $hall->primary_image_url }}" width="50px"></td>
 
                         <td>{{ $hall->title_ar }}</td>
                         <td>{{ $hall->title_en }}</td>
 
+<<<<<<< HEAD
+=======
+                        <td>{{ number_format($hall->real_price) }} AED</td>
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                         <td>
                             @if ($hall->created_at)
                                 <p><i class="fas fa-calendar-week text-info"></i>

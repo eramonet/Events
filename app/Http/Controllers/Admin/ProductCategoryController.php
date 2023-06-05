@@ -10,7 +10,10 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductCategoryExport;
 use App\Models\Admin;
 use App\Models\ProductCategory;
+<<<<<<< HEAD
 use App\Models\Vendor;
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 use App\Services\ProductCategoryService;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,20 +41,35 @@ class ProductCategoryController extends Controller
             $categories = $this->productCategoryService->getAll($request);
             $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
+<<<<<<< HEAD
             
+=======
+            // return $categories;
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
             return \view('admin.productCategory.index', \compact('categories', 'type'));
 
         } else {
 
+<<<<<<< HEAD
             $vendor = Vendor::where("id" , $useradmin->vendor_id)->first() ;
             $categories = ProductCategory::where("admin_id" , $vendor->id)->paginate(10);
 
+=======
+            $categories = $this->productCategoryService->getAllAdmin($request, $useradmin);
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
             $type = $request->type && $request->type == 'sub' ? 'sub' : 'main';
 
 
             return \view('admin.productCategory.index', \compact('categories', 'type'));
         }
     }
+<<<<<<< HEAD
+=======
+    public function show($id){
+        $category = $this->productCategoryService->getById($id);
+        return \view('admin.productCategory.show', \compact('category'));
+    }
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
     public function create(Request $request)
     {
@@ -88,10 +106,14 @@ class ProductCategoryController extends Controller
     {
 
         $data=$request->all();
+<<<<<<< HEAD
         $data['admin_id'] = Auth::guard('admin')->id();
         if( Auth::guard('admin')->user()->vendor){
             $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
         }
+=======
+        $data['admin_id'] = Auth::id();
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
         $data['parent_id'] = null;
 
         $request->validate([

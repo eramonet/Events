@@ -170,7 +170,7 @@ class ProductCategoryService {
         if( Auth::guard('admin')->user()->vendor){
             $data['admin_id'] = Auth::guard('admin')->user()->vendor->id;
         }
-        
+
         $this->category::create($data);
 
         // if ($request->hasFile('image')) {

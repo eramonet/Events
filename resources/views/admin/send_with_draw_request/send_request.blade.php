@@ -173,7 +173,11 @@
                             `);
                         for (x = 0; x < data.my_orders.length; x++) {
                             $("#my_orders").append(`
+<<<<<<< HEAD
                                 <option value="${data.my_orders[x].id}">${data.my_orders[x].id}</option>
+=======
+                                <option value="${data.my_orders[x].id}">0000${data.my_orders[x].id}</option>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                             `);
                         }
                     }

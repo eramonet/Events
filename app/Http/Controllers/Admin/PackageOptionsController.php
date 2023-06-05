@@ -59,7 +59,7 @@ class PackageOptionsController extends Controller
         }
 
 
-        
+
 
         return \view('admin.packageOption.index', \compact('options',));
     }

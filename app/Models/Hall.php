@@ -43,7 +43,6 @@ class Hall extends Model
         return $this->belongsTo(Admin::class, 'admin_id')->with('roles');
     }
 
-
     public function category()
     {
         return $this->hasMany(CategoryHall::class, 'hall_id');

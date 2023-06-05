@@ -101,7 +101,11 @@
                             <select name="vendor_email" class="form-control" id="choose_client">
                                 <option value="">Choose Vendor -----</option>
                                 @foreach ($all_vendors as $vendor)
+<<<<<<< HEAD
                                     <option value="{{ $vendor->title_en }}">{{ $vendor->title_en }}</option>
+=======
+                                    <option value="{{ $vendor->email }}">{{ $vendor->title_en }}</option>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 @endforeach
                             </select>
                         </div>
@@ -173,7 +177,11 @@
         }
 
         $("#choose_client").change(function() {
+<<<<<<< HEAD
             client_id = $(this).children("option:selected").val(); // name
+=======
+            client_id = $(this).children("option:selected").val();
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
             if (client_id == "") {
                 client_id = "empty";
@@ -191,7 +199,11 @@
                         $("#inp_balance").val(0);
                         $("#client_id").val("");
                     } else {
+<<<<<<< HEAD
                         $("#client_email_inpt").val(data[1].title_en);
+=======
+                        $("#client_email_inpt").val(data[1].email);
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                         $("#balance_price").text(addCommas(data[0].toFixed(2)).split('.')[1] == 00 ?
                             addCommas(data[0]) : addCommas(data[0].toFixed(2)));
@@ -240,7 +252,11 @@
                             `);
                             for (x = 0; x < data[1].my_orders.length; x++) {
                                 $('#choose_client_orders').append(`
+<<<<<<< HEAD
                                         <option value="${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+=======
+                                        <option value="0000${data[1].my_orders[x].id}"> 0000${data[1].my_orders[x].id} </option>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                                 `);
                             }
                         }

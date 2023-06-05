@@ -25,7 +25,11 @@
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item">Hall Name [Ar] : {{ $package->hall->title_ar }} </li>
 
+<<<<<<< HEAD
                                         <li class="list-group-item">Hall Name [En] : {{ $package->hall->title_en }} </li>
+=======
+                                        <li class="list-group-item">Hall Name [Ar] : {{ $package->hall->title_ar }} </li>
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
 
                                         <li class="list-group-item">Added By :
                                             @if ($package->admin)

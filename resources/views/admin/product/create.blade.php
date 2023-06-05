@@ -551,6 +551,7 @@
 
                     {{-- details_en --}}
 
+<<<<<<< HEAD
                     <div class="col-md-12">
                         <div class="form-group mb-4">
                             <label for="model_number">Model Number <span class="text-danger">*</span></label>
@@ -587,6 +588,10 @@
                         @enderror
                     </div>
 
+=======
+
+
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
                 </div>
 
             </div>
@@ -1226,8 +1231,11 @@
         $('#occasion_id').select2({
             width: "100%"
         });
+<<<<<<< HEAD
         $('#color_id').select2({
             width: "100%"
         });
+=======
+>>>>>>> d36cbbda453e24bf36fa2ba7c87f57a3db5f1ab4
     </script>
 @endsection
